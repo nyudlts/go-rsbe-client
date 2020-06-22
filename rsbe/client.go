@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"os"
 )
 
 type Config struct {
@@ -22,16 +21,6 @@ func ConfigureClient(c *Config) {
 
 func init() {
 	client = &http.Client{}
-}
-
-func lookupEnvKeyOrDefault(env_key string, default_value string) string {
-	val, found := os.LookupEnv(env_key)
-
-	if !found {
-		val = default_value
-	}
-
-	return val
 }
 
 func Get(path string) (resp *http.Response, err error) {
