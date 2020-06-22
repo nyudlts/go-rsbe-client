@@ -9,6 +9,13 @@ import (
 
 
 func main() {
+	c := new(rsbe.Config)
+	c.BaseURL = "http://localhost:3000"
+	c.User = "foo"
+	c.Password = "bar"
+
+	rsbe.ConfigureClient(c)
+
 	partners, err := rsbe.PartnerIndex()
 	if err != nil {
 		log.Fatal(err)
