@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-//	"io/ioutil"
 	"log"
 
 	"github.com/jgpawletko/rsbe-client-go/rsbe"
