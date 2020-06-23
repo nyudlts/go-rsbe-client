@@ -50,8 +50,8 @@ func PartnerCollectionsList(partnerID string) (collections []CollectionListEntry
 	return collections, nil
 }
 
-func CollectionShow(id string) (collection CollectionShowEntry, err error) {
-	path := fmt.Sprintf("/api/v0/partners/%s/colls", id)
+func CollectionGet(id string) (collection CollectionShowEntry, err error) {
+	path := fmt.Sprintf("/api/v0/colls/%s", id)
 
 	s, err := GetBodyTextString(path)
 	if err != nil {
@@ -66,15 +66,15 @@ func CollectionShow(id string) (collection CollectionShowEntry, err error) {
 	return collection, nil
 }
 
-func (li CollectionListEntry) ToString() string {
+func (e CollectionListEntry) ToString() string {
 	s := fmt.Sprintf("ID: %s, PartnerID: %s, Code: %s, Name: %s, CollType: %s, Created_at: %s , Updated_at: %s, URL: %s, PartnerURL: %s",
-		li.ID, li.PartnerID, li.Code, li.Name, li.CollType, li.Created_at, li.Updated_at, li.URL, li.PartnerURL)
+		e.ID, e.PartnerID, e.Code, e.Name, e.CollType, e.Created_at, e.Updated_at, e.URL, e.PartnerURL)
 
 	return s
 }
 
-func (i CollectionShowEntry) ToString() string {
-	s := fmt.Sprintf("ID: %s, PartnerID: %s, Code: %s, Name: %s, CollType: %s, Created_at: %s , Updated_at: %s, Quota: %d, ReadyForContent: %b, PartnerURL: %s, SEsURL: %s, IEsURL: %s, LockVersion: %d, RelPath: %s", i.ID, i.PartnerID, i.Code, i.Name, i.CollType, i.Created_at, i.Updated_at, i.Quota, i.ReadyForContent, i.PartnerURL, i.SEsURL, i.IEsURL, i.LockVersion, i.RelPath)
+func (e CollectionShowEntry) ToString() string {
+	s := fmt.Sprintf("ID: %s, PartnerID: %s, Code: %s, Name: %s, CollType: %s, Created_at: %s , Updated_at: %s, Quota: %d, ReadyForContent: %v, PartnerURL: %s, SEsURL: %s, IEsURL: %s, LockVersion: %d, RelPath: %s", e.ID, e.PartnerID, e.Code, e.Name, e.CollType, e.Created_at, e.Updated_at, e.Quota, e.ReadyForContent, e.PartnerURL, e.SEsURL, e.IEsURL, e.LockVersion, e.RelPath)
 
 	return s
 }
