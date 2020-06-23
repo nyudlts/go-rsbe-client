@@ -41,7 +41,7 @@ func PartnerList() (partners []PartnerListEntry, err error) {
 	return partners, nil
 }
 
-func PartnerShow(id string) (partner PartnerShowEntry, err error) {
+func PartnerGet(id string) (partner PartnerShowEntry, err error) {
 	path := "/api/v0/partners/" + id
 
 	s, err := GetBodyTextString(path)
@@ -57,16 +57,16 @@ func PartnerShow(id string) (partner PartnerShowEntry, err error) {
 	return partner, nil
 }
 
-func (p PartnerListEntry) ToString() string {
+func (e PartnerListEntry) ToString() string {
 	s := fmt.Sprintf("ID: %s, Code: %s, Name: %s, Created_at: %s , Updated_at: %s, URL: %s",
-		p.ID, p.Code, p.Name, p.Created_at, p.Updated_at, p.URL)
+		e.ID, e.Code, e.Name, e.Created_at, e.Updated_at, e.URL)
 
 	return s
 }
 
-func (p PartnerShowEntry) ToString() string {
+func (e PartnerShowEntry) ToString() string {
 	s := fmt.Sprintf("ID: %s, Code: %s, Name: %s, Created_at: %s , Updated_at: %s, PartnersURL: %s, CollectionsURL: %s, LockVersion: %d, RelPath: %s",
-		p.ID, p.Code, p.Name, p.Created_at, p.Updated_at, p.PartnersURL, p.CollectionsURL, p.LockVersion, p.RelPath)
+		e.ID, e.Code, e.Name, e.Created_at, e.Updated_at, e.PartnersURL, e.CollectionsURL, e.LockVersion, e.RelPath)
 
 	return s
 }
