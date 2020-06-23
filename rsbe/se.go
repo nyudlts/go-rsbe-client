@@ -38,7 +38,7 @@ type SEShowEntry struct {
 	LockVersion   int    `json:"lock_version"`
 }
 
-func CollectionSEList(collectionID string) (list []SEListEntry, err error) {
+func CollectionSEsList(collectionID string) (list []SEListEntry, err error) {
 	path := fmt.Sprintf("/api/v0/colls/%s/ses", collectionID)
 
 	s, err := GetBodyTextString(path)
@@ -54,7 +54,7 @@ func CollectionSEList(collectionID string) (list []SEListEntry, err error) {
 	return list, nil
 }
 
-func SEShow(id string) (item SEShowEntry, err error) {
+func SEGet(id string) (item SEShowEntry, err error) {
 	path := fmt.Sprintf("/api/v0/ses/%s", id)
 
 	s, err := GetBodyTextString(path)
@@ -70,15 +70,15 @@ func SEShow(id string) (item SEShowEntry, err error) {
 	return item, nil
 }
 
-func (li SEListEntry) ToString() string {
+func (e SEListEntry) ToString() string {
 	s := fmt.Sprintf("ID: %s, DigiID: %s, DOType: %s, Phase: %s, Step: %s, Status: %s, Label: %s, Created_at: %s , Updated_at: %s, URL: %s, CollectionURL: %s",
-		li.ID, li.DigiID, li.DOType, li.Phase, li.Step, li.Status, li.Label, li.Created_at, li.Updated_at, li.URL, li.CollectionURL)
+		e.ID, e.DigiID, e.DOType, e.Phase, e.Step, e.Status, e.Label, e.Created_at, e.Updated_at, e.URL, e.CollectionURL)
 
 	return s
 }
 
-func (i SEShowEntry) ToString() string {
-	s := fmt.Sprintf("ID: %s, DigiID: %s, DOType: %s, Phase: %s, Step: %s, Status: %s, Label: %s, Title: %s, Created_at: %s , Updated_at: %s, BDIURL: %s, FMDsURL: %s, CollectionURL: %s, LockVersion: %d, Notes: %s", i.ID, i.DigiID, i.DOType, i.Phase, i.Step, i.Status, i.Label, i.Title, i.Created_at, i.Updated_at, i.BDIURL, i.FMDsURL, i.CollectionURL, i.LockVersion, i.Notes)
+func (e SEShowEntry) ToString() string {
+	s := fmt.Sprintf("ID: %s, DigiID: %s, DOType: %s, Phase: %s, Step: %s, Status: %s, Label: %s, Title: %s, Created_at: %s , Updated_at: %s, BDIURL: %s, FMDsURL: %s, CollectionURL: %s, LockVersion: %d, Notes: %s", e.ID, e.DigiID, e.DOType, e.Phase, e.Step, e.Status, e.Label, e.Title, e.Created_at, e.Updated_at, e.BDIURL, e.FMDsURL, e.CollectionURL, e.LockVersion, e.Notes)
 
 	return s
 }
