@@ -29,7 +29,7 @@ func main() {
 	fmt.Printf("%s\n", partners[0].ToString())
 	fmt.Println("------------------------------------------------------------------------------")
 	fmt.Println("Partner Show Entry")
-	partner, err := rsbe.PartnerShow(partners[0].ID)
+	partner, err := rsbe.PartnerGet(partners[0].ID)
 	fmt.Printf("%s\n", partner.ToString())
 	fmt.Println("------------------------------------------------------------------------------")
 	fmt.Println("Collections")
@@ -40,8 +40,7 @@ func main() {
 	fmt.Printf("%s\n", collections[0].ToString())
 	fmt.Println("------------------------------------------------------------------------------")
 	fmt.Println("Collection Show Entry")
-	collection, err := rsbe.CollectionShow(collections[0].ID)
-	fmt.Printf("%s\n", collection)
+	collection, err := rsbe.CollectionGet(collections[0].ID)
 	fmt.Printf("%s\n", collection.ToString())
 	fmt.Println("------------------------------------------------------------------------------")
 }
