@@ -2,19 +2,20 @@ package rsbe
 
 import (
 	"encoding/json"
+	"fmt"
 )
 
-type PartnerIndexEntry struct {
-	Id         string `json:"id"`
+type PartnerListEntry struct {
+	ID         string `json:"id"`
 	Code       string `json:"code"`
 	Name       string `json:"name"`
 	Created_at string `json:"created_at"`
 	Updated_at string `json:"updated_at"`
-	Url        string `json:"url"`
+	URL        string `json:"url"`
 }
 
 type PartnerShowEntry struct {
-	Id             string `json:"id"`
+	ID             string `json:"id"`
 	Code           string `json:"code"`
 	Name           string `json:"name"`
 	Created_at     string `json:"created_at"`
@@ -25,7 +26,7 @@ type PartnerShowEntry struct {
 	RelPath        string `json:"rel_path"`
 }
 
-func PartnerIndex() (partners []PartnerIndexEntry, err error) {
+func PartnerList() (partners []PartnerListEntry, err error) {
 
 	s, err := GetBodyTextString("/api/v0/partners")
 	if err != nil {
@@ -54,4 +55,18 @@ func PartnerShow(id string) (partner PartnerShowEntry, err error) {
 	}
 
 	return partner, nil
+}
+
+func (p PartnerListEntry) ToString() string {
+	s := fmt.Sprintf("ID: %s, Code: %s, Name: %s, Created_at: %s , Updated_at: %s, URL: %s",
+		p.ID, p.Code, p.Name, p.Created_at, p.Updated_at, p.URL)
+
+	return s
+}
+
+func (p PartnerShowEntry) ToString() string {
+	s := fmt.Sprintf("ID: %s, Code: %s, Name: %s, Created_at: %s , Updated_at: %s, PartnersURL: %s, CollectionsURL: %s, LockVersion: %d, RelPath: %s",
+		p.ID, p.Code, p.Name, p.Created_at, p.Updated_at, p.PartnersURL, p.CollectionsURL, p.LockVersion, p.RelPath)
+
+	return s
 }

@@ -16,19 +16,32 @@ func main() {
 
 	rsbe.ConfigureClient(c)
 
-	partners, err := rsbe.PartnerIndex()
+	partners, err := rsbe.PartnerList()
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	fmt.Println("------------------------------------------------------------------------------")
+	fmt.Println("Partners")
 	fmt.Printf("%s\n", partners)
-
-	id := partners[0].Id
-	
-	partner, err := rsbe.PartnerShow(id)
-
-	fmt.Printf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%d\n%s\n",
-		partner.Id, partner.Code, partner.Name, partner.Created_at,
-		partner.Updated_at, partner.PartnersURL, partner.CollectionsURL,
-		partner.LockVersion, partner.RelPath)
+	fmt.Println("------------------------------------------------------------------------------")
+	fmt.Println("Partner List Entry")
+	fmt.Printf("%s\n", partners[0].ToString())
+	fmt.Println("------------------------------------------------------------------------------")
+	fmt.Println("Partner Show Entry")
+	partner, err := rsbe.PartnerShow(partners[0].ID)
+	fmt.Printf("%s\n", partner.ToString())
+	fmt.Println("------------------------------------------------------------------------------")
+	fmt.Println("Collections")
+	collections, err := rsbe.PartnerCollectionsList(partner.ID)
+	fmt.Printf("%s\n", collections)
+	fmt.Println("------------------------------------------------------------------------------")
+	fmt.Println("Collection List Entry")
+	fmt.Printf("%s\n", collections[0].ToString())
+	fmt.Println("------------------------------------------------------------------------------")
+	fmt.Println("Collection Show Entry")
+	collection, err := rsbe.CollectionShow(collections[0].ID)
+	fmt.Printf("%s\n", collection)
+	fmt.Printf("%s\n", collection.ToString())
+	fmt.Println("------------------------------------------------------------------------------")
 }
