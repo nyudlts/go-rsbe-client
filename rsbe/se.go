@@ -8,7 +8,7 @@ import (
 type SEListEntry struct {
 	ID            string `json:"id"`
 	DigiID        string `json:"digi_id"`
-	DOType        string `json:"dotype"`
+	DOType        string `json:"do_type"`
 	Phase         string `json:"phase"`
 	Step          string `json:"step"`
 	Status        string `json:"status"`
@@ -23,7 +23,7 @@ type SEShowEntry struct {
 	ID            string `json:"id"`
 	CollectionID  string `json:"coll_id"`
 	DigiID        string `json:"digi_id"`
-	DOType        string `json:"dotype"`
+	DOType        string `json:"do_type"`
 	Phase         string `json:"phase"`
 	Step          string `json:"step"`
 	Status        string `json:"status"`
