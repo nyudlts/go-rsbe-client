@@ -90,6 +90,30 @@ func PostReturnBody(path string, data []byte) (body []byte, err error) {
 	return body, nil
 }
 
+func Put(path string, data []byte) (err error) {
+	url := fmt.Sprintf("%s%s", conf.BaseURL, path)
+
+	req, err := http.NewRequest("PUT", url, bytes.NewBuffer(data))
+	if err != nil {
+		return err
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+	req.SetBasicAuth(conf.User, conf.Password)
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != 204 {
+		return fmt.Errorf("unexpected status code: %s", resp.Status)
+	}
+
+	return nil
+}
+
 // TODO: refactor: extract bodyText conversion to string?
 func Delete(path string) (err error) {
 	url := fmt.Sprintf("%s%s", conf.BaseURL, path)
