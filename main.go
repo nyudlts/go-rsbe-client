@@ -65,8 +65,6 @@ func main() {
 		Name:    "Bork Partner",
 		RelPath: "bork",
 	}
-
-
 	fmt.Println("PartnerCreate: Before")
 	fmt.Printf("%v", pe)
 	err = rsbe.PartnerCreate(&pe)
@@ -76,16 +74,30 @@ func main() {
 	fmt.Println("PartnerCreate: After")
 	fmt.Printf("%v", pe)
 	fmt.Println("------------------------------------------------------------------------------")
-	fmt.Println("PartnerGet:")
+	fmt.Println("PartnerUpdate BEFORE:")
 	partner, err = rsbe.PartnerGet(pe.ID)
 	fmt.Printf("%s\n", partner.ToString())
 	fmt.Println("------------------------------------------------------------------------------")
-	fmt.Println("PartnerDelete:")
-	err = rsbe.PartnerDelete(pe.ID)
-	fmt.Printf("%v", pe)
+	fmt.Println("PartnerUpdate:")
+	partner.Code = "goofy"
+	partner.Name = "GOOFY Partner"
+	err = rsbe.PartnerUpdate(&partner)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("PartnerUpdate: AFTER")
+	fmt.Printf("%v", partner)
 	fmt.Println("------------------------------------------------------------------------------")
 	fmt.Println("PartnerGet:")
-	partner, err = rsbe.PartnerGet(pe.ID)
+	partner, err = rsbe.PartnerGet(partner.ID)
+	fmt.Printf("%s\n", partner.ToString())
+	fmt.Println("------------------------------------------------------------------------------")
+	fmt.Println("PartnerDelete:")
+	err = rsbe.PartnerDelete(partner.ID)
+	fmt.Printf("%v", partner)
+	fmt.Println("------------------------------------------------------------------------------")
+	fmt.Println("PartnerGet:")
+	partner, err = rsbe.PartnerGet(partner.ID)
 	fmt.Printf("%s\n", partner.ToString())
 	fmt.Println("------------------------------------------------------------------------------")
 }
