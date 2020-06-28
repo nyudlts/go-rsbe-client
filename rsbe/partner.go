@@ -75,7 +75,22 @@ func PartnerCreate(p *PartnerEntry) (err error) {
 		return err
 	}
 
-	fmt.Printf("%s\n", body)
+	return nil
+}
+
+func PartnerUpdate(p *PartnerEntry) (err error) {
+	path := "/api/v0/partners/" + p.ID
+
+	data, err := json.Marshal(p)
+	if err != nil {
+		return err
+	}
+
+	err = Put(path, data)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
