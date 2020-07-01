@@ -28,12 +28,12 @@ type PartnerEntry struct {
 
 func PartnerList() (partners []PartnerListEntry, err error) {
 
-	s, err := GetBodyTextString("/api/v0/partners")
+	body, err := GetBody("/api/v0/partners")
 	if err != nil {
 		return nil, err
 	}
 
-	err = json.Unmarshal([]byte(s), &partners)
+	err = json.Unmarshal(body, &partners)
 	if err != nil {
 		return nil, err
 	}
@@ -44,12 +44,12 @@ func PartnerList() (partners []PartnerListEntry, err error) {
 func PartnerGet(id string) (partner PartnerEntry, err error) {
 	path := "/api/v0/partners/" + id
 
-	s, err := GetBodyTextString(path)
+	body, err := GetBody(path)
 	if err != nil {
 		return partner, err
 	}
 
-	err = json.Unmarshal([]byte(s), &partner)
+	err = json.Unmarshal(body, &partner)
 	if err != nil {
 		return partner, err
 	}
