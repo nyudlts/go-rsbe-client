@@ -41,12 +41,12 @@ type SEShowEntry struct {
 func CollectionSEsList(collectionID string) (list []SEListEntry, err error) {
 	path := fmt.Sprintf("/api/v0/colls/%s/ses", collectionID)
 
-	s, err := GetBodyTextString(path)
+	body, err := GetBody(path)
 	if err != nil {
 		return nil, err
 	}
 
-	err = json.Unmarshal([]byte(s), &list)
+	err = json.Unmarshal(body, &list)
 	if err != nil {
 		return nil, err
 	}
@@ -57,12 +57,12 @@ func CollectionSEsList(collectionID string) (list []SEListEntry, err error) {
 func SEGet(id string) (item SEShowEntry, err error) {
 	path := fmt.Sprintf("/api/v0/ses/%s", id)
 
-	s, err := GetBodyTextString(path)
+	body, err := GetBody(path)
 	if err != nil {
 		return item, err
 	}
 
-	err = json.Unmarshal([]byte(s), &item)
+	err = json.Unmarshal(body, &item)
 	if err != nil {
 		return item, err
 	}
