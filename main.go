@@ -88,9 +88,44 @@ func main() {
 	fmt.Println("PartnerUpdate: AFTER")
 	fmt.Printf("%v", partner)
 	fmt.Println("------------------------------------------------------------------------------")
-	fmt.Println("PartnerGet:")
+	fmt.Println("------------------------------------------------------------------------------")
+	fmt.Println("TEST COLLECTION STUFF:")
 	partner, err = rsbe.PartnerGet(partner.ID)
-	fmt.Printf("%s\n", partner.ToString())
+	coll := new(rsbe.CollectionEntry)
+	coll.PartnerID = partner.ID
+	coll.Code = "abcdef"
+	coll.Name = "a Rose by Any Other Name"
+	coll.CollType = "origin"
+	coll.Quota = 1234
+	coll.RelPath = "content/abcdef"
+	coll.ReadyForContent = true
+
+	fmt.Println("------------------------------------------------------------------------------")
+	fmt.Println("Collection Create: BEFORE")
+	fmt.Printf("%v", coll)
+	fmt.Println("------------------------------------------------------------------------------")
+	err = rsbe.CollectionCreate(coll)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("CollectionCreate: After")
+	fmt.Printf("%v", coll)
+	fmt.Println("------------------------------------------------------------------------------")
+	fmt.Println("------------------------------------------------------------------------------")
+	
+	fmt.Println("CollectionDelete:")
+	fmt.Println("------------------------------------------------------------------------------")
+	fmt.Println("CollectionGet:")
+	collection, err = rsbe.CollectionGet(coll.ID)
+	fmt.Printf("%s\n", collection.ToString())
+	err = rsbe.CollectionDelete(collection.ID)
+	fmt.Println("------------------------------------------------------------------------------")
+	fmt.Println("CollectionGet:")
+	collection, err = rsbe.CollectionGet(coll.ID)
+	fmt.Printf("%s\n", collection.ToString())
+	fmt.Println("------------------------------------------------------------------------------")
+	fmt.Println("------------------------------------------------------------------------------")
+	
 	fmt.Println("------------------------------------------------------------------------------")
 	fmt.Println("PartnerDelete:")
 	err = rsbe.PartnerDelete(partner.ID)
