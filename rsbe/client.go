@@ -39,21 +39,20 @@ func Get(path string) (resp *http.Response, err error) {
 //       or can you just use variable "s"?
 //       add status code check
 //       also might want to just merge all of this into Get?
-func GetBodyTextString(path string) (s string, err error) {
-	s = ""
+func GetBody(path string) (body []byte, err error) {
 
 	resp, err := Get(path)
 	if err != nil {
-		return s, err
+		return body, err
 	}
 	defer resp.Body.Close()
 
-	bodyText, err := ioutil.ReadAll(resp.Body)
+	body, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return s, err
+		return body, err
 	}
 
-	return string(bodyText), nil
+	return body, nil
 }
 
 func Post(path string, data []byte) (resp *http.Response, err error) {
@@ -70,7 +69,6 @@ func Post(path string, data []byte) (resp *http.Response, err error) {
 	return client.Do(req)
 }
 
-// TODO: refactor: extract bodyText conversion to string?
 func PostReturnBody(path string, data []byte) (body []byte, err error) {
 	resp, err := Post(path, data)
 	if err != nil {
@@ -114,7 +112,6 @@ func Put(path string, data []byte) (err error) {
 	return nil
 }
 
-// TODO: refactor: extract bodyText conversion to string?
 func Delete(path string) (err error) {
 	url := fmt.Sprintf("%s%s", conf.BaseURL, path)
 
