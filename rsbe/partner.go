@@ -26,7 +26,7 @@ type PartnerEntry struct {
 	RelPath        string `json:"rel_path,omitempty"`
 }
 
-func PartnerList() (partners []PartnerEntry, err error) {
+func PartnerList() (partners []PartnerListEntry, err error) {
 
 	body, err := GetBody("/api/v0/partners")
 	if err != nil {
