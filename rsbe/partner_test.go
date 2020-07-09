@@ -88,7 +88,7 @@ func TestPartnerList(t *testing.T) {
 
 }
 
-func TestGet(t *testing.T) {
+func TestPartnerGetFunc(t *testing.T) {
 
 	mux := setupMux("/api/v0/partners/e6517775-6277-4e25-9373-ee7738e820b5", "testdata/partner-get.json")
 	ts := httptest.NewServer(mux)
@@ -133,7 +133,7 @@ func TestPartnerGet(t *testing.T) {
 	})
 }
 
-func TestCreate(t *testing.T) {
+func TestPartnerCreateFunc(t *testing.T) {
 	setupLocalhostClient()
 
 	err := partnerToCreate.Create()
@@ -156,7 +156,7 @@ func TestCreate(t *testing.T) {
 	})
 }
 
-func TestUpdate(t *testing.T) {
+func TestPartnerUpdateFunc(t *testing.T) {
 	setupLocalhostClient()
 
 	_ = partnerToCreate.Get()
@@ -185,7 +185,7 @@ func TestUpdate(t *testing.T) {
 	})
 }
 
-func TestDelete(t *testing.T) {
+func TestPartnerDeleteFunc(t *testing.T) {
 	setupLocalhostClient()
 
 	_ = partnerToCreate.Get()
