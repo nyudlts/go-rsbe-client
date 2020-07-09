@@ -6,36 +6,36 @@ import (
 )
 
 type SEListEntry struct {
-	ID            string `json:"id"`
-	DigiID        string `json:"digi_id"`
-	DOType        string `json:"do_type"`
-	Phase         string `json:"phase"`
-	Step          string `json:"step"`
-	Status        string `json:"status"`
-	Label         string `json:"label"`
-	Created_at    string `json:"created_at"`
-	Updated_at    string `json:"updated_at"`
-	URL           string `json:"url"`
-	CollectionURL string `json:"coll_url"`
+	ID            string `json:"id,omitempty"`
+	DigiID        string `json:"digi_id,omitempty"`
+	DOType        string `json:"do_type,omitempty"`
+	Phase         string `json:"phase,omitempty"`
+	Step          string `json:"step,omitempty"`
+	Status        string `json:"status,omitempty"`
+	Label         string `json:"label,omitempty"`
+	CreatedAt     string `json:"created_at,omitempty"`
+	UpdatedAt     string `json:"updated_at,omitempty"`
+	URL           string `json:"url,omitempty"`
+	CollectionURL string `json:"coll_url,omitempty"`
 }
 
-type SEShowEntry struct {
-	ID            string `json:"id"`
-	CollectionID  string `json:"coll_id"`
-	DigiID        string `json:"digi_id"`
-	DOType        string `json:"do_type"`
-	Phase         string `json:"phase"`
-	Step          string `json:"step"`
-	Status        string `json:"status"`
-	Notes         string `json:"notes"`
-	Label         string `json:"label"`
-	Title         string `json:"title"`
-	Created_at    string `json:"created_at"`
-	Updated_at    string `json:"updated_at"`
-	BDIURL        string `json:"bdi_url"`
-	FMDsURL       string `json:"fmds_url"`
-	CollectionURL string `json:"coll_url"`
-	LockVersion   int    `json:"lock_version"`
+type SEEntry struct {
+	ID            string `json:"id,omitempty"`
+	CollectionID  string `json:"coll_id,omitempty"` // REQUIRED
+	DigiID        string `json:"digi_id,omitempty"` // REQUIRED
+	DOType        string `json:"do_type,omitempty"` // REQUIRED
+	Phase         string `json:"phase,omitempty"`   // REQUIRED
+	Step          string `json:"step,omitempty"`    // REQUIRED
+	Status        string `json:"status,omitempty"`  // REQUIRED
+	Notes         string `json:"notes,omitempty"`   // REQUIRED
+	Label         string `json:"label,omitempty"`
+	Title         string `json:"title,omitempty"`
+	CreatedAt     string `json:"created_at,omitempty"`
+	UpdatedAt     string `json:"updated_at,omitempty"`
+	BDIURL        string `json:"bdi_url,omitempty"`
+	FMDsURL       string `json:"fmds_url,omitempty"`
+	CollectionURL string `json:"coll_url,omitempty"`
+	LockVersion   int    `json:"lock_version,omitempty"`
 }
 
 func CollectionSEsList(collectionID string) (list []SEListEntry, err error) {
@@ -54,7 +54,7 @@ func CollectionSEsList(collectionID string) (list []SEListEntry, err error) {
 	return list, nil
 }
 
-func SEGet(id string) (item SEShowEntry, err error) {
+func SEGet(id string) (item SEEntry, err error) {
 	path := fmt.Sprintf("/api/v0/ses/%s", id)
 
 	body, err := GetBody(path)
@@ -70,15 +70,82 @@ func SEGet(id string) (item SEShowEntry, err error) {
 	return item, nil
 }
 
+func SEDelete(id string) (err error) {
+	path := "/api/v0/ses/" + id
+
+	err = Delete(path)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (c *SEEntry) Get() (err error) {
+	path := fmt.Sprintf("/api/v0/ses/%s", c.ID)
+
+	body, err := GetBody(path)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(body, c)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (c *SEEntry) Create() (err error) {
+	path := "/api/v0/ses"
+
+	data, err := json.Marshal(c)
+	if err != nil {
+		return err
+	}
+
+	body, err := PostReturnBody(path, data)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(body, c)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (c *SEEntry) Update() (err error) {
+	path := "/api/v0/ses/" + c.ID
+
+	data, err := json.Marshal(c)
+	if err != nil {
+		return err
+	}
+
+	err = Put(path, data)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (c *SEEntry) Delete() (err error) {
+	return SEDelete(c.ID)
+}
+
 func (e SEListEntry) ToString() string {
-	s := fmt.Sprintf("ID: %s, DigiID: %s, DOType: %s, Phase: %s, Step: %s, Status: %s, Label: %s, Created_at: %s , Updated_at: %s, URL: %s, CollectionURL: %s",
-		e.ID, e.DigiID, e.DOType, e.Phase, e.Step, e.Status, e.Label, e.Created_at, e.Updated_at, e.URL, e.CollectionURL)
+	s := fmt.Sprintf("ID: %s, DigiID: %s, DOType: %s, Phase: %s, Step: %s, Status: %s, Label: %s, CreatedAt: %s , UpdatedAt: %s, URL: %s, CollectionURL: %s",
+		e.ID, e.DigiID, e.DOType, e.Phase, e.Step, e.Status, e.Label, e.CreatedAt, e.UpdatedAt, e.URL, e.CollectionURL)
 
 	return s
 }
 
-func (e SEShowEntry) ToString() string {
-	s := fmt.Sprintf("ID: %s, DigiID: %s, DOType: %s, Phase: %s, Step: %s, Status: %s, Label: %s, Title: %s, Created_at: %s , Updated_at: %s, BDIURL: %s, FMDsURL: %s, CollectionURL: %s, LockVersion: %d, Notes: %s", e.ID, e.DigiID, e.DOType, e.Phase, e.Step, e.Status, e.Label, e.Title, e.Created_at, e.Updated_at, e.BDIURL, e.FMDsURL, e.CollectionURL, e.LockVersion, e.Notes)
+func (e SEEntry) ToString() string {
+	s := fmt.Sprintf("ID: %s, DigiID: %s, DOType: %s, Phase: %s, Step: %s, Status: %s, Label: %s, Title: %s, CreatedAt: %s , UpdatedAt: %s, BDIURL: %s, FMDsURL: %s, CollectionURL: %s, LockVersion: %d, Notes: %s", e.ID, e.DigiID, e.DOType, e.Phase, e.Step, e.Status, e.Label, e.Title, e.CreatedAt, e.UpdatedAt, e.BDIURL, e.FMDsURL, e.CollectionURL, e.LockVersion, e.Notes)
 
 	return s
 }
