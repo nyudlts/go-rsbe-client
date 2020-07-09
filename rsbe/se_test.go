@@ -113,77 +113,77 @@ func TestSEGet(t *testing.T) {
 	})
 }
 
-// func TestSECreateFunc(t *testing.T) {
-// 	setupLocalhostClient()
+func TestSECreateFunc(t *testing.T) {
+	setupLocalhostClient()
 
-// 	err := seToCreate.Create()
-// 	if err != nil {
-// 		t.Errorf("Unexpected error: %s", err)
-// 	}
+	err := seToCreate.Create()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
 
-// 	t.Run("confirm that attributes updated", func(t *testing.T) {
-// 		if seToCreate.ID == "" {
-// 			t.Errorf("ID not updated")
-// 		}
+	t.Run("confirm that attributes updated", func(t *testing.T) {
+		if seToCreate.ID == "" {
+			t.Errorf("ID not updated")
+		}
 
-// 		if seToCreate.CreatedAt == "" {
-// 			t.Errorf("CreatedAt not updated")
-// 		}
+		if seToCreate.CreatedAt == "" {
+			t.Errorf("CreatedAt not updated")
+		}
 
-// 		if seToCreate.UpdatedAt == "" {
-// 			t.Errorf("UpdatedAt not updated")
-// 		}
-// 	})
-// }
+		if seToCreate.UpdatedAt == "" {
+			t.Errorf("UpdatedAt not updated")
+		}
+	})
+}
 
-// func TestSEUpdateFunc(t *testing.T) {
-// 	setupLocalhostClient()
+func TestSEUpdateFunc(t *testing.T) {
+	setupLocalhostClient()
 
-// 	_ = seToCreate.Get()
+	_ = seToCreate.Get()
 
-// 	if seToCreate.Name != "Waffles and Syrup" {
-// 		t.Errorf("variable already updated: %s", seToCreate.ToString())
-// 	}
+	if seToCreate.DigiID != "temporary_item" {
+		t.Errorf("variable already updated: %s", seToCreate.ToString())
+	}
 
-// 	seToCreate.Name = "WAFFLES WAFFLES WAFFLES"
+	seToCreate.DigiID = "DogBiscuit"
 
-// 	err := seToCreate.Update()
-// 	if err != nil {
-// 		t.Errorf("Unexpected error: %s", err)
-// 	}
+	err := seToCreate.Update()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
 
-// 	_ = seToCreate.Get()
+	_ = seToCreate.Get()
 
-// 	t.Run("confirm that elements updated", func(t *testing.T) {
-// 		if seToCreate.Name != "WAFFLES WAFFLES WAFFLES" {
-// 			t.Errorf("Name was not updated: got: %s", seToCreate.Name)
-// 		}
+	t.Run("confirm that elements updated", func(t *testing.T) {
+		if seToCreate.DigiID != "DogBiscuit" {
+			t.Errorf("DigiID was not updated: got: %s", seToCreate.DigiID)
+		}
 
-// 		if seToCreate.CreatedAt == seToCreate.UpdatedAt {
-// 			t.Errorf("UpeatedAt not updated")
-// 		}
-// 	})
-// }
+		if seToCreate.CreatedAt == seToCreate.UpdatedAt {
+			t.Errorf("UpeatedAt not updated")
+		}
+	})
+}
 
-// func TestSEDeleteFunc(t *testing.T) {
-// 	setupLocalhostClient()
+func TestSEDeleteFunc(t *testing.T) {
+	setupLocalhostClient()
 
-// 	_ = seToCreate.Get()
+	_ = seToCreate.Get()
 
-// 	id := seToCreate.ID
+	id := seToCreate.ID
 
-// 	err := seToCreate.Delete()
-// 	if err != nil {
-// 		t.Errorf("Unexpected error: %s", err)
-// 	}
+	err := seToCreate.Delete()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
 
-// 	t.Run("confirm that deleted item not found", func(t *testing.T) {
-// 		// should not be found, so err should NOT be nil
-// 		_, err = PartnerGet(id)
+	t.Run("confirm that deleted item not found", func(t *testing.T) {
+		// should not be found, so err should NOT be nil
+		_, err = SEGet(id)
 
-// 		if err != nil {
-// 			t.Errorf("err was nil")
-// 		}
+		if err != nil {
+			t.Errorf("err was nil")
+		}
 
-// 	})
-// }
+	})
+}
