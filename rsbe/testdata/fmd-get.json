@@ -1,0 +1,19 @@
+{
+  "id": "4a3f8f8c-6dbe-4d7c-bff1-1b973f9f615c",
+  "partner_id": "e6517775-6277-4e25-9373-ee7738e820b5",
+  "coll_id": "b9612d5d-619a-4ceb-b620-d816e4b4340b",
+  "size": 1111,
+  "status": "ok",
+  "original_name": "bar.txt",
+  "name": "foo.pdf",
+  "extension": "pdf",
+  "file_mtime": "2020-05-30T02:21:59.710Z",
+  "created_at": "2020-05-30T02:21:59.712Z",
+  "updated_at": "2020-06-01T02:40:48.847Z",
+  "data": {
+    "searchable": true
+  },
+  "coll_url": "http://localhost:3000/api/v0/colls/b9612d5d-619a-4ceb-b620-d816e4b4340b",
+  "partner_url": "http://localhost:3000/api/v0/partners/e6517775-6277-4e25-9373-ee7738e820b5",
+  "lock_version": 2
+}
