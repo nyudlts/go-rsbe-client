@@ -1,0 +1,271 @@
+package rsbe
+
+import (
+	"net/http/httptest"
+	"testing"
+)
+
+var fmdListEntry = FMDListEntry{
+	ID:        "4a3f8f8c-6dbe-4d7c-bff1-1b973f9f615c",
+	Name:      "foo.pdf",
+	Size:      1111,
+	Status:    "ok",
+	FileMTime: "2020-05-30T02:21:59.710Z",
+	DataHash: map[string]interface{}{
+		"searchable": true,
+	},
+	URL:           "http://localhost:3000/api/v0/fmds/4a3f8f8c-6dbe-4d7c-bff1-1b973f9f615c",
+	PartnerURL:    "http://localhost:3000/api/v0/partners/e6517775-6277-4e25-9373-ee7738e820b5",
+	CollectionURL: "http://localhost:3000/api/v0/colls/b9612d5d-619a-4ceb-b620-d816e4b4340b",
+}
+
+var fmdShow = FMDEntry{
+	ID:           "4a3f8f8c-6dbe-4d7c-bff1-1b973f9f615c",
+	PartnerID:    "e6517775-6277-4e25-9373-ee7738e820b5",
+	CollectionID: "b9612d5d-619a-4ceb-b620-d816e4b4340b",
+	Size:         1111,
+	Status:       "ok",
+	OriginalName: "bar.txt",
+	Name:         "foo.pdf",
+	Extension:    "pdf",
+	FileMTime:    "2020-05-30T02:21:59.710Z",
+	CreatedAt:    "2020-05-30T02:21:59.712Z",
+	UpdatedAt:    "2020-06-01T02:40:48.847Z",
+	DataHash: map[string]interface{}{
+		"searchable": true,
+	},
+	CollectionURL: "http://localhost:3000/api/v0/colls/b9612d5d-619a-4ceb-b620-d816e4b4340b",
+	PartnerURL:    "http://localhost:3000/api/v0/partners/e6517775-6277-4e25-9373-ee7738e820b5",
+	LockVersion:   2,
+}
+
+var fmdToCreate = FMDEntry{
+	PartnerID:    "e6517775-6277-4e25-9373-ee7738e820b5",
+	CollectionID: "b9612d5d-619a-4ceb-b620-d816e4b4340b",
+	Size:         12342,
+	Status:       "ok",
+	OriginalName: "maple.pdf",
+	Name:         "syrup.pdf",
+	Extension:    "pdf",
+	FileMTime:    "2020-06-30T02:21:59.710Z",
+	HashMD5:      "6a6735088d582e2b9867542759988d3c",
+	HashSHA1:     "7adfb08560ea47856db668fda00276796404a7dc",
+	HashSHA256:   "57cb4643e48bdaf4aad877cbd1a5401341207964bbc3195cd798e34ce69f37fb",
+	HashSHA512:   "e21baae6bac92cd46cb3fb7d1117d529ee8c3d80f6e1a7c84ee599bc14bb7cd6c538c9161f75bd9d24f1ce714a9c422bedf55a132fb070e0c7a112316bfbc267",
+	FormatsHash: map[string]interface{}{
+		"pronom": "fmt/14",
+	},
+	DataHash: map[string]interface{}{
+		"searchable": true,
+	},
+}
+
+func TestSEFMDsList(t *testing.T) {
+
+	mux := setupMux("/api/v0/ses/8c258cb2-d700-43be-8773-a61a7b9cd668/fmds", "testdata/se-fmd-list.json")
+	ts := httptest.NewServer(mux)
+	defer ts.Close()
+
+	setupTestServerClient(ts)
+
+	t.Run("result", func(t *testing.T) {
+		want := fmdListEntry
+		got, err := SEFMDsList("8c258cb2-d700-43be-8773-a61a7b9cd668")
+		if err != nil {
+			t.Errorf("Unexpected error: %s", err)
+		}
+
+		if 3 != len(got) {
+			t.Errorf("Result Length Mismatch: want: 3, got: %d", len(got))
+		}
+
+		if fmdListEntry.ID != got[0].ID {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		if fmdListEntry.Name != got[0].Name {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		if fmdListEntry.Size != got[0].Size {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		if fmdListEntry.Status != got[0].Status {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		if fmdListEntry.FileMTime != got[0].FileMTime {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		if fmdListEntry.DataHash["searchable"] != got[0].DataHash["searchable"] {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		if fmdListEntry.PartnerURL != got[0].PartnerURL {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		if fmdListEntry.CollectionURL != got[0].CollectionURL {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+	})
+
+}
+
+func TestFMDGetFunc(t *testing.T) {
+
+	mux := setupMux("/api/v0/fmds/4a3f8f8c-6dbe-4d7c-bff1-1b973f9f615c", "testdata/fmd-get.json")
+	ts := httptest.NewServer(mux)
+	defer ts.Close()
+
+	setupTestServerClient(ts)
+
+	t.Run("result", func(t *testing.T) {
+		want := fmdShow
+		got := FMDEntry{ID: "4a3f8f8c-6dbe-4d7c-bff1-1b973f9f615c"}
+
+		err := got.Get()
+		if err != nil {
+			t.Errorf("Unexpected error: %s", err)
+		}
+
+		if want.ID != got.ID {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		if want.PartnerID != got.PartnerID {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		if want.CollectionID != got.CollectionID {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		if want.Size != got.Size {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		if want.Status != got.Status {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		if want.OriginalName != got.OriginalName {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		if want.Name != got.Name {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		if want.Extension != got.Extension {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		if want.FileMTime != got.FileMTime {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		if want.CreatedAt != got.CreatedAt {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		if want.UpdatedAt != got.UpdatedAt {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		if want.DataHash["searchable"] != got.DataHash["searchable"] {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		if want.PartnerURL != got.PartnerURL {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		if want.CollectionURL != got.CollectionURL {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		if want.LockVersion != got.LockVersion {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+	})
+
+}
+
+// func TestSECreateFunc(t *testing.T) {
+// 	setupLocalhostClient()
+
+// 	err := seToCreate.Create()
+// 	if err != nil {
+// 		t.Errorf("Unexpected error: %s", err)
+// 	}
+
+// 	t.Run("confirm that attributes updated", func(t *testing.T) {
+// 		if seToCreate.ID == "" {
+// 			t.Errorf("ID not updated")
+// 		}
+
+// 		if seToCreate.CreatedAt == "" {
+// 			t.Errorf("CreatedAt not updated")
+// 		}
+
+// 		if seToCreate.UpdatedAt == "" {
+// 			t.Errorf("UpdatedAt not updated")
+// 		}
+// 	})
+// }
+
+// func TestSEUpdateFunc(t *testing.T) {
+// 	setupLocalhostClient()
+
+// 	_ = seToCreate.Get()
+
+// 	if seToCreate.DigiID != "temporary_item" {
+// 		t.Errorf("variable already updated: %s", seToCreate.ToString())
+// 	}
+
+// 	seToCreate.DigiID = "DogBiscuit"
+
+// 	err := seToCreate.Update()
+// 	if err != nil {
+// 		t.Errorf("Unexpected error: %s", err)
+// 	}
+
+// 	_ = seToCreate.Get()
+
+// 	t.Run("confirm that elements updated", func(t *testing.T) {
+// 		if seToCreate.DigiID != "DogBiscuit" {
+// 			t.Errorf("DigiID was not updated: got: %s", seToCreate.DigiID)
+// 		}
+
+// 		if seToCreate.CreatedAt == seToCreate.UpdatedAt {
+// 			t.Errorf("UpeatedAt not updated")
+// 		}
+// 	})
+// }
+
+// func TestSEDeleteFunc(t *testing.T) {
+// 	setupLocalhostClient()
+
+// 	_ = seToCreate.Get()
+
+// 	id := seToCreate.ID
+
+// 	err := seToCreate.Delete()
+// 	if err != nil {
+// 		t.Errorf("Unexpected error: %s", err)
+// 	}
+
+// 	t.Run("confirm that deleted item not found", func(t *testing.T) {
+// 		// should not be found, so err should NOT be nil
+// 		_, err = SEGet(id)
+
+// 		if err != nil {
+// 			t.Errorf("err was nil")
+// 		}
+
+// 	})
+// }
