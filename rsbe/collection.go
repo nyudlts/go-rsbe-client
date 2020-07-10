@@ -66,7 +66,33 @@ func CollectionGet(id string) (collection CollectionEntry, err error) {
 	return collection, nil
 }
 
-func CollectionCreate(c *CollectionEntry) (err error) {
+func CollectionDelete(id string) (err error) {
+	path := "/api/v0/colls/" + id
+
+	err = Delete(path)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (c *CollectionEntry) Get() (err error) {
+	path := fmt.Sprintf("/api/v0/colls/%s", c.ID)
+
+	body, err := GetBody(path)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(body, c)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (c *CollectionEntry) Create() (err error) {
 	path := "/api/v0/colls"
 
 	data, err := json.Marshal(c)
@@ -87,7 +113,7 @@ func CollectionCreate(c *CollectionEntry) (err error) {
 	return nil
 }
 
-func CollectionUpdate(c *PartnerEntry) (err error) {
+func (c *CollectionEntry) Update() (err error) {
 	path := "/api/v0/colls/" + c.ID
 
 	data, err := json.Marshal(c)
@@ -103,14 +129,8 @@ func CollectionUpdate(c *PartnerEntry) (err error) {
 	return nil
 }
 
-func CollectionDelete(id string) (err error) {
-	path := "/api/v0/colls/" + id
-
-	err = Delete(path)
-	if err != nil {
-		return err
-	}
-	return nil
+func (c *CollectionEntry) Delete() (err error) {
+	return CollectionDelete(c.ID)
 }
 
 func (e CollectionListEntry) ToString() string {
