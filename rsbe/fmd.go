@@ -101,6 +101,57 @@ func (p *FMDEntry) Get() (err error) {
 	return nil
 }
 
+func (p *FMDEntry) Create() (err error) {
+	path := "/api/v0/fmds"
+
+	data, err := json.Marshal(p)
+	if err != nil {
+		return err
+	}
+
+	body, err := PostReturnBody(path, data)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(body, p)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (c *FMDEntry) Update() (err error) {
+	path := "/api/v0/fmds/" + c.ID
+
+	data, err := json.Marshal(c)
+	if err != nil {
+		return err
+	}
+
+	err = Put(path, data)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func FMDDelete(id string) (err error) {
+	path := "/api/v0/fmds/" + id
+
+	err = Delete(path)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (c *FMDEntry) Delete() (err error) {
+	return FMDDelete(c.ID)
+}
+
 func (e FMDListEntry) ToString() string {
 	s := fmt.Sprintf("ID: %s, Name: %s, Size: %d, Status: %s, FileMTime: %s, DataHash: %v, URL: %s , PartnerURL: %s, CollectionURL: %s",
 		e.ID, e.Name, e.Size, e.Status, e.FileMTime, e.DataHash, e.URL, e.PartnerURL, e.CollectionURL)
