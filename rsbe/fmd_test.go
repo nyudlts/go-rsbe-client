@@ -11,8 +11,8 @@ var fmdListEntry = FMDListEntry{
 	Size:      1111,
 	Status:    "ok",
 	FileMTime: "2020-05-30T02:21:59.710Z",
-	DataHash: map[string]interface{}{
-		"searchable": true,
+	Data: FMDData{
+		Searchable: true,
 	},
 	URL:           "http://localhost:3000/api/v0/fmds/4a3f8f8c-6dbe-4d7c-bff1-1b973f9f615c",
 	PartnerURL:    "http://localhost:3000/api/v0/partners/e6517775-6277-4e25-9373-ee7738e820b5",
@@ -35,19 +35,19 @@ var fmdShow = FMDEntry{
 	HashSHA512:   "e21baae6bac92cd46cb3fb7d1117d529ee8c3d80f6e1a7c84ee599bc14bb7cd6c538c9161f75bd9d24f1ce714a9c422bedf55a132fb070e0c7a112316bfbc267",
 	CreatedAt:    "2020-07-13T02:13:10.297Z",
 	UpdatedAt:    "2020-07-13T02:13:10.297Z",
-	FormatsHash: map[string]interface{}{
-		"pronom": "fmt/14",
-		"mime":   "application/pdf",
+	Formats: FMDFormat{
+		PRONOM: "fmt/14",
+		MIME:   "application/pdf",
 	},
-	DataHash: map[string]interface{}{
-		"searchable":       true,
-		"duration":         "00:01:23.456",
-		"bitrate":          800000,
-		"width":            1920,
-		"height":           1080,
-		"aspect_ratio":     "16:9",
-		"xml_schema":       "marcxml",
-		"transcription_id": "cd165a2f-f976-4c55-a63c-6b57017eed49",
+	Data: FMDData{
+		Searchable:      true,
+		Duration:        "00:01:23.456",
+		Bitrate:         800000,
+		Width:           1920,
+		Height:          1080,
+		AspectRatio:     "16:9",
+		XMLSchema:       "marcxml",
+		TranscriptionID: "cd165a2f-f976-4c55-a63c-6b57017eed49",
 	},
 	CollectionURL: "http://localhost:3000/api/v0/colls/b9612d5d-619a-4ceb-b620-d816e4b4340b",
 	PartnerURL:    "http://localhost:3000/api/v0/partners/e6517775-6277-4e25-9373-ee7738e820b5",
@@ -67,11 +67,11 @@ var fmdToCreate = FMDEntry{
 	HashSHA1:     "7adfb08560ea47856db668fda00276796404a7dc",
 	HashSHA256:   "57cb4643e48bdaf4aad877cbd1a5401341207964bbc3195cd798e34ce69f37fb",
 	HashSHA512:   "e21baae6bac92cd46cb3fb7d1117d529ee8c3d80f6e1a7c84ee599bc14bb7cd6c538c9161f75bd9d24f1ce714a9c422bedf55a132fb070e0c7a112316bfbc267",
-	FormatsHash: map[string]interface{}{
-		"pronom": "fmt/14",
+	Formats: FMDFormat{
+		PRONOM: "fmt/14",
 	},
-	DataHash: map[string]interface{}{
-		"searchable": true,
+	Data: FMDData{
+		Searchable: true,
 	},
 }
 
@@ -114,7 +114,7 @@ func TestSEFMDsList(t *testing.T) {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
 		}
 
-		if fmdListEntry.DataHash["searchable"] != got[0].DataHash["searchable"] {
+		if fmdListEntry.Data.Searchable != got[0].Data.Searchable {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
 		}
 
@@ -190,7 +190,7 @@ func TestFMDGetFunc(t *testing.T) {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
 		}
 
-		if want.DataHash["searchable"] != got.DataHash["searchable"] {
+		if want.Data.Searchable != got.Data.Searchable {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
 		}
 
@@ -209,7 +209,6 @@ func TestFMDGetFunc(t *testing.T) {
 	})
 
 }
-
 
 func TestFMDCreateFunc(t *testing.T) {
 	setupLocalhostClient()
@@ -239,11 +238,11 @@ func TestFMDUpdateFunc(t *testing.T) {
 
 	_ = fmdToCreate.Get()
 
-	if fmdToCreate.FormatsHash["pronom"] != "fmt/14" {
+	if fmdToCreate.Formats.PRONOM != "fmt/14" {
 		t.Errorf("variable already updated: %s", fmdToCreate.ToString())
 	}
 
-	fmdToCreate.FormatsHash["pronom"] = "fmt/99"
+	fmdToCreate.Formats.PRONOM = "fmt/99"
 
 	err := fmdToCreate.Update()
 	if err != nil {
@@ -253,8 +252,8 @@ func TestFMDUpdateFunc(t *testing.T) {
 	_ = fmdToCreate.Get()
 
 	t.Run("confirm that elements updated", func(t *testing.T) {
-		if fmdToCreate.FormatsHash["pronom"] != "fmt/99" {
-			t.Errorf("FormatsHash was not updated: got: %s", fmdToCreate.FormatsHash["pronom"])
+		if fmdToCreate.Formats.PRONOM != "fmt/99" {
+			t.Errorf("Formats was not updated: got: %s", fmdToCreate.Formats.PRONOM)
 		}
 
 		if fmdToCreate.CreatedAt == fmdToCreate.UpdatedAt {
