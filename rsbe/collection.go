@@ -11,8 +11,8 @@ type CollectionListEntry struct {
 	Code       string `json:"code"`
 	Name       string `json:"name"`
 	CollType   string `json:"coll_type"`
-	Created_at string `json:"created_at"`
-	Updated_at string `json:"updated_at"`
+	CreatedAt string `json:"created_at"`
+	UpdatedAt string `json:"updated_at"`
 	URL        string `json:"url"`
 	PartnerURL string `json:"partner_url"`
 }
@@ -30,8 +30,8 @@ type CollectionEntry struct {
 	SEsURL          string `json:"ses_url,omitempty"`
 	IEsURL          string `json:"ies_url,omitempty"`
 	LockVersion     int    `json:"lock_version,omitempty"`
-	Created_at      string `json:"created_at,omitempty"`
-	Updated_at      string `json:"updated_at,omitempty"`
+	CreatedAt      string `json:"created_at,omitempty"`
+	UpdatedAt      string `json:"updated_at,omitempty"`
 }
 
 func PartnerCollectionsList(partnerID string) (collections []CollectionListEntry, err error) {
@@ -134,14 +134,14 @@ func (c *CollectionEntry) Delete() (err error) {
 }
 
 func (e CollectionListEntry) ToString() string {
-	s := fmt.Sprintf("ID: %s, PartnerID: %s, Code: %s, Name: %s, CollType: %s, Created_at: %s , Updated_at: %s, URL: %s, PartnerURL: %s",
-		e.ID, e.PartnerID, e.Code, e.Name, e.CollType, e.Created_at, e.Updated_at, e.URL, e.PartnerURL)
+	s := fmt.Sprintf("ID: %s, PartnerID: %s, Code: %s, Name: %s, CollType: %s, CreatedAt: %s , UpdatedAt: %s, URL: %s, PartnerURL: %s",
+		e.ID, e.PartnerID, e.Code, e.Name, e.CollType, e.CreatedAt, e.UpdatedAt, e.URL, e.PartnerURL)
 
 	return s
 }
 
 func (e CollectionEntry) ToString() string {
-	s := fmt.Sprintf("ID: %s, PartnerID: %s, Code: %s, Name: %s, CollType: %s, Created_at: %s , Updated_at: %s, Quota: %d, ReadyForContent: %v, PartnerURL: %s, SEsURL: %s, IEsURL: %s, LockVersion: %d, RelPath: %s", e.ID, e.PartnerID, e.Code, e.Name, e.CollType, e.Created_at, e.Updated_at, e.Quota, e.ReadyForContent, e.PartnerURL, e.SEsURL, e.IEsURL, e.LockVersion, e.RelPath)
+	s := fmt.Sprintf("ID: %s, PartnerID: %s, Code: %s, Name: %s, CollType: %s, CreatedAt: %s , UpdatedAt: %s, Quota: %d, ReadyForContent: %v, PartnerURL: %s, SEsURL: %s, IEsURL: %s, LockVersion: %d, RelPath: %s", e.ID, e.PartnerID, e.Code, e.Name, e.CollType, e.CreatedAt, e.UpdatedAt, e.Quota, e.ReadyForContent, e.PartnerURL, e.SEsURL, e.IEsURL, e.LockVersion, e.RelPath)
 
 	return s
 }
