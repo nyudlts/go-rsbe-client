@@ -26,28 +26,14 @@ var etofmdShow = EtoFMDEntry{
 	LockVersion: 0,
 }
 
-// var fmdToCreate = FMDEntry{
-// 	PartnerID:    "e6517775-6277-4e25-9373-ee7738e820b5",
-// 	CollectionID: "b9612d5d-619a-4ceb-b620-d816e4b4340b",
-// 	Size:         12342,
-// 	Status:       "ok",
-// 	OriginalName: "maple.pdf",
-// 	Name:         "syrup.pdf",
-// 	Extension:    "pdf",
-// 	FileMTime:    "2020-06-30T02:21:59.710Z",
-// 	HashMD5:      "6a6735088d582e2b9867542759988d3c",
-// 	HashSHA1:     "7adfb08560ea47856db668fda00276796404a7dc",
-// 	HashSHA256:   "57cb4643e48bdaf4aad877cbd1a5401341207964bbc3195cd798e34ce69f37fb",
-// 	HashSHA512:   "e21baae6bac92cd46cb3fb7d1117d529ee8c3d80f6e1a7c84ee599bc14bb7cd6c538c9161f75bd9d24f1ce714a9c422bedf55a132fb070e0c7a112316bfbc267",
-// 	Formats: FMDFormat{
-// 		PRONOM: "fmt/14",
-// 	},
-// 	Data: FMDData{
-// 		Searchable: true,
-// 	},
-// }
+var etofmdToCreate = EtoFMDEntry{
+	EType:       "ie",
+	EID:         "9ea98441-b6b6-46cf-b6c8-91dff385c6c8",
+	Role:        "notes",
+	FMDID:       "f9f38cc5-0728-4f1a-85ec-e4cb6906d304",
+}
 
-func TestEtoFMDsList(t *testing.T) {
+func TestEtoFMDList(t *testing.T) {
 
 	mux := setupMux("/api/v0/etofmds", "testdata/etofmd-list.json")
 	ts := httptest.NewServer(mux)
@@ -57,7 +43,7 @@ func TestEtoFMDsList(t *testing.T) {
 
 	t.Run("result", func(t *testing.T) {
 		want := etofmdListEntry
-		got, err := EtoFMDsList()
+		got, err := EtoFMDList()
 		if err != nil {
 			t.Errorf("Unexpected error: %s", err)
 		}
@@ -97,77 +83,77 @@ func TestEtoFMDGetFunc(t *testing.T) {
 
 }
 
-// func TestFMDCreateFunc(t *testing.T) {
-// 	setupLocalhostClient()
+func TestEtoFMDCreateFunc(t *testing.T) {
+	setupLocalhostClient()
 
-// 	err := fmdToCreate.Create()
-// 	if err != nil {
-// 		t.Errorf("Unexpected error: %s", err)
-// 	}
+	err := etofmdToCreate.Create()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
 
-// 	t.Run("confirm that attributes updated", func(t *testing.T) {
-// 		if fmdToCreate.ID == "" {
-// 			t.Errorf("ID not updated")
-// 		}
+	t.Run("confirm that attributes updated", func(t *testing.T) {
+		if etofmdToCreate.ID == "" {
+			t.Errorf("ID not updated")
+		}
 
-// 		if fmdToCreate.CreatedAt == "" {
-// 			t.Errorf("CreatedAt not updated")
-// 		}
+		if etofmdToCreate.CreatedAt == "" {
+			t.Errorf("CreatedAt not updated")
+		}
 
-// 		if fmdToCreate.UpdatedAt == "" {
-// 			t.Errorf("UpdatedAt not updated")
-// 		}
-// 	})
-// }
+		if etofmdToCreate.UpdatedAt == "" {
+			t.Errorf("UpdatedAt not updated")
+		}
+	})
+}
 
-// func TestFMDUpdateFunc(t *testing.T) {
-// 	setupLocalhostClient()
+func TestEtoFMDUpdateFunc(t *testing.T) {
+	setupLocalhostClient()
 
-// 	_ = fmdToCreate.Get()
+	_ = etofmdToCreate.Get()
 
-// 	if fmdToCreate.Formats.PRONOM != "fmt/14" {
-// 		t.Errorf("variable already updated: %s", fmdToCreate.ToString())
-// 	}
+	if etofmdToCreate.Role != "notes" {
+		t.Errorf("variable already updated: %s", etofmdToCreate.ToString())
+	}
 
-// 	fmdToCreate.Formats.PRONOM = "fmt/99"
+	etofmdToCreate.Role = "waffles"
 
-// 	err := fmdToCreate.Update()
-// 	if err != nil {
-// 		t.Errorf("Unexpected error: %s", err)
-// 	}
+	err := etofmdToCreate.Update()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
 
-// 	_ = fmdToCreate.Get()
+	_ = etofmdToCreate.Get()
 
-// 	t.Run("confirm that elements updated", func(t *testing.T) {
-// 		if fmdToCreate.Formats.PRONOM != "fmt/99" {
-// 			t.Errorf("Formats was not updated: got: %s", fmdToCreate.Formats.PRONOM)
-// 		}
+	t.Run("confirm that elements updated", func(t *testing.T) {
+		if etofmdToCreate.Role != "waffles" {
+			t.Errorf("Role was not updated: got: %s", etofmdToCreate.Role)
+		}
 
-// 		if fmdToCreate.CreatedAt == fmdToCreate.UpdatedAt {
-// 			t.Errorf("UpdatedAt not updated")
-// 		}
-// 	})
-// }
+		if etofmdToCreate.CreatedAt == etofmdToCreate.UpdatedAt {
+			t.Errorf("UpdatedAt not updated")
+		}
+	})
+}
 
-// func TestFMDDeleteFunc(t *testing.T) {
-// 	setupLocalhostClient()
+func TestEtoFMDDeleteFunc(t *testing.T) {
+	setupLocalhostClient()
 
-// 	_ = fmdToCreate.Get()
+	_ = etofmdToCreate.Get()
 
-// 	id := fmdToCreate.ID
+	id := etofmdToCreate.ID
 
-// 	err := fmdToCreate.Delete()
-// 	if err != nil {
-// 		t.Errorf("Unexpected error: %s", err)
-// 	}
+	err := etofmdToCreate.Delete()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
 
-// 	t.Run("confirm that deleted item not found", func(t *testing.T) {
-// 		// should not be found, so err should NOT be nil
-// 		_, err = FMDGet(id)
+	t.Run("confirm that deleted item not found", func(t *testing.T) {
+		// should not be found, so err should NOT be nil
+		_, err = EtoFMDGet(id)
 
-// 		if err != nil {
-// 			t.Errorf("err was nil")
-// 		}
+		if err != nil {
+			t.Errorf("err was nil")
+		}
 
-// 	})
-// }
+	})
+}
