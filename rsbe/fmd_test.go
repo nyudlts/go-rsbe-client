@@ -190,7 +190,39 @@ func TestFMDGetFunc(t *testing.T) {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
 		}
 
-		if want.Data.Searchable != got.Data.Searchable {
+		if want.Formats.PRONOM != got.Formats.PRONOM {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		if want.Formats.MIME != got.Formats.MIME {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		if want.Data.Duration != got.Data.Duration {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		if want.Data.Bitrate != got.Data.Bitrate {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		if want.Data.Width != got.Data.Width {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		if want.Data.Height != got.Data.Height {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		if want.Data.AspectRatio != got.Data.AspectRatio {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		if want.Data.XMLSchema != got.Data.XMLSchema {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		if want.Data.TranscriptionID != got.Data.TranscriptionID {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
 		}
 
