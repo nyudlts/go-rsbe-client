@@ -1,0 +1,31 @@
+[
+  {
+    "id": "3ca8ecaf-6fae-48a5-8441-5a96e119ad28",
+    "etype": "se",
+    "eid": "8c258cb2-d700-43be-8773-a61a7b9cd668",
+    "fmd_id": "4a3f8f8c-6dbe-4d7c-bff1-1b973f9f615c",
+    "role": "master",
+    "url": "http://localhost:3000/api/v0/etofmds/3ca8ecaf-6fae-48a5-8441-5a96e119ad28"
+  },
+  {
+    "id": "d9824815-edf1-4ea4-b6f3-8ea05740e7a1",
+    "etype": "ie",
+    "eid": "9ea98441-b6b6-46cf-b6c8-91dff385c6c8",
+    "fmd_id": "f9f38cc5-0728-4f1a-85ec-e4cb6906d304",
+    "url": "http://localhost:3000/api/v0/etofmds/d9824815-edf1-4ea4-b6f3-8ea05740e7a1"
+  },
+  {
+    "id": "3e292c4d-ff00-4cc0-85e0-0028e5a1978e",
+    "etype": "se",
+    "eid": "8c258cb2-d700-43be-8773-a61a7b9cd668",
+    "fmd_id": "ed11a83d-9d88-4ee2-9d8f-bae055d41ed4",
+    "url": "http://localhost:3000/api/v0/etofmds/3e292c4d-ff00-4cc0-85e0-0028e5a1978e"
+  },
+  {
+    "id": "eeb0ba03-d90b-48ee-afa0-44179827f01e",
+    "etype": "se",
+    "eid": "8c258cb2-d700-43be-8773-a61a7b9cd668",
+    "fmd_id": "c9416e9a-5d6d-4cb3-b16f-8d957628759a",
+    "url": "http://localhost:3000/api/v0/etofmds/eeb0ba03-d90b-48ee-afa0-44179827f01e"
+  }
+]
