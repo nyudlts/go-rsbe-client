@@ -64,37 +64,37 @@ func EtoFMDsList() (list []EtoFMDListEntry, err error) {
 	return list, nil
 }
 
-// func EtoFMDGet(id string) (item FMDEntry, err error) {
-// 	path := "/api/v0/fmds/" + id
+func EtoFMDGet(id string) (item EtoFMDEntry, err error) {
+	path := "/api/v0/etofmds/" + id
 
-// 	body, err := GetBody(path)
-// 	if err != nil {
-// 		return item, err
-// 	}
+	body, err := GetBody(path)
+	if err != nil {
+		return item, err
+	}
 
-// 	err = json.Unmarshal(body, &item)
-// 	if err != nil {
-// 		return item, err
-// 	}
+	err = json.Unmarshal(body, &item)
+	if err != nil {
+		return item, err
+	}
 
-// 	return item, nil
-// }
+	return item, nil
+}
 
-// func (p *FMDEntry) Get() (err error) {
-// 	path := "/api/v0/fmds/" + p.ID
+func (p *EtoFMDEntry) Get() (err error) {
+	path := "/api/v0/etofmds/" + p.ID
 
-// 	body, err := GetBody(path)
-// 	if err != nil {
-// 		return err
-// 	}
+	body, err := GetBody(path)
+	if err != nil {
+		return err
+	}
 
-// 	err = json.Unmarshal(body, p)
-// 	if err != nil {
-// 		return err
-// 	}
+	err = json.Unmarshal(body, p)
+	if err != nil {
+		return err
+	}
 
-// 	return nil
-// }
+	return nil
+}
 
 // func (p *FMDEntry) Create() (err error) {
 // 	path := "/api/v0/fmds"
