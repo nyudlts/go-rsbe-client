@@ -115,77 +115,77 @@ func TestCollectionGet(t *testing.T) {
 	})
 }
 
-// func TestCollectionCreateFunc(t *testing.T) {
-// 	setupLocalhostClient()
+func TestCollectionCreateFunc(t *testing.T) {
+	setupLocalhostClient()
 
-// 	err := seToCreate.Create()
-// 	if err != nil {
-// 		t.Errorf("Unexpected error: %s", err)
-// 	}
+	err := collectionToCreate.Create()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
 
-// 	t.Run("confirm that attributes updated", func(t *testing.T) {
-// 		if seToCreate.ID == "" {
-// 			t.Errorf("ID not updated")
-// 		}
+	t.Run("confirm that attributes updated", func(t *testing.T) {
+		if collectionToCreate.ID == "" {
+			t.Errorf("ID not updated")
+		}
 
-// 		if seToCreate.CreatedAt == "" {
-// 			t.Errorf("CreatedAt not updated")
-// 		}
+		if collectionToCreate.CreatedAt == "" {
+			t.Errorf("CreatedAt not updated")
+		}
 
-// 		if seToCreate.UpdatedAt == "" {
-// 			t.Errorf("UpdatedAt not updated")
-// 		}
-// 	})
-// }
+		if collectionToCreate.UpdatedAt == "" {
+			t.Errorf("UpdatedAt not updated")
+		}
+	})
+}
 
-// func TestCollectionUpdateFunc(t *testing.T) {
-// 	setupLocalhostClient()
+func TestCollectionUpdateFunc(t *testing.T) {
+	setupLocalhostClient()
 
-// 	_ = seToCreate.Get()
+	_ = collectionToCreate.Get()
 
-// 	if seToCreate.DigiID != "temporary_item" {
-// 		t.Errorf("variable already updated: %s", seToCreate.ToString())
-// 	}
+	if collectionToCreate.Name != "The Amazing Breakfast Collection" {
+		t.Errorf("variable already updated: %s", collectionToCreate.ToString())
+	}
 
-// 	seToCreate.DigiID = "DogBiscuit"
+	collectionToCreate.Name = "DogBiscuit"
 
-// 	err := seToCreate.Update()
-// 	if err != nil {
-// 		t.Errorf("Unexpected error: %s", err)
-// 	}
+	err := collectionToCreate.Update()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
 
-// 	_ = seToCreate.Get()
+	_ = collectionToCreate.Get()
 
-// 	t.Run("confirm that elements updated", func(t *testing.T) {
-// 		if seToCreate.DigiID != "DogBiscuit" {
-// 			t.Errorf("DigiID was not updated: got: %s", seToCreate.DigiID)
-// 		}
+	t.Run("confirm that elements updated", func(t *testing.T) {
+		if collectionToCreate.Name != "DogBiscuit" {
+			t.Errorf("Name was not updated: got: %s", collectionToCreate.Name)
+		}
 
-// 		if seToCreate.CreatedAt == seToCreate.UpdatedAt {
-// 			t.Errorf("UpeatedAt not updated")
-// 		}
-// 	})
-// }
+		if collectionToCreate.CreatedAt == collectionToCreate.UpdatedAt {
+			t.Errorf("UpeatedAt not updated")
+		}
+	})
+}
 
-// func TestCollectionDeleteFunc(t *testing.T) {
-// 	setupLocalhostClient()
+func TestCollectionDeleteFunc(t *testing.T) {
+	setupLocalhostClient()
 
-// 	_ = seToCreate.Get()
+	_ = collectionToCreate.Get()
 
-// 	id := seToCreate.ID
+	id := collectionToCreate.ID
 
-// 	err := seToCreate.Delete()
-// 	if err != nil {
-// 		t.Errorf("Unexpected error: %s", err)
-// 	}
+	err := collectionToCreate.Delete()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
 
-// 	t.Run("confirm that deleted item not found", func(t *testing.T) {
-// 		// should not be found, so err should NOT be nil
-// 		_, err = CollectionGet(id)
+	t.Run("confirm that deleted item not found", func(t *testing.T) {
+		// should not be found, so err should NOT be nil
+		_, err = CollectionGet(id)
 
-// 		if err != nil {
-// 			t.Errorf("err was nil")
-// 		}
+		if err != nil {
+			t.Errorf("err was nil")
+		}
 
-// 	})
-// }
+	})
+}
