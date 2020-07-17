@@ -70,52 +70,52 @@ func TestPartnerCollectionList(t *testing.T) {
 
 }
 
-// func TestSEGetFunc(t *testing.T) {
+func TestCollectionGetFunc(t *testing.T) {
 
-// 	mux := setupMux("/api/v0/ses/8c258cb2-d700-43be-8773-a61a7b9cd668", "testdata/se-get.json")
-// 	ts := httptest.NewServer(mux)
-// 	defer ts.Close()
+	mux := setupMux("/api/v0/colls/b9612d5d-619a-4ceb-b620-d816e4b4340b", "testdata/collection-get.json")
+	ts := httptest.NewServer(mux)
+	defer ts.Close()
 
-// 	setupTestServerClient(ts)
+	setupTestServerClient(ts)
 
-// 	t.Run("result", func(t *testing.T) {
-// 		want := seShow
-// 		got := CollectionEntry{ID: "8c258cb2-d700-43be-8773-a61a7b9cd668"}
+	t.Run("result", func(t *testing.T) {
+		want := collectionShow
+		got := CollectionEntry{ID: "b9612d5d-619a-4ceb-b620-d816e4b4340b"}
 
-// 		err := got.Get()
-// 		if err != nil {
-// 			t.Errorf("Unexpected error: %s", err)
-// 		}
+		err := got.Get()
+		if err != nil {
+			t.Errorf("Unexpected error: %s", err)
+		}
 
-// 		if got != want {
-// 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
-// 		}
-// 	})
+		if got != want {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+	})
 
-// }
+}
 
-// func TestSEGet(t *testing.T) {
+func TestCollectionGet(t *testing.T) {
 
-// 	mux := setupMux("/api/v0/ses/8c258cb2-d700-43be-8773-a61a7b9cd668", "testdata/se-get.json")
-// 	ts := httptest.NewServer(mux)
-// 	defer ts.Close()
+	mux := setupMux("/api/v0/colls/b9612d5d-619a-4ceb-b620-d816e4b4340b", "testdata/collection-get.json")
+	ts := httptest.NewServer(mux)
+	defer ts.Close()
 
-// 	setupTestServerClient(ts)
+	setupTestServerClient(ts)
 
-// 	t.Run("confirm that expected partner was retrieved", func(t *testing.T) {
-// 		want := seShow
-// 		got, err := SEGet("8c258cb2-d700-43be-8773-a61a7b9cd668")
-// 		if err != nil {
-// 			t.Errorf("Unexpected error: %s", err)
-// 		}
+	t.Run("confirm that expected collection was retrieved", func(t *testing.T) {
+		want := collectionShow
+		got, err := CollectionGet("b9612d5d-619a-4ceb-b620-d816e4b4340b")
+		if err != nil {
+			t.Errorf("Unexpected error: %s", err)
+		}
 
-// 		if got != want {
-// 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
-// 		}
-// 	})
-// }
+		if got != want {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+	})
+}
 
-// func TestSECreateFunc(t *testing.T) {
+// func TestCollectionCreateFunc(t *testing.T) {
 // 	setupLocalhostClient()
 
 // 	err := seToCreate.Create()
@@ -138,7 +138,7 @@ func TestPartnerCollectionList(t *testing.T) {
 // 	})
 // }
 
-// func TestSEUpdateFunc(t *testing.T) {
+// func TestCollectionUpdateFunc(t *testing.T) {
 // 	setupLocalhostClient()
 
 // 	_ = seToCreate.Get()
@@ -167,7 +167,7 @@ func TestPartnerCollectionList(t *testing.T) {
 // 	})
 // }
 
-// func TestSEDeleteFunc(t *testing.T) {
+// func TestCollectionDeleteFunc(t *testing.T) {
 // 	setupLocalhostClient()
 
 // 	_ = seToCreate.Get()
@@ -181,7 +181,7 @@ func TestPartnerCollectionList(t *testing.T) {
 
 // 	t.Run("confirm that deleted item not found", func(t *testing.T) {
 // 		// should not be found, so err should NOT be nil
-// 		_, err = SEGet(id)
+// 		_, err = CollectionGet(id)
 
 // 		if err != nil {
 // 			t.Errorf("err was nil")
