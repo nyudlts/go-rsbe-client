@@ -1,0 +1,12 @@
+[
+  {
+    "id": "f9f38cc5-0728-4f1a-85ec-e4cb6906d304",
+    "name": "foo.txt",
+    "size": 8888,
+    "status": "ok",
+    "file_mtime": "2020-05-30T02:23:33.187Z",
+    "url": "http://localhost:3000/api/v0/fmds/f9f38cc5-0728-4f1a-85ec-e4cb6906d304",
+    "partner_url": "http://localhost:3000/api/v0/partners/e6517775-6277-4e25-9373-ee7738e820b5",
+    "coll_url": "http://localhost:3000/api/v0/colls/b9612d5d-619a-4ceb-b620-d816e4b4340b"
+  }
+]

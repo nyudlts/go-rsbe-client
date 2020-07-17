@@ -1,0 +1,35 @@
+[
+  {
+    "id": "4a3f8f8c-6dbe-4d7c-bff1-1b973f9f615c",
+    "name": "foo.pdf",
+    "size": 1111,
+    "status": "ok",
+    "file_mtime": "2020-05-30T02:21:59.710Z",
+    "data": {
+      "searchable": true
+    },
+    "url": "http://localhost:3000/api/v0/fmds/4a3f8f8c-6dbe-4d7c-bff1-1b973f9f615c",
+    "partner_url": "http://localhost:3000/api/v0/partners/e6517775-6277-4e25-9373-ee7738e820b5",
+    "coll_url": "http://localhost:3000/api/v0/colls/b9612d5d-619a-4ceb-b620-d816e4b4340b"
+  },
+  {
+    "id": "c9416e9a-5d6d-4cb3-b16f-8d957628759a",
+    "name": "baz.tif",
+    "size": 7777,
+    "status": "ok",
+    "file_mtime": "2020-05-30T02:23:42.724Z",
+    "url": "http://localhost:3000/api/v0/fmds/c9416e9a-5d6d-4cb3-b16f-8d957628759a",
+    "partner_url": "http://localhost:3000/api/v0/partners/e6517775-6277-4e25-9373-ee7738e820b5",
+    "coll_url": "http://localhost:3000/api/v0/colls/b9612d5d-619a-4ceb-b620-d816e4b4340b"
+  },
+  {
+    "id": "ed11a83d-9d88-4ee2-9d8f-bae055d41ed4",
+    "name": "bar.pdf",
+    "size": 9999,
+    "status": "ok",
+    "file_mtime": "2020-05-30T02:22:10.935Z",
+    "url": "http://localhost:3000/api/v0/fmds/ed11a83d-9d88-4ee2-9d8f-bae055d41ed4",
+    "partner_url": "http://localhost:3000/api/v0/partners/e6517775-6277-4e25-9373-ee7738e820b5",
+    "coll_url": "http://localhost:3000/api/v0/colls/b9612d5d-619a-4ceb-b620-d816e4b4340b"
+  }
+]
