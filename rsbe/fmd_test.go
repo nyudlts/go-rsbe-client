@@ -75,7 +75,7 @@ var fmdToCreate = FMDEntry{
 	},
 }
 
-func TestSEFMDsList(t *testing.T) {
+func TestSEFMDList(t *testing.T) {
 
 	mux := setupMux("/api/v0/ses/8c258cb2-d700-43be-8773-a61a7b9cd668/fmds", "testdata/se-fmd-list.json")
 	ts := httptest.NewServer(mux)
@@ -85,7 +85,7 @@ func TestSEFMDsList(t *testing.T) {
 
 	t.Run("result", func(t *testing.T) {
 		want := fmdListEntry
-		got, err := SEFMDsList("8c258cb2-d700-43be-8773-a61a7b9cd668")
+		got, err := SEFMDList("8c258cb2-d700-43be-8773-a61a7b9cd668")
 		if err != nil {
 			t.Errorf("Unexpected error: %s", err)
 		}

@@ -61,17 +61,17 @@ type FMDData struct {
 	TranscriptionID string `json:"transcription_id,omitempty"`
 }
 
-func SEFMDsList(eID string) (list []FMDListEntry, err error) {
+func SEFMDList(eID string) (list []FMDListEntry, err error) {
 	path := fmt.Sprintf("/api/v0/ses/%s/fmds", eID)
-	return fmdsList(path)
+	return fmdList(path)
 }
 
-func IEFMDsList(eID string) (list []FMDListEntry, err error) {
+func IEFMDList(eID string) (list []FMDListEntry, err error) {
 	path := fmt.Sprintf("/api/v0/ies/%s/fmds", eID)
-	return fmdsList(path)
+	return fmdList(path)
 }
 
-func fmdsList(path string) (list []FMDListEntry, err error) {
+func fmdList(path string) (list []FMDListEntry, err error) {
 	body, err := GetBody(path)
 	if err != nil {
 		return nil, err
