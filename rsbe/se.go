@@ -38,7 +38,7 @@ type SEEntry struct {
 	LockVersion   int    `json:"lock_version,omitempty"`
 }
 
-func CollectionSEsList(collectionID string) (list []SEListEntry, err error) {
+func CollectionSEList(collectionID string) (list []SEListEntry, err error) {
 	path := fmt.Sprintf("/api/v0/colls/%s/ses", collectionID)
 
 	body, err := GetBody(path)

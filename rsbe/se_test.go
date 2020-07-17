@@ -42,7 +42,7 @@ var seToCreate = SEEntry{
 	Status:       "queued",
 }
 
-func TestCollectionSEsList(t *testing.T) {
+func TestCollectionSEList(t *testing.T) {
 
 	mux := setupMux("/api/v0/colls/b9612d5d-619a-4ceb-b620-d816e4b4340b/ses", "testdata/se-list.json")
 	ts := httptest.NewServer(mux)
@@ -52,7 +52,7 @@ func TestCollectionSEsList(t *testing.T) {
 
 	t.Run("result", func(t *testing.T) {
 		want := seListEntry
-		got, err := CollectionSEsList(seShow.CollectionID)
+		got, err := CollectionSEList(seShow.CollectionID)
 		if err != nil {
 			t.Errorf("Unexpected error: %s", err)
 		}
