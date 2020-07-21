@@ -80,7 +80,17 @@ func Post(path string, data []byte) (resp *http.Response, err error) {
 	req.Header.Set("Content-Type", "application/json")
 	req.SetBasicAuth(conf.User, conf.Password)
 
-	return client.Do(req)
+	resp, err = client.Do(req)
+
+	if resp.StatusCode != 201 {
+		body, _ := ioutil.ReadAll(resp.Body)
+
+		var eMsg ErrMsg
+		_ = json.Unmarshal(body, &eMsg)
+		return resp, fmt.Errorf("Bad response: %d ; %v\n", resp.StatusCode, eMsg.Error)
+	}
+
+	return resp, nil
 }
 
 func PostReturnBody(path string, data []byte) (body []byte, err error) {
@@ -89,10 +99,6 @@ func PostReturnBody(path string, data []byte) (body []byte, err error) {
 		return body, err
 	}
 	defer resp.Body.Close()
-
-	if resp.StatusCode != 201 {
-		return body, fmt.Errorf("unexpected status code: %s", resp.Status)
-	}
 
 	body, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
@@ -141,7 +147,11 @@ func Delete(path string) (err error) {
 	}
 
 	if resp.StatusCode != 204 {
-		return fmt.Errorf("unexpected status code: %s", resp.Status)
+		body, _ := ioutil.ReadAll(resp.Body)
+
+		var eMsg ErrMsg
+		_ = json.Unmarshal(body, &eMsg)
+		return fmt.Errorf("Bad response: %d ; %v\n", resp.StatusCode, eMsg.Error)
 	}
 
 	return nil

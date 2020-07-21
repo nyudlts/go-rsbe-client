@@ -1,35 +1,10 @@
 package rsbe
 
 import (
+	"encoding/json"
+	"path"
 	"testing"
 )
-
-// var partnerListEntry = PartnerListEntry{
-// 	ID:        "e6517775-6277-4e25-9373-ee7738e820b5",
-// 	Code:      "dlts",
-// 	Name:      "nyu dlts",
-// 	CreatedAt: "2020-05-30T01:56:01.603Z",
-// 	UpdatedAt: "2020-05-30T01:56:01.603Z",
-// 	URL:       "http://localhost:3000/api/v0/partners/e6517775-6277-4e25-9373-ee7738e820b5",
-// }
-
-// var partnerShow = PartnerEntry{
-// 	ID:             "e6517775-6277-4e25-9373-ee7738e820b5",
-// 	Code:           "dlts",
-// 	Name:           "nyu dlts",
-// 	CreatedAt:      "2020-05-30T01:56:01.603Z",
-// 	UpdatedAt:      "2020-05-30T01:56:01.603Z",
-// 	PartnersURL:    "http://localhost:3000/api/v0/partners",
-// 	CollectionsURL: "http://localhost:3000/api/v0/partners/e6517775-6277-4e25-9373-ee7738e820b5/colls",
-// 	LockVersion:    0,
-// 	RelPath:        "content/dlts",
-// }
-
-// var partnerToCreate = PartnerEntry{
-// 	Code:    "waffles",
-// 	Name:    "Waffles and Syrup",
-// 	RelPath: "content/waffles",
-// }
 
 func TestClientGet(t *testing.T) {
 
@@ -53,7 +28,7 @@ func TestClientGet(t *testing.T) {
 		if err == nil {
 			t.Errorf("err should NOT be nil: %v", err)
 		}
-		
+
 		got := resp.StatusCode
 		if want != got {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
@@ -62,123 +37,111 @@ func TestClientGet(t *testing.T) {
 
 }
 
-// func TestPartnerGetFunc(t *testing.T) {
+func TestClientGetBody(t *testing.T) {
 
-// 	// mux := setupMux("/api/v0/partners/e6517775-6277-4e25-9373-ee7738e820b5", "testdata/partner-get.json")
-// 	// ts := httptest.NewServer(mux)
-// 	// defer ts.Close()
+	setupLocalhostClient()
+	t.Run("confirm OK status response", func(t *testing.T) {
+		body, err := GetBody("/api/v0/partners/e6517775-6277-4e25-9373-ee7738e820b5")
+		if err != nil {
+			t.Errorf("Unexpected error: %s", err)
+		}
 
-// 	// setupTestServerClient(ts)
+		if len(body) == 0 {
+			t.Errorf("Body should not be empty")
+		}
+	})
 
-// 	setupLocalhostClient()
-// 	t.Run("result", func(t *testing.T) {
-// 		want := partnerShow
-// 		got := PartnerEntry{ID: "e6517775-6277-4e25-9373-ee7738e820b5"}
+	t.Run("confirm bad request response", func(t *testing.T) {
+		body, err := GetBody("/api/v0/partners/x")
+		if err == nil {
+			t.Errorf("err should NOT be nil: %v", err)
+		}
 
-// 		err := got.Get()
-// 		if err != nil {
-// 			t.Errorf("Unexpected error: %s", err)
-// 		}
+		if len(body) != 0 {
+			t.Errorf("Body should be empty")
+		}
+	})
 
-// 		if got != want {
-// 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
-// 		}
-// 	})
+}
 
-// }
+func TestClientPost(t *testing.T) {
 
-// func TestPartnerGet(t *testing.T) {
+	data := "{\"code\":\"canteloupe\",\"name\":\"Can elope\",\"rel_path\":\"content/canteloupe\"}"
+	ppath := "/api/v0/partners"
 
-// 	mux := setupMux("/api/v0/partners/e6517775-6277-4e25-9373-ee7738e820b5", "testdata/partner-get.json")
-// 	ts := httptest.NewServer(mux)
-// 	defer ts.Close()
+	setupLocalhostClient()
+	t.Run("confirm OK status response on successful POST", func(t *testing.T) {
 
-// 	setupTestServerClient(ts)
+		want := 201
+		resp, err := Post(ppath, []byte(data))
+		if err != nil {
+			t.Errorf("Unexpected error: %s", err)
+		}
 
-// 	t.Run("confirm that expected partner was retrieved", func(t *testing.T) {
-// 		want := partnerShow
-// 		got, err := PartnerGet("e6517775-6277-4e25-9373-ee7738e820b5")
-// 		if err != nil {
-// 			t.Errorf("Unexpected error: %s", err)
-// 		}
+		got := resp.StatusCode
+		if want != got {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
 
-// 		if got != want {
-// 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
-// 		}
-// 	})
-// }
+		id := path.Base(resp.Header.Get("Location"))
+		if id == "." {
+			t.Errorf("Unable to find created partner to delete.")
+		}
+		err = PartnerDelete(id)
+		if err != nil {
+			t.Errorf("Unexpected error: %s", err)
+		}
+	})
 
-// func TestPartnerCreateFunc(t *testing.T) {
-// 	setupLocalhostClient()
+	t.Run("confirm bad request response", func(t *testing.T) {
 
-// 	err := partnerToCreate.Create()
-// 	if err != nil {
-// 		t.Errorf("Unexpected error: %s", err)
-// 	}
+		_, err := Post("/api/v0/partners", []byte("{}"))
+		if err == nil {
+			t.Errorf("err should NOT be nil: %v", err)
+		}
+	})
 
-// 	t.Run("confirm that attributes updated", func(t *testing.T) {
-// 		if partnerToCreate.ID == "" {
-// 			t.Errorf("ID not updated")
-// 		}
+}
 
-// 		if partnerToCreate.CreatedAt == "" {
-// 			t.Errorf("CreatedAt not updated")
-// 		}
+func TestClientPostReturnBody(t *testing.T) {
 
-// 		if partnerToCreate.UpdatedAt == "" {
-// 			t.Errorf("UpdatedAt not updated")
-// 		}
-// 	})
-// }
+	data := "{\"code\":\"canteloupe\",\"name\":\"Can elope\",\"rel_path\":\"content/canteloupe\"}"
+	ppath := "/api/v0/partners"
 
-// func TestPartnerUpdateFunc(t *testing.T) {
-// 	setupLocalhostClient()
+	setupLocalhostClient()
+	t.Run("confirm OK status response on successful POST", func(t *testing.T) {
 
-// 	_ = partnerToCreate.Get()
+		body, err := PostReturnBody(ppath, []byte(data))
+		if err != nil {
+			t.Errorf("Unexpected error: %s", err)
+		}
 
-// 	if partnerToCreate.Name != "Waffles and Syrup" {
-// 		t.Errorf("variable already updated: %s", partnerToCreate.ToString())
-// 	}
+		if err != nil {
+			t.Errorf("err should be nil: %s", err)
+		}
 
-// 	partnerToCreate.Name = "WAFFLES WAFFLES WAFFLES"
+		if len(body) == 0 {
+			t.Errorf("Body should not be empty")
+		}
 
-// 	err := partnerToCreate.Update()
-// 	if err != nil {
-// 		t.Errorf("Unexpected error: %s", err)
-// 	}
+		var p PartnerEntry
+		err = json.Unmarshal(body, &p)
+		if err != nil {
+			t.Errorf("Error parsing body.")
+		}
 
-// 	_ = partnerToCreate.Get()
+		err = PartnerDelete(p.ID)
+		if err != nil {
+			t.Errorf("Unexpected error: %s", err)
+		}
+	})
 
-// 	t.Run("confirm that elements updated", func(t *testing.T) {
-// 		if partnerToCreate.Name != "WAFFLES WAFFLES WAFFLES" {
-// 			t.Errorf("Name was not updated: got: %s", partnerToCreate.Name)
-// 		}
+	t.Run("confirm bad request response", func(t *testing.T) {
 
-// 		if partnerToCreate.CreatedAt == partnerToCreate.UpdatedAt {
-// 			t.Errorf("UpeatedAt not updated")
-// 		}
-// 	})
-// }
+		_, err := PostReturnBody("/api/v0/partners", []byte("{}"))
+		if err == nil {
+			t.Errorf("err should NOT be nil: %v", err)
+		}
+	})
 
-// func TestPartnerDeleteFunc(t *testing.T) {
-// 	setupLocalhostClient()
-
-// 	_ = partnerToCreate.Get()
-
-// 	id := partnerToCreate.ID
-
-// 	err := partnerToCreate.Delete()
-// 	if err != nil {
-// 		t.Errorf("Unexpected error: %s", err)
-// 	}
-
-// 	t.Run("confirm that deleted item not found", func(t *testing.T) {
-// 		// should not be found, so err should NOT be nil
-// 		_, err = PartnerGet(id)
-
-// 		if err != nil {
-// 			t.Errorf("err was nil")
-// 		}
-
-// 	})
-// }
+}
