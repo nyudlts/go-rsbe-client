@@ -64,12 +64,7 @@ var partnerToCreate = PartnerEntry{
 
 func TestPartnerList(t *testing.T) {
 
-	mux := setupMux("/api/v0/partners", "testdata/partner-list.json")
-	ts := httptest.NewServer(mux)
-	defer ts.Close()
-
-	setupTestServerClient(ts)
-
+	setupLocalhostClient()
 	t.Run("result", func(t *testing.T) {
 		want := partnerListEntry
 		got, err := PartnerList()
@@ -90,12 +85,13 @@ func TestPartnerList(t *testing.T) {
 
 func TestPartnerGetFunc(t *testing.T) {
 
-	mux := setupMux("/api/v0/partners/e6517775-6277-4e25-9373-ee7738e820b5", "testdata/partner-get.json")
-	ts := httptest.NewServer(mux)
-	defer ts.Close()
+	// mux := setupMux("/api/v0/partners/e6517775-6277-4e25-9373-ee7738e820b5", "testdata/partner-get.json")
+	// ts := httptest.NewServer(mux)
+	// defer ts.Close()
 
-	setupTestServerClient(ts)
+	// setupTestServerClient(ts)
 
+	setupLocalhostClient()
 	t.Run("result", func(t *testing.T) {
 		want := partnerShow
 		got := PartnerEntry{ID: "e6517775-6277-4e25-9373-ee7738e820b5"}
@@ -201,7 +197,7 @@ func TestPartnerDeleteFunc(t *testing.T) {
 		// should not be found, so err should NOT be nil
 		_, err = PartnerGet(id)
 
-		if err != nil {
+		if err == nil {
 			t.Errorf("err was nil")
 		}
 

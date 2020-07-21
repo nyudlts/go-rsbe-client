@@ -310,7 +310,7 @@ func TestFMDDeleteFunc(t *testing.T) {
 		// should not be found, so err should NOT be nil
 		_, err = FMDGet(id)
 
-		if err != nil {
+		if err == nil {
 			t.Errorf("err was nil")
 		}
 
