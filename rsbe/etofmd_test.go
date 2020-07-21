@@ -151,7 +151,7 @@ func TestEtoFMDDeleteFunc(t *testing.T) {
 		// should not be found, so err should NOT be nil
 		_, err = EtoFMDGet(id)
 
-		if err != nil {
+		if err == nil {
 			t.Errorf("err was nil")
 		}
 
