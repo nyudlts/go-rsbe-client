@@ -109,7 +109,7 @@ func TestClientPostReturnBody(t *testing.T) {
 	ppath := "/api/v0/partners"
 
 	setupLocalhostClient()
-	t.Run("confirm OK status response on successful POST", func(t *testing.T) {
+	t.Run("confirm no error and non-empty response body on successful POST", func(t *testing.T) {
 
 		body, err := PostReturnBody(ppath, []byte(data))
 		if err != nil {
@@ -139,6 +139,82 @@ func TestClientPostReturnBody(t *testing.T) {
 	t.Run("confirm bad request response", func(t *testing.T) {
 
 		_, err := PostReturnBody("/api/v0/partners", []byte("{}"))
+		if err == nil {
+			t.Errorf("err should NOT be nil: %v", err)
+		}
+	})
+
+}
+
+func TestClientPut(t *testing.T) {
+
+	data := "{\"code\":\"canteloupe\",\"name\":\"Can elope\",\"rel_path\":\"content/canteloupe\"}"
+	ppath := "/api/v0/partners"
+
+	setupLocalhostClient()
+	t.Run("confirm OK status response on successful POST", func(t *testing.T) {
+
+		// create Partner to update:
+		resp, err := Post(ppath, []byte(data))
+		if err != nil {
+			t.Errorf("Unexpected error: %s", err)
+		}
+
+		id := path.Base(resp.Header.Get("Location"))
+		if id == "." {
+			t.Errorf("Unable to find created partner to delete.")
+		}
+
+		data := "{\"code\":\"bananananana\",\"name\":\"Can elope\",\"rel_path\":\"content/canteloupe\"}"
+		err = Put(ppath+"/"+id, []byte(data))
+		if err != nil {
+			t.Errorf("Unexpected error: %s", err)
+		}
+
+		err = PartnerDelete(id)
+		if err != nil {
+			t.Errorf("Unexpected error: %s", err)
+		}
+	})
+
+	t.Run("confirm bad request response", func(t *testing.T) {
+
+		err := Put("/api/v0/partners/adflasdfj", []byte("{}"))
+		if err == nil {
+			t.Errorf("err should NOT be nil: %v", err)
+		}
+	})
+
+}
+
+func TestClientDelete(t *testing.T) {
+
+	data := "{\"code\":\"canteloupe\",\"name\":\"Can elope\",\"rel_path\":\"content/canteloupe\"}"
+	ppath := "/api/v0/partners"
+
+	setupLocalhostClient()
+	t.Run("confirm OK status response on successful DELETE", func(t *testing.T) {
+
+		// create Partner to delete
+		resp, err := Post(ppath, []byte(data))
+		if err != nil {
+			t.Errorf("Unexpected error: %s", err)
+		}
+
+		id := path.Base(resp.Header.Get("Location"))
+		if id == "." {
+			t.Errorf("Unable to find created partner to delete.")
+		}
+
+		err = Delete(ppath + "/" + id)
+		if err != nil {
+			t.Errorf("Unexpected error: %s", err)
+		}
+	})
+
+	t.Run("confirm bad request response", func(t *testing.T) {
+
+		err := Delete("/api/v0/partners/adflasdfj")
 		if err == nil {
 			t.Errorf("err should NOT be nil: %v", err)
 		}
