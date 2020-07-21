@@ -2,10 +2,15 @@ package rsbe
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 )
+
+type ErrMsg struct {
+	Error string `json:"error"`
+}
 
 type Config struct {
 	BaseURL  string
@@ -31,14 +36,23 @@ func Get(path string) (resp *http.Response, err error) {
 		return nil, err
 	}
 	req.SetBasicAuth(conf.User, conf.Password)
-	return client.Do(req)
+
+	resp, err = client.Do(req)
+
+	if err != nil {
+		return resp, err
+	}
+
+	if resp.StatusCode != 200 {
+		body, _ := ioutil.ReadAll(resp.Body)
+		var eMsg ErrMsg
+		_ = json.Unmarshal(body, &eMsg)
+		return resp, fmt.Errorf("Bad response: %d ; %v\n", resp.StatusCode, eMsg.Error)
+	}
+
+	return resp, nil
 }
 
-// TODO: change fn name? GetBodyText?
-// TODO: do you need intermediate bodyText variable, or
-//       or can you just use variable "s"?
-//       add status code check
-//       also might want to just merge all of this into Get?
 func GetBody(path string) (body []byte, err error) {
 
 	resp, err := Get(path)

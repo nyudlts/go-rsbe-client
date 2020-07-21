@@ -181,9 +181,9 @@ func TestCollectionDeleteFunc(t *testing.T) {
 
 	t.Run("confirm that deleted item not found", func(t *testing.T) {
 		// should not be found, so err should NOT be nil
-		_, err = CollectionGet(id)
+		_, err := CollectionGet(id)
 
-		if err != nil {
+		if err == nil {
 			t.Errorf("err was nil")
 		}
 
