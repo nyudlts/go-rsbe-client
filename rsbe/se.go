@@ -3,6 +3,7 @@ package rsbe
 import (
 	"encoding/json"
 	"fmt"
+	"path/filepath"
 )
 
 type SEListEntry struct {
@@ -68,6 +69,29 @@ func SEGet(id string) (item SEEntry, err error) {
 	}
 
 	return item, nil
+}
+
+func SEGetByDigiID(digiID string) (item SEEntry, err error) {
+	path := fmt.Sprintf("/api/v0/search?scope=ses&digi_id=%s", digiID)
+
+	var searchResult SearchResult
+
+	body, err := GetBody(path)
+	if err != nil {
+		return item, err
+	}
+
+	err = json.Unmarshal(body, &searchResult)
+	if err != nil {
+		return item, err
+	}
+
+	if searchResult.Response.NumFound != 1 {
+		return item, fmt.Errorf("Incorrect number of results. Expected 1, found %d", searchResult.Response.NumFound)
+	}
+
+	id := filepath.Base(searchResult.Response.Docs[0].URL)
+	return SEGet(id)
 }
 
 func SEDelete(id string) (err error) {
