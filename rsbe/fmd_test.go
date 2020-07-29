@@ -6,11 +6,11 @@ import (
 )
 
 var fmdListEntry = FMDListEntry{
-	ID:        "4a3f8f8c-6dbe-4d7c-bff1-1b973f9f615c",
-	Name:      "foo.pdf",
-	Size:      1111,
-	Status:    "ok",
-	FileMTime: "2020-05-30T02:21:59.710Z",
+	ID:     "4a3f8f8c-6dbe-4d7c-bff1-1b973f9f615c",
+	Name:   "foo.pdf",
+	Size:   1111,
+	Status: "ok",
+	MTime:  "2020-05-30T02:21:59.710Z",
 	Data: FMDData{
 		Searchable: true,
 	},
@@ -28,7 +28,7 @@ var fmdShow = FMDEntry{
 	OriginalName: "maple.pdf",
 	Name:         "syrup.pdf",
 	Extension:    "pdf",
-	FileMTime:    "2020-06-30T02:21:59.710Z",
+	MTime:        "2020-06-30T02:21:59.710Z",
 	HashMD5:      "6a6735088d582e2b9867542759988d3c",
 	HashSHA1:     "7adfb08560ea47856db668fda00276796404a7dc",
 	HashSHA256:   "57cb4643e48bdaf4aad877cbd1a5401341207964bbc3195cd798e34ce69f37fb",
@@ -62,7 +62,7 @@ var fmdToCreate = FMDEntry{
 	OriginalName: "maple.pdf",
 	Name:         "syrup.pdf",
 	Extension:    "pdf",
-	FileMTime:    "2020-06-30T02:21:59.710Z",
+	MTime:        "2020-06-30T02:21:59.710Z",
 	HashMD5:      "6a6735088d582e2b9867542759988d3c",
 	HashSHA1:     "7adfb08560ea47856db668fda00276796404a7dc",
 	HashSHA256:   "57cb4643e48bdaf4aad877cbd1a5401341207964bbc3195cd798e34ce69f37fb",
@@ -110,7 +110,7 @@ func TestSEFMDList(t *testing.T) {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
 		}
 
-		if fmdListEntry.FileMTime != got[0].FileMTime {
+		if fmdListEntry.MTime != got[0].MTime {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
 		}
 
@@ -147,95 +147,95 @@ func TestFMDGetFunc(t *testing.T) {
 		}
 
 		if want.ID != got.ID {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+			t.Errorf("ID mismatch: want: \"%v\", got: \"%v\"", want.ID, got.ID)
 		}
 
 		if want.PartnerID != got.PartnerID {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+			t.Errorf("PartnerID mismatch: want: \"%v\", got: \"%v\"", want.PartnerID, got.PartnerID)
 		}
 
 		if want.CollectionID != got.CollectionID {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+			t.Errorf("CollectionID mismatch: want: \"%v\", got: \"%v\"", want.CollectionID, got.CollectionID)
 		}
 
 		if want.Size != got.Size {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+			t.Errorf("Size mismatch: want: \"%v\", got: \"%v\"", want.Size, got.Size)
 		}
 
 		if want.Status != got.Status {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+			t.Errorf("Status mismatch: want: \"%v\", got: \"%v\"", want.Status, got.Status)
 		}
 
 		if want.OriginalName != got.OriginalName {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+			t.Errorf("OriginalName mismatch: want: \"%v\", got: \"%v\"", want.OriginalName, got.OriginalName)
 		}
 
 		if want.Name != got.Name {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+			t.Errorf("Name mismatch: want: \"%v\", got: \"%v\"", want.Name, got.Name)
 		}
 
 		if want.Extension != got.Extension {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+			t.Errorf("Extension mismatch: want: \"%v\", got: \"%v\"", want.Extension, got.Extension)
 		}
 
-		if want.FileMTime != got.FileMTime {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		if want.MTime != got.MTime {
+			t.Errorf("MTime mismatch: want: \"%v\", got: \"%v\"", want.MTime, got.MTime)
 		}
 
 		if want.CreatedAt != got.CreatedAt {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+			t.Errorf("CreatedAt mismatch: want: \"%v\", got: \"%v\"", want.CreatedAt, got.CreatedAt)
 		}
 
 		if want.UpdatedAt != got.UpdatedAt {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+			t.Errorf("UpdatedAt mismatch: want: \"%v\", got: \"%v\"", want.UpdatedAt, got.UpdatedAt)
 		}
 
 		if want.Formats.PRONOM != got.Formats.PRONOM {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+			t.Errorf("Formats.PRONOM Mismatch: want: \"%v\", got: \"%v\"", want.Formats.PRONOM, got.Formats.PRONOM)
 		}
 
 		if want.Formats.MIME != got.Formats.MIME {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+			t.Errorf("Formats.MIME mismatch: want: \"%v\", got: \"%v\"", "foo", got.Formats.MIME)
 		}
 
 		if want.Data.Duration != got.Data.Duration {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+			t.Errorf("Data.Duration mismatch: want: \"%v\", got: \"%v\"", want.Data.Duration, got.Data.Duration)
 		}
 
 		if want.Data.Bitrate != got.Data.Bitrate {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+			t.Errorf("Data.Bitrate mismatch: want: \"%v\", got: \"%v\"", want.Data.Bitrate, got.Data.Bitrate)
 		}
 
 		if want.Data.Width != got.Data.Width {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+			t.Errorf("Data.Width mismatch: want: \"%v\", got: \"%v\"", want.Data.Width, got.Data.Width)
 		}
 
 		if want.Data.Height != got.Data.Height {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+			t.Errorf("Data.Height mismatch: want: \"%v\", got: \"%v\"", want.Data.Height, got.Data.Height)
 		}
 
 		if want.Data.AspectRatio != got.Data.AspectRatio {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+			t.Errorf("Data.AspectRatio mismatch: want: \"%v\", got: \"%v\"", want.Data.AspectRatio, got.Data.AspectRatio)
 		}
 
 		if want.Data.XMLSchema != got.Data.XMLSchema {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+			t.Errorf("Data.XMLSchema mismatch: want: \"%v\", got: \"%v\"", want.Data.XMLSchema, got.Data.XMLSchema)
 		}
 
 		if want.Data.TranscriptionID != got.Data.TranscriptionID {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+			t.Errorf("Data.TranscriptionID Mismatch: want: \"%v\", got: \"%v\"", want.Data.TranscriptionID, got.Data.TranscriptionID)
 		}
 
 		if want.PartnerURL != got.PartnerURL {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+			t.Errorf("PartnerURL mismatch: want: \"%v\", got: \"%v\"", want.PartnerURL, got.PartnerURL)
 		}
 
 		if want.CollectionURL != got.CollectionURL {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+			t.Errorf("CollectionURL mismatch: want: \"%v\", got: \"%v\"", want.CollectionURL, got.CollectionURL)
 		}
 
 		if want.LockVersion != got.LockVersion {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+			t.Errorf("LockVersion mismatch: want: \"%v\", got: \"%v\"", want.LockVersion, got.LockVersion)
 		}
 
 	})
@@ -261,6 +261,106 @@ func TestFMDCreateFunc(t *testing.T) {
 
 		if fmdToCreate.UpdatedAt == "" {
 			t.Errorf("UpdatedAt not updated")
+		}
+
+		if fmdToCreate.CollectionURL != "" {
+			t.Errorf("CollectionURL mismatch: want a non-empty value, got: \"%v\"", fmdToCreate.CollectionURL)
+		}
+
+		if fmdToCreate.PartnerURL != "" {
+			t.Errorf("PartnerURL mismatch: want a non-empty value, got: \"%v\"", fmdToCreate.PartnerURL)
+		}
+	})
+
+	t.Run("confirm that all fields are as expected", func(t *testing.T) {
+		want := fmdToCreate
+		got, err := FMDGet(fmdToCreate.ID)
+		if err != nil {
+			t.Errorf("Unexpected error: %s", err)
+		}
+
+		if want.ID != got.ID {
+			t.Errorf("ID mismatch: want: \"%v\", got: \"%v\"", want.ID, got.ID)
+		}
+
+		if want.PartnerID != got.PartnerID {
+			t.Errorf("PartnerID mismatch: want: \"%v\", got: \"%v\"", want.PartnerID, got.PartnerID)
+		}
+
+		if want.CollectionID != got.CollectionID {
+			t.Errorf("CollectionID mismatch: want: \"%v\", got: \"%v\"", want.CollectionID, got.CollectionID)
+		}
+
+		if want.Size != got.Size {
+			t.Errorf("Size mismatch: want: \"%v\", got: \"%v\"", want.Size, got.Size)
+		}
+
+		if want.Status != got.Status {
+			t.Errorf("Status mismatch: want: \"%v\", got: \"%v\"", want.Status, got.Status)
+		}
+
+		if want.OriginalName != got.OriginalName {
+			t.Errorf("OriginalName mismatch: want: \"%v\", got: \"%v\"", want.OriginalName, got.OriginalName)
+		}
+
+		if want.Name != got.Name {
+			t.Errorf("Name mismatch: want: \"%v\", got: \"%v\"", want.Name, got.Name)
+		}
+
+		if want.Extension != got.Extension {
+			t.Errorf("Extension mismatch: want: \"%v\", got: \"%v\"", want.Extension, got.Extension)
+		}
+
+		if want.MTime != got.MTime {
+			t.Errorf("MTime mismatch: want: \"%v\", got: \"%v\"", want.MTime, got.MTime)
+		}
+
+		if want.CreatedAt != got.CreatedAt {
+			t.Errorf("CreatedAt mismatch: want: \"%v\", got: \"%v\"", want.CreatedAt, got.CreatedAt)
+		}
+
+		if want.UpdatedAt != got.UpdatedAt {
+			t.Errorf("UpdatedAt mismatch: want: \"%v\", got: \"%v\"", want.UpdatedAt, got.UpdatedAt)
+		}
+
+		if want.Formats.PRONOM != got.Formats.PRONOM {
+			t.Errorf("Formats.PRONOM Mismatch: want: \"%v\", got: \"%v\"", want.Formats.PRONOM, got.Formats.PRONOM)
+		}
+
+		if want.Formats.MIME != got.Formats.MIME {
+			t.Errorf("Formats.MIME mismatch: want: \"%v\", got: \"%v\"", "foo", got.Formats.MIME)
+		}
+
+		if want.Data.Duration != got.Data.Duration {
+			t.Errorf("Data.Duration mismatch: want: \"%v\", got: \"%v\"", want.Data.Duration, got.Data.Duration)
+		}
+
+		if want.Data.Bitrate != got.Data.Bitrate {
+			t.Errorf("Data.Bitrate mismatch: want: \"%v\", got: \"%v\"", want.Data.Bitrate, got.Data.Bitrate)
+		}
+
+		if want.Data.Width != got.Data.Width {
+			t.Errorf("Data.Width mismatch: want: \"%v\", got: \"%v\"", want.Data.Width, got.Data.Width)
+		}
+
+		if want.Data.Height != got.Data.Height {
+			t.Errorf("Data.Height mismatch: want: \"%v\", got: \"%v\"", want.Data.Height, got.Data.Height)
+		}
+
+		if want.Data.AspectRatio != got.Data.AspectRatio {
+			t.Errorf("Data.AspectRatio mismatch: want: \"%v\", got: \"%v\"", want.Data.AspectRatio, got.Data.AspectRatio)
+		}
+
+		if want.Data.XMLSchema != got.Data.XMLSchema {
+			t.Errorf("Data.XMLSchema mismatch: want: \"%v\", got: \"%v\"", want.Data.XMLSchema, got.Data.XMLSchema)
+		}
+
+		if want.Data.TranscriptionID != got.Data.TranscriptionID {
+			t.Errorf("Data.TranscriptionID Mismatch: want: \"%v\", got: \"%v\"", want.Data.TranscriptionID, got.Data.TranscriptionID)
+		}
+
+		if want.LockVersion != got.LockVersion {
+			t.Errorf("LockVersion mismatch: want: \"%v\", got: \"%v\"", want.LockVersion, got.LockVersion)
 		}
 	})
 }
