@@ -51,7 +51,7 @@ type FMDFormat struct {
 }
 
 type FMDData struct {
-	Searchable      bool   `json:"searchable,omitempty"`
+	Searchable      bool   `json:"searchable"`
 	Duration        string `json:"duration,omitempty"`
 	Bitrate         uint64 `json:"bitrate,omitempty"`
 	Width           uint   `json:"width,omitempty"`
