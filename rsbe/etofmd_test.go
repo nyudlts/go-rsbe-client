@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-var etofmdListEntry = EtoFMDListEntry{
+var etofmdListEntry = EToFMDListEntry{
 	ID:    "3ca8ecaf-6fae-48a5-8441-5a96e119ad28",
 	EType: "se",
 	EID:   "8c258cb2-d700-43be-8773-a61a7b9cd668",
@@ -14,7 +14,7 @@ var etofmdListEntry = EtoFMDListEntry{
 	URL:   "http://localhost:3000/api/v0/etofmds/3ca8ecaf-6fae-48a5-8441-5a96e119ad28",
 }
 
-var etofmdShow = EtoFMDEntry{
+var etofmdShow = EToFMDEntry{
 	ID:          "3ca8ecaf-6fae-48a5-8441-5a96e119ad28",
 	EType:       "se",
 	EID:         "8c258cb2-d700-43be-8773-a61a7b9cd668",
@@ -26,14 +26,14 @@ var etofmdShow = EtoFMDEntry{
 	LockVersion: 0,
 }
 
-var etofmdToCreate = EtoFMDEntry{
+var etofmdToCreate = EToFMDEntry{
 	EType:       "ie",
 	EID:         "9ea98441-b6b6-46cf-b6c8-91dff385c6c8",
 	Role:        "notes",
 	FMDID:       "f9f38cc5-0728-4f1a-85ec-e4cb6906d304",
 }
 
-func TestEtoFMDList(t *testing.T) {
+func TestEToFMDList(t *testing.T) {
 
 	mux := setupMux("/api/v0/etofmds", "testdata/etofmd-list.json")
 	ts := httptest.NewServer(mux)
@@ -43,7 +43,7 @@ func TestEtoFMDList(t *testing.T) {
 
 	t.Run("result", func(t *testing.T) {
 		want := etofmdListEntry
-		got, err := EtoFMDList()
+		got, err := EToFMDList()
 		if err != nil {
 			t.Errorf("Unexpected error: %s", err)
 		}
@@ -59,7 +59,7 @@ func TestEtoFMDList(t *testing.T) {
 
 }
 
-func TestEtoFMDGetFunc(t *testing.T) {
+func TestEToFMDGetFunc(t *testing.T) {
 
 	mux := setupMux("/api/v0/etofmds/3ca8ecaf-6fae-48a5-8441-5a96e119ad28", "testdata/etofmd-get.json")
 	ts := httptest.NewServer(mux)
@@ -69,7 +69,7 @@ func TestEtoFMDGetFunc(t *testing.T) {
 
 	t.Run("result", func(t *testing.T) {
 		want := etofmdShow
-		got := EtoFMDEntry{ID: "3ca8ecaf-6fae-48a5-8441-5a96e119ad28"}
+		got := EToFMDEntry{ID: "3ca8ecaf-6fae-48a5-8441-5a96e119ad28"}
 
 		err := got.Get()
 		if err != nil {
@@ -83,7 +83,7 @@ func TestEtoFMDGetFunc(t *testing.T) {
 
 }
 
-func TestEtoFMDCreateFunc(t *testing.T) {
+func TestEToFMDCreateFunc(t *testing.T) {
 	setupLocalhostClient()
 
 	err := etofmdToCreate.Create()
@@ -106,7 +106,7 @@ func TestEtoFMDCreateFunc(t *testing.T) {
 	})
 }
 
-func TestEtoFMDUpdateFunc(t *testing.T) {
+func TestEToFMDUpdateFunc(t *testing.T) {
 	setupLocalhostClient()
 
 	_ = etofmdToCreate.Get()
@@ -135,7 +135,7 @@ func TestEtoFMDUpdateFunc(t *testing.T) {
 	})
 }
 
-func TestEtoFMDDeleteFunc(t *testing.T) {
+func TestEToFMDDeleteFunc(t *testing.T) {
 	setupLocalhostClient()
 
 	_ = etofmdToCreate.Get()
@@ -149,7 +149,7 @@ func TestEtoFMDDeleteFunc(t *testing.T) {
 
 	t.Run("confirm that deleted item not found", func(t *testing.T) {
 		// should not be found, so err should NOT be nil
-		_, err = EtoFMDGet(id)
+		_, err = EToFMDGet(id)
 
 		if err == nil {
 			t.Errorf("err was nil")
