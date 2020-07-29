@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-type EtoFMDListEntry struct {
+type EToFMDListEntry struct {
 	ID    string `json:"id,omitempty"`
 	EID   string `json:"eid,omitempty"`
 	EType string `json:"etype,omitempty"`
@@ -14,7 +14,7 @@ type EtoFMDListEntry struct {
 	URL   string `json:"url,omitempty"`
 }
 
-type EtoFMDEntry struct {
+type EToFMDEntry struct {
 	ID          string `json:"id,omitempty"`
 	EID         string `json:"eid,omitempty"`
 	EType       string `json:"etype,omitempty"`
@@ -26,7 +26,7 @@ type EtoFMDEntry struct {
 	LockVersion int    `json:"lock_version,omitempty"` // ---
 }
 
-func EtoFMDList() (list []EtoFMDListEntry, err error) {
+func EToFMDList() (list []EToFMDListEntry, err error) {
 
 	body, err := GetBody("/api/v0/etofmds")
 	if err != nil {
@@ -41,7 +41,7 @@ func EtoFMDList() (list []EtoFMDListEntry, err error) {
 	return list, nil
 }
 
-func EtoFMDGet(id string) (item EtoFMDEntry, err error) {
+func EToFMDGet(id string) (item EToFMDEntry, err error) {
 	path := "/api/v0/etofmds/" + id
 
 	body, err := GetBody(path)
@@ -57,7 +57,7 @@ func EtoFMDGet(id string) (item EtoFMDEntry, err error) {
 	return item, nil
 }
 
-func (p *EtoFMDEntry) Get() (err error) {
+func (p *EToFMDEntry) Get() (err error) {
 	path := "/api/v0/etofmds/" + p.ID
 
 	body, err := GetBody(path)
@@ -73,7 +73,7 @@ func (p *EtoFMDEntry) Get() (err error) {
 	return nil
 }
 
-func (p *EtoFMDEntry) Create() (err error) {
+func (p *EToFMDEntry) Create() (err error) {
 	path := "/api/v0/etofmds"
 
 	data, err := json.Marshal(p)
@@ -94,7 +94,7 @@ func (p *EtoFMDEntry) Create() (err error) {
 	return nil
 }
 
-func (c *EtoFMDEntry) Update() (err error) {
+func (c *EToFMDEntry) Update() (err error) {
 	path := "/api/v0/etofmds/" + c.ID
 
 	data, err := json.Marshal(c)
@@ -110,7 +110,7 @@ func (c *EtoFMDEntry) Update() (err error) {
 	return nil
 }
 
-func EtoFMDDelete(id string) (err error) {
+func EToFMDDelete(id string) (err error) {
 	path := "/api/v0/etofmds/" + id
 
 	err = Delete(path)
@@ -120,17 +120,17 @@ func EtoFMDDelete(id string) (err error) {
 	return nil
 }
 
-func (c *EtoFMDEntry) Delete() (err error) {
-	return EtoFMDDelete(c.ID)
+func (c *EToFMDEntry) Delete() (err error) {
+	return EToFMDDelete(c.ID)
 }
 
-func (e EtoFMDListEntry) ToString() string {
+func (e EToFMDListEntry) ToString() string {
 	s := fmt.Sprintf("ID: %s, EID: %s, EType: %s, FMDID: %s, Role: %s, URL: %s",
 		e.ID, e.EID, e.EType, e.FMDID, e.Role, e.URL)
 	return s
 }
 
-func (e EtoFMDEntry) ToString() string {
+func (e EToFMDEntry) ToString() string {
 	s := fmt.Sprintf("ID: %s, EID: %s, EType: %s, FMDID: %s, Role: %s, CreatedAt: %s, UpdatedAt: %s, EURL: %s, LockVersion: %d",
 		e.ID, e.EID, e.EType, e.FMDID, e.Role, e.CreatedAt, e.UpdatedAt, e.EURL, e.LockVersion)
 	return s
