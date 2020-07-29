@@ -130,8 +130,6 @@ func (p *FMDEntry) Create() (err error) {
 		return err
 	}
 
-	fmt.Printf("%v\n", string(body))
-
 	err = json.Unmarshal(body, p)
 	if err != nil {
 		return err
