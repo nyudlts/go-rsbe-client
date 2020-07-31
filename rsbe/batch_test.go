@@ -133,108 +133,116 @@ func TestBatchGetFunc(t *testing.T) {
 		if want.Notes != got.Notes {
 			t.Errorf("Notes mismatch: want: \"%v\", got: \"%v\"", want.Notes, got.Notes)
 		}
-
 	})
 
 }
 
-// func TestBatchGet(t *testing.T) {
+func TestBatchGet(t *testing.T) {
+	setupLocalhostClient()
 
-// 	mux := setupMux("/api/v0/ses/8c258cb2-d700-43be-8773-a61a7b9cd668", "testdata/se-get.json")
-// 	ts := httptest.NewServer(mux)
-// 	defer ts.Close()
+	t.Run("confirm that expected batch was retrieved", func(t *testing.T) {
+		want := batchToCreate
+		got, err := BatchGet(batchToCreate.ID)
+		if err != nil {
+			t.Errorf("Unexpected error: %s", err)
+		}
 
-// 	setupTestServerClient(ts)
+		if want.ID != got.ID {
+			t.Errorf("ID mismatch: want: \"%v\", got: \"%v\"", want.ID, got.ID)
+		}
 
-// 	t.Run("confirm that expected partner was retrieved", func(t *testing.T) {
-// 		want := seShow
-// 		got, err := BatchGet("8c258cb2-d700-43be-8773-a61a7b9cd668")
-// 		if err != nil {
-// 			t.Errorf("Unexpected error: %s", err)
-// 		}
+		if want.BatchType != got.BatchType {
+			t.Errorf("BatchType mismatch: want: \"%v\", got: \"%v\"", want.BatchType, got.BatchType)
+		}
 
-// 		if got != want {
-// 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
-// 		}
-// 	})
-// }
+		if want.BatchNumber != got.BatchNumber {
+			t.Errorf("BatchNumber mismatch: want: \"%v\", got: \"%v\"", want.BatchNumber, got.BatchNumber)
+		}
 
-// func TestBatchUpdateFunc(t *testing.T) {
-// 	setupLocalhostClient()
+		if want.Name != got.Name {
+			t.Errorf("Name mismatch: want: \"%v\", got: \"%v\"", want.Name, got.Name)
+		}
 
-// 	_ = batchToCreate.Get()
+		if want.SourceFile != got.SourceFile {
+			t.Errorf("SourceFile mismatch: want: \"%v\", got: \"%v\"", want.SourceFile, got.SourceFile)
+		}
 
-// 	if batchToCreate.DigiID != "temporary_item" {
-// 		t.Errorf("variable already updated: %s", batchToCreate.ToString())
-// 	}
+		if want.CollectionID != got.CollectionID {
+			t.Errorf("CollectionID mismatch: want: \"%v\", got: \"%v\"", want.CollectionID, got.CollectionID)
+		}
 
-// 	batchToCreate.DigiID = "DogBiscuit"
+		if want.CreatedAt != got.CreatedAt {
+			t.Errorf("CreatedAt mismatch: want: \"%v\", got: \"%v\"", want.CreatedAt, got.CreatedAt)
+		}
 
-// 	err := batchToCreate.Update()
-// 	if err != nil {
-// 		t.Errorf("Unexpected error: %s", err)
-// 	}
+		if want.UpdatedAt != got.UpdatedAt {
+			t.Errorf("UpdatedAt mismatch: want: \"%v\", got: \"%v\"", want.UpdatedAt, got.UpdatedAt)
+		}
 
-// 	_ = batchToCreate.Get()
+		if want.Notes != got.Notes {
+			t.Errorf("Notes mismatch: want: \"%v\", got: \"%v\"", want.Notes, got.Notes)
+		}
 
-// 	t.Run("confirm that elements updated", func(t *testing.T) {
-// 		if batchToCreate.DigiID != "DogBiscuit" {
-// 			t.Errorf("DigiID was not updated: got: %s", batchToCreate.DigiID)
-// 		}
+	})
+}
 
-// 		if batchToCreate.CreatedAt == batchToCreate.UpdatedAt {
-// 			t.Errorf("UpeatedAt not updated")
-// 		}
-// 	})
-// }
+func TestBatchUpdateFunc(t *testing.T) {
+	setupLocalhostClient()
 
-// func TestBatchDeleteFunc(t *testing.T) {
-// 	setupLocalhostClient()
+	err := batchToCreate.Get()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
 
-// 	_ = batchToCreate.Get()
+	if batchToCreate.Name != "a super cool batch" {
+		t.Errorf("variable already updated: %s", batchToCreate.Name)
+	}
 
-// 	id := batchToCreate.ID
+	batchToCreate.Name = "DogBiscuit"
 
-// 	err := batchToCreate.Delete()
-// 	if err != nil {
-// 		t.Errorf("Unexpected error: %s", err)
-// 	}
+	err = batchToCreate.Update()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
 
-// 	t.Run("confirm that deleted item not found", func(t *testing.T) {
-// 		// should not be found, so err should NOT be nil
-// 		_, err = BatchGet(id)
+	err = batchToCreate.Get()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
 
-// 		if err == nil {
-// 			t.Errorf("err was nil")
-// 		}
+	t.Run("confirm that elements updated", func(t *testing.T) {
+		if batchToCreate.Name != "DogBiscuit" {
+			t.Errorf("Name was not updated: got: %s", batchToCreate.Name)
+		}
 
-// 	})
-// }
+		if batchToCreate.CreatedAt == batchToCreate.UpdatedAt {
+			t.Errorf("UpeatedAt not updated")
+		}
+	})
+}
 
-// func TestBatchGetByDigiID(t *testing.T) {
-// 	setupLocalhostClient()
+func TestBatchDeleteFunc(t *testing.T) {
+	setupLocalhostClient()
 
-// 	want, err := BatchGet("8c258cb2-d700-43be-8773-a61a7b9cd668")
-// 	if err != nil {
-// 		t.Errorf("Unexpected error: %s", err)
-// 	}
+	err := batchToCreate.Get()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
 
-// 	t.Run("confirm that exiting Batch is returned", func(t *testing.T) {
-// 		got, err := BatchGetByDigiID("foo")
-// 		if err != nil {
-// 			t.Errorf("Unexpected error: %s", err)
-// 		}
+	id := batchToCreate.ID
 
-// 		if got != want {
-// 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
-// 		}
-// 	})
+	err = batchToCreate.Delete()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
 
-// 	t.Run("confirm error is returned when not found", func(t *testing.T) {
-// 		_, err := BatchGetByDigiID("fooX")
-// 		if err == nil {
-// 			t.Errorf("Expected search for non-existant Batch to return error, but err was nil")
-// 		}
-// 	})
+	t.Run("confirm that deleted item not found", func(t *testing.T) {
+		// should not be found, so err should NOT be nil
+		_, err = BatchGet(id)
 
-// }
+		if err == nil {
+			t.Errorf("err was nil")
+		}
+
+	})
+}

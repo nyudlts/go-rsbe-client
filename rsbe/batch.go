@@ -3,7 +3,6 @@ package rsbe
 import (
 	"encoding/json"
 	"fmt"
-//	"path/filepath"
 )
 
 type BatchListEntry struct {
@@ -33,13 +32,6 @@ type BatchEntry struct {
 	BatchesURL    string `json:"batches_url,omitempty"`
 	LockVersion   int    `json:"lock_version,omitempty"`
 }
-
-//    api_v0_batches GET    /api/v0/batches(.:format)                    api/v0/batches#index {:format=>"json"}
-//                   POST   /api/v0/batches(.:format)                    api/v0/batches#create {:format=>"json"}
-//      api_v0_batch GET    /api/v0/batches/:id(.:format)                api/v0/batches#show {:format=>"json"}
-//                   PATCH  /api/v0/batches/:id(.:format)                api/v0/batches#update {:format=>"json"}
-//                   PUT    /api/v0/batches/:id(.:format)                api/v0/batches#update {:format=>"json"}
-//                   DELETE /api/v0/batches/:id(.:format)                api/v0/batches#destroy {:format=>"json"}
 
 func BatchList() (list []BatchListEntry, err error) {
 	path := fmt.Sprintf("/api/v0/batches")
@@ -73,54 +65,31 @@ func BatchGet(id string) (item BatchEntry, err error) {
 	return item, nil
 }
 
-// func BatchGetByDigiID(digiID string) (item BatchEntry, err error) {
-// 	path := fmt.Sprintf("/api/v0/search?scope=ses&digi_id=%s", digiID)
+func BatchDelete(id string) (err error) {
+	path := "/api/v0/batches/" + id
 
-// 	var searchResult SearchResult
+	err = Delete(path)
+	if err != nil {
+		return err
+	}
+	return nil
+}
 
-// 	body, err := GetBody(path)
-// 	if err != nil {
-// 		return item, err
-// 	}
+func (c *BatchEntry) Get() (err error) {
+	path := fmt.Sprintf("/api/v0/batches/%s", c.ID)
 
-// 	err = json.Unmarshal(body, &searchResult)
-// 	if err != nil {
-// 		return item, err
-// 	}
+	body, err := GetBody(path)
+	if err != nil {
+		return err
+	}
 
-// 	if searchResult.Response.NumFound != 1 {
-// 		return item, fmt.Errorf("Incorrect number of results. Expected 1, found %d", searchResult.Response.NumFound)
-// 	}
+	err = json.Unmarshal(body, c)
+	if err != nil {
+		return err
+	}
 
-// 	id := filepath.Base(searchResult.Response.Docs[0].URL)
-// 	return BatchGet(id)
-// }
-
-// func BatchDelete(id string) (err error) {
-// 	path := "/api/v0/ses/" + id
-
-// 	err = Delete(path)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	return nil
-// }
-
-// func (c *BatchEntry) Get() (err error) {
-// 	path := fmt.Sprintf("/api/v0/ses/%s", c.ID)
-
-// 	body, err := GetBody(path)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	err = json.Unmarshal(body, c)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	return nil
-// }
+	return nil
+}
 
 func (c *BatchEntry) Create() (err error) {
 	path := "/api/v0/batches"
@@ -143,35 +112,34 @@ func (c *BatchEntry) Create() (err error) {
 	return nil
 }
 
-// func (c *BatchEntry) Update() (err error) {
-// 	path := "/api/v0/ses/" + c.ID
+func (c *BatchEntry) Update() (err error) {
+	path := "/api/v0/batches/" + c.ID
 
-// 	data, err := json.Marshal(c)
-// 	if err != nil {
-// 		return err
-// 	}
+	data, err := json.Marshal(c)
+	if err != nil {
+		return err
+	}
 
-// 	err = Put(path, data)
-// 	if err != nil {
-// 		return err
-// 	}
+	err = Put(path, data)
+	if err != nil {
+		return err
+	}
 
-// 	return nil
-// }
+	return nil
+}
 
-// func (c *BatchEntry) Delete() (err error) {
-// 	return BatchDelete(c.ID)
-// }
+func (c *BatchEntry) Delete() (err error) {
+	return BatchDelete(c.ID)
+}
 
-// func (e BatchListEntry) ToString() string {
-// 	s := fmt.Sprintf("ID: %s, DigiID: %s, DOType: %s, Phase: %s, Step: %s, Status: %s, Label: %s, CreatedAt: %s , UpdatedAt: %s, URL: %s, CollectionURL: %s",
-// 		e.ID, e.DigiID, e.DOType, e.Phase, e.Step, e.Status, e.Label, e.CreatedAt, e.UpdatedAt, e.URL, e.CollectionURL)
+func (e BatchListEntry) ToString() string {
+	s := fmt.Sprintf("ID: %s, BatchType: %s, BatchNumber: %d, Name: %s, SourceFile: %s, CollectionID: %s, CreatedAt: %s , UpdatedAt: %s, URL: %s, CollectionURL: %s",
+		e.ID, e.BatchType, e.BatchNumber, e.Name, e.SourceFile, e.CollectionID, e.CreatedAt, e.UpdatedAt, e.URL, e.CollectionURL)
+	return s
+}
 
-// 	return s
-// }
-
-// func (e BatchEntry) ToString() string {
-// 	s := fmt.Sprintf("ID: %s, DigiID: %s, DOType: %s, Phase: %s, Step: %s, Status: %s, Label: %s, Title: %s, CreatedAt: %s , UpdatedAt: %s, BDIURL: %s, FMDsURL: %s, CollectionURL: %s, LockVersion: %d, Notes: %s", e.ID, e.DigiID, e.DOType, e.Phase, e.Step, e.Status, e.Label, e.Title, e.CreatedAt, e.UpdatedAt, e.BDIURL, e.FMDsURL, e.CollectionURL, e.LockVersion, e.Notes)
-
-// 	return s
-// }
+func (e BatchEntry) ToString() string {
+	s := fmt.Sprintf("ID: %s, BatchType: %s, BatchNumber: %d, Name: %s, SourceFile: %s, CollectionID: %s, CreatedAt: %s , UpdatedAt: %s, CollectionURL: %s, BatchesURL: %s, LockVersion: %d, Notes: %s",
+		e.ID, e.BatchType, e.BatchNumber, e.Name, e.SourceFile, e.CollectionID, e.CreatedAt, e.UpdatedAt, e.CollectionURL, e.BatchesURL, e.LockVersion, e.Notes)
+	return s
+}
