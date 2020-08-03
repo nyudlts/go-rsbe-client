@@ -1,6 +1,7 @@
 package rsbe
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -139,6 +140,22 @@ func TestBatchToSEGetFunc(t *testing.T) {
 		if want.LockVersion != got.LockVersion {
 			t.Errorf("LockVersion mismatch: want: \"%v\", got: \"%v\"", want.LockVersion, got.LockVersion)
 		}
+
+		expect := fmt.Sprintf("http://localhost:3000/api/v0/ses/%s", want.SEID)
+		if expect != got.SEURL {
+			t.Errorf("SEURL mismatch: want: \"%v\", got: \"%v\"", expect, got.SEURL)
+		}
+
+		expect = fmt.Sprintf("http://localhost:3000/api/v0/batches/%s", want.BatchID)
+		if expect != got.BatchURL {
+			t.Errorf("BatchURL mismatch: want: \"%v\", got: \"%v\"", expect, got.BatchURL)
+		}
+
+		expect = fmt.Sprintf("http://localhost:3000/api/v0/batch_to_ses")
+		if expect != got.BatchToSEsURL {
+			t.Errorf("BatchToSEsURL mismatch: want: \"%v\", got: \"%v\"", expect, got.BatchToSEsURL)
+		}
+
 	})
 }
 

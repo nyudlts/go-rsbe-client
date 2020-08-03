@@ -29,7 +29,7 @@ type BatchToSEEntry struct {
 	UpdatedAt     string `json:"updated_at,omitempty"`
 	BatchURL      string `json:"batch_url,omitempty"`
 	SEURL         string `json:"se_url,omitempty"`
-	BatchToSEsURL string `json:"batch_to_ies_url"`
+	BatchToSEsURL string `json:"batch_to_ses_url"`
 	LockVersion   int    `json:"lock_version,omitempty"`
 }
 
