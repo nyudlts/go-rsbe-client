@@ -33,13 +33,6 @@ type BatchToSEEntry struct {
 	LockVersion   int    `json:"lock_version,omitempty"`
 }
 
-// api_v0_batch_to_ses GET    /api/v0/batch_to_ses(.:format)               api/v0/batch_to_ses#index {:format=>"json"}
-//                     POST   /api/v0/batch_to_ses(.:format)               api/v0/batch_to_ses#create {:format=>"json"}
-//  api_v0_batch_to_se GET    /api/v0/batch_to_ses/:id(.:format)           api/v0/batch_to_ses#show {:format=>"json"}
-//                     PATCH  /api/v0/batch_to_ses/:id(.:format)           api/v0/batch_to_ses#update {:format=>"json"}
-//                     PUT    /api/v0/batch_to_ses/:id(.:format)           api/v0/batch_to_ses#update {:format=>"json"}
-//                     DELETE /api/v0/batch_to_ses/:id(.:format)           api/v0/batch_to_ses#destroy {:format=>"json"}
-
 func BatchToSEList() (list []BatchToSEListEntry, err error) {
 
 	body, err := GetBody("/api/v0/batch_to_ses")
