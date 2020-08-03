@@ -2,6 +2,7 @@ package rsbe
 
 import (
 	"testing"
+	"sort"
 )
 
 var batchToCreate = BatchEntry{
@@ -48,6 +49,11 @@ func TestBatchList(t *testing.T) {
 		if 2 != len(list) {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", 2, len(list))
 		}
+
+		// this is needed because the API does not guarantee order or returned elements
+		sort.SliceStable(list, func(i, j int) bool {
+			return list[i].Number < list[j].Number
+		})
 
 		want := batchToCreate
 		got := list[1]
