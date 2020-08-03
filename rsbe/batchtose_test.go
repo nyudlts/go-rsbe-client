@@ -4,18 +4,17 @@ import (
 	"testing"
 )
 
-var batchToSEListEntry = BatchToSEListEntry{
-}
+var batchToSEListEntry = BatchToSEListEntry{}
 
-var batchToSEShow = BatchToSEEntry{
-}
+var batchToSEShow = BatchToSEEntry{}
 
 var batchToSEToCreate = BatchToSEEntry{
-	BatchID:     "32626389-c942-4e71-9b5a-5d7c7ca4d389",
-	SEID: "8c258cb2-d700-43be-8773-a61a7b9cd668",
-	Phase: "transcoding",
-	Step: "trimming",
-	Status: "active",
+	BatchID: "32626389-c942-4e71-9b5a-5d7c7ca4d389",
+	SEID:    "8c258cb2-d700-43be-8773-a61a7b9cd668",
+	Phase:   "transcoding",
+	Step:    "trimming",
+	Status:  "active",
+	Notes:   "amazing notes, as always",
 }
 
 func TestBatchToSECreateFunc(t *testing.T) {
@@ -41,104 +40,165 @@ func TestBatchToSECreateFunc(t *testing.T) {
 	})
 }
 
-// func TestBatchToSEList(t *testing.T) {
+func TestBatchToSEList(t *testing.T) {
+	setupLocalhostClient()
 
-// 	mux := setupMux("/api/v0/batchToSEs", "testdata/batchToSE-list.json")
-// 	ts := httptest.NewServer(mux)
-// 	defer ts.Close()
+	t.Run("check that proper attribute values are returned", func(t *testing.T) {
+		list, err := BatchToSEList()
+		if err != nil {
+			t.Errorf("Unexpected error: %s", err)
+		}
 
-// 	setupTestServerClient(ts)
+		if 1 != len(list) {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", 1, len(list))
+		}
 
-// 	t.Run("result", func(t *testing.T) {
-// 		want := batchToSEListEntry
-// 		got, err := BatchToSEList()
-// 		if err != nil {
-// 			t.Errorf("Unexpected error: %s", err)
-// 		}
+		want := batchToSEToCreate
+		got := list[0]
 
-// 		if 4 != len(got) {
-// 			t.Errorf("Result Length Mismatch: want: 4, got: %d", len(got))
-// 		}
+		if want.ID != got.ID {
+			t.Errorf("ID mismatch: want: \"%v\", got: \"%v\"", want.ID, got.ID)
+		}
 
-// 		if batchToSEListEntry != got[0] {
-// 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
-// 		}
-// 	})
+		if want.BatchID != got.BatchID {
+			t.Errorf("BatchID mismatch: want: \"%v\", got: \"%v\"", want.BatchID, got.BatchID)
+		}
 
-// }
+		if want.SEID != got.SEID {
+			t.Errorf("SEID mismatch: want: \"%v\", got: \"%v\"", want.SEID, got.SEID)
+		}
 
-// func TestBatchToSEGetFunc(t *testing.T) {
+		if want.Phase != got.Phase {
+			t.Errorf("Phase mismatch: want: \"%v\", got: \"%v\"", want.Phase, got.Phase)
+		}
 
-// 	mux := setupMux("/api/v0/batchToSEs/3ca8ecaf-6fae-48a5-8441-5a96e119ad28", "testdata/batchToSE-get.json")
-// 	ts := httptest.NewServer(mux)
-// 	defer ts.Close()
+		if want.Step != got.Step {
+			t.Errorf("Step mismatch: want: \"%v\", got: \"%v\"", want.Step, got.Step)
+		}
 
-// 	setupTestServerClient(ts)
+		if want.Status != got.Status {
+			t.Errorf("Status mismatch: want: \"%v\", got: \"%v\"", want.Status, got.Status)
+		}
 
-// 	t.Run("result", func(t *testing.T) {
-// 		want := batchToSEShow
-// 		got := BatchToSEEntry{ID: "3ca8ecaf-6fae-48a5-8441-5a96e119ad28"}
+		if want.CreatedAt != got.CreatedAt {
+			t.Errorf("CreatedAt mismatch: want: \"%v\", got: \"%v\"", want.CreatedAt, got.CreatedAt)
+		}
 
-// 		err := got.Get()
-// 		if err != nil {
-// 			t.Errorf("Unexpected error: %s", err)
-// 		}
+		if want.UpdatedAt != got.UpdatedAt {
+			t.Errorf("UpdatedAt mismatch: want: \"%v\", got: \"%v\"", want.UpdatedAt, got.UpdatedAt)
+		}
+	})
+}
 
-// 		if want.ID != got.ID {
-// 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
-// 		}
-// 	})
+func TestBatchToSEGetFunc(t *testing.T) {
+	setupLocalhostClient()
 
-// }
+	t.Run("check that proper attribute values are returned", func(t *testing.T) {
+		want := batchToSEToCreate
+		got, err := BatchToSEGet(want.ID)
+		if err != nil {
+			t.Errorf("Unexpected error: %s", err)
+		}
 
-// func TestBatchToSEUpdateFunc(t *testing.T) {
-// 	setupLocalhostClient()
+		if want.ID != got.ID {
+			t.Errorf("ID mismatch: want: \"%v\", got: \"%v\"", want.ID, got.ID)
+		}
 
-// 	_ = batchToSEToCreate.Get()
+		if want.BatchID != got.BatchID {
+			t.Errorf("BatchID mismatch: want: \"%v\", got: \"%v\"", want.BatchID, got.BatchID)
+		}
 
-// 	if batchToSEToCreate.Role != "notes" {
-// 		t.Errorf("variable already updated: %s", batchToSEToCreate.ToString())
-// 	}
+		if want.SEID != got.SEID {
+			t.Errorf("SEID mismatch: want: \"%v\", got: \"%v\"", want.SEID, got.SEID)
+		}
 
-// 	batchToSEToCreate.Role = "waffles"
+		if want.Phase != got.Phase {
+			t.Errorf("Phase mismatch: want: \"%v\", got: \"%v\"", want.Phase, got.Phase)
+		}
 
-// 	err := batchToSEToCreate.Update()
-// 	if err != nil {
-// 		t.Errorf("Unexpected error: %s", err)
-// 	}
+		if want.Step != got.Step {
+			t.Errorf("Step mismatch: want: \"%v\", got: \"%v\"", want.Step, got.Step)
+		}
 
-// 	_ = batchToSEToCreate.Get()
+		if want.Status != got.Status {
+			t.Errorf("Status mismatch: want: \"%v\", got: \"%v\"", want.Status, got.Status)
+		}
 
-// 	t.Run("confirm that elements updated", func(t *testing.T) {
-// 		if batchToSEToCreate.Role != "waffles" {
-// 			t.Errorf("Role was not updated: got: %s", batchToSEToCreate.Role)
-// 		}
+		if want.CreatedAt != got.CreatedAt {
+			t.Errorf("CreatedAt mismatch: want: \"%v\", got: \"%v\"", want.CreatedAt, got.CreatedAt)
+		}
 
-// 		if batchToSEToCreate.CreatedAt == batchToSEToCreate.UpdatedAt {
-// 			t.Errorf("UpdatedAt not updated")
-// 		}
-// 	})
-// }
+		if want.UpdatedAt != got.UpdatedAt {
+			t.Errorf("UpdatedAt mismatch: want: \"%v\", got: \"%v\"", want.UpdatedAt, got.UpdatedAt)
+		}
 
-// func TestBatchToSEDeleteFunc(t *testing.T) {
-// 	setupLocalhostClient()
+		if want.Notes != got.Notes {
+			t.Errorf("Notes mismatch: want: \"%v\", got: \"%v\"", want.Notes, got.Notes)
+		}
 
-// 	_ = batchToSEToCreate.Get()
+		if want.LockVersion != got.LockVersion {
+			t.Errorf("LockVersion mismatch: want: \"%v\", got: \"%v\"", want.LockVersion, got.LockVersion)
+		}
+	})
+}
 
-// 	id := batchToSEToCreate.ID
+func TestBatchToSEUpdateFunc(t *testing.T) {
+	setupLocalhostClient()
 
-// 	err := batchToSEToCreate.Delete()
-// 	if err != nil {
-// 		t.Errorf("Unexpected error: %s", err)
-// 	}
+	err := batchToSEToCreate.Get()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
 
-// 	t.Run("confirm that deleted item not found", func(t *testing.T) {
-// 		// should not be found, so err should NOT be nil
-// 		_, err = BatchToSEGet(id)
+	if batchToSEToCreate.Status != "active" {
+		t.Errorf("variable already updated: %s", batchToSEToCreate.Status)
+	}
 
-// 		if err == nil {
-// 			t.Errorf("err was nil")
-// 		}
+	batchToSEToCreate.Status = "error"
 
-// 	})
-// }
+	err = batchToSEToCreate.Update()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
+
+	err = batchToSEToCreate.Get()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
+
+	t.Run("confirm that elements updated", func(t *testing.T) {
+		if batchToSEToCreate.Status != "error" {
+			t.Errorf("Status was not updated: got: %s", batchToSEToCreate.Status)
+		}
+
+		if batchToSEToCreate.CreatedAt == batchToSEToCreate.UpdatedAt {
+			t.Errorf("UpeatedAt not updated")
+		}
+	})
+}
+
+func TestBatchToSEDeleteFunc(t *testing.T) {
+	setupLocalhostClient()
+
+	err := batchToSEToCreate.Get()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
+
+	id := batchToSEToCreate.ID
+
+	err = batchToSEToCreate.Delete()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
+
+	t.Run("confirm that deleted item not found", func(t *testing.T) {
+		// should not be found, so err should NOT be nil
+		_, err = BatchToSEGet(id)
+
+		if err == nil {
+			t.Errorf("err was nil")
+		}
+
+	})
+}
