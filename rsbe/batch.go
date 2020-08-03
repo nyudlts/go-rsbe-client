@@ -7,10 +7,10 @@ import (
 
 type BatchListEntry struct {
 	ID            string `json:"id,omitempty"`
-	BatchType     string `json:"batch_type,omitempty"`
-	BatchNumber   uint   `json:"batch_number,omitempty"`
+	Type          string `json:"batch_type,omitempty"`
+	Number        uint   `json:"batch_number,omitempty"`
 	Name          string `json:"name,omitempty"`
-	SourceFile    string `json:"source_file,omitempty"`
+	Source        string `json:"source_file,omitempty"`
 	CreatedAt     string `json:"created_at,omitempty"`
 	UpdatedAt     string `json:"updated_at,omitempty"`
 	CollectionID  string `json:"coll_id,omitempty"`
@@ -21,10 +21,10 @@ type BatchListEntry struct {
 type BatchEntry struct {
 	ID            string `json:"id,omitempty"`
 	Name          string `json:"name,omitempty"`
-	SourceFile    string `json:"source_file,omitempty"`
+	Source        string `json:"source_file,omitempty"`
 	CollectionID  string `json:"coll_id,omitempty"`
-	BatchType     string `json:"batch_type,omitempty"`
-	BatchNumber   uint   `json:"batch_number,omitempty"`
+	Type          string `json:"batch_type,omitempty"`
+	Number        uint   `json:"batch_number,omitempty"`
 	Notes         string `json:"notes,omitempty"`
 	CreatedAt     string `json:"created_at,omitempty"`
 	UpdatedAt     string `json:"updated_at,omitempty"`
@@ -133,13 +133,13 @@ func (c *BatchEntry) Delete() (err error) {
 }
 
 func (e BatchListEntry) ToString() string {
-	s := fmt.Sprintf("ID: %s, BatchType: %s, BatchNumber: %d, Name: %s, SourceFile: %s, CollectionID: %s, CreatedAt: %s , UpdatedAt: %s, URL: %s, CollectionURL: %s",
-		e.ID, e.BatchType, e.BatchNumber, e.Name, e.SourceFile, e.CollectionID, e.CreatedAt, e.UpdatedAt, e.URL, e.CollectionURL)
+	s := fmt.Sprintf("ID: %s, Type: %s, Number: %d, Name: %s, Source: %s, CollectionID: %s, CreatedAt: %s , UpdatedAt: %s, URL: %s, CollectionURL: %s",
+		e.ID, e.Type, e.Number, e.Name, e.Source, e.CollectionID, e.CreatedAt, e.UpdatedAt, e.URL, e.CollectionURL)
 	return s
 }
 
 func (e BatchEntry) ToString() string {
-	s := fmt.Sprintf("ID: %s, BatchType: %s, BatchNumber: %d, Name: %s, SourceFile: %s, CollectionID: %s, CreatedAt: %s , UpdatedAt: %s, CollectionURL: %s, BatchesURL: %s, LockVersion: %d, Notes: %s",
-		e.ID, e.BatchType, e.BatchNumber, e.Name, e.SourceFile, e.CollectionID, e.CreatedAt, e.UpdatedAt, e.CollectionURL, e.BatchesURL, e.LockVersion, e.Notes)
+	s := fmt.Sprintf("ID: %s, Type: %s, Number: %d, Name: %s, Source: %s, CollectionID: %s, CreatedAt: %s , UpdatedAt: %s, CollectionURL: %s, BatchesURL: %s, LockVersion: %d, Notes: %s",
+		e.ID, e.Type, e.Number, e.Name, e.Source, e.CollectionID, e.CreatedAt, e.UpdatedAt, e.CollectionURL, e.BatchesURL, e.LockVersion, e.Notes)
 	return s
 }

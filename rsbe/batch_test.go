@@ -6,10 +6,10 @@ import (
 
 var batchToCreate = BatchEntry{
 	Name:         "a super cool batch",
-	SourceFile:   "foo.xlsx",
+	Source:       "foo.xlsx",
 	CollectionID: "b9612d5d-619a-4ceb-b620-d816e4b4340b",
-	BatchType:    "transcoding",
-	BatchNumber:  1,
+	Type:         "transcoding",
+	Number:       2,
 	Notes:        "get stuff ready",
 }
 
@@ -45,31 +45,31 @@ func TestBatchList(t *testing.T) {
 			t.Errorf("Unexpected error: %s", err)
 		}
 
-		if 1 != len(list) {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", 1, len(list))
+		if 2 != len(list) {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", 2, len(list))
 		}
 
 		want := batchToCreate
-		got := list[0]
+		got := list[1]
 
 		if want.ID != got.ID {
 			t.Errorf("ID mismatch: want: \"%v\", got: \"%v\"", want.ID, got.ID)
 		}
 
-		if want.BatchType != got.BatchType {
-			t.Errorf("BatchType mismatch: want: \"%v\", got: \"%v\"", want.BatchType, got.BatchType)
+		if want.Type != got.Type {
+			t.Errorf("Type mismatch: want: \"%v\", got: \"%v\"", want.Type, got.Type)
 		}
 
-		if want.BatchNumber != got.BatchNumber {
-			t.Errorf("BatchNumber mismatch: want: \"%v\", got: \"%v\"", want.BatchNumber, got.BatchNumber)
+		if want.Number != got.Number {
+			t.Errorf("Number mismatch: want: \"%v\", got: \"%v\"", want.Number, got.Number)
 		}
 
 		if want.Name != got.Name {
 			t.Errorf("Name mismatch: want: \"%v\", got: \"%v\"", want.Name, got.Name)
 		}
 
-		if want.SourceFile != got.SourceFile {
-			t.Errorf("SourceFile mismatch: want: \"%v\", got: \"%v\"", want.SourceFile, got.SourceFile)
+		if want.Source != got.Source {
+			t.Errorf("Source mismatch: want: \"%v\", got: \"%v\"", want.Source, got.Source)
 		}
 
 		if want.CollectionID != got.CollectionID {
@@ -102,20 +102,20 @@ func TestBatchGetFunc(t *testing.T) {
 			t.Errorf("ID mismatch: want: \"%v\", got: \"%v\"", want.ID, got.ID)
 		}
 
-		if want.BatchType != got.BatchType {
-			t.Errorf("BatchType mismatch: want: \"%v\", got: \"%v\"", want.BatchType, got.BatchType)
+		if want.Type != got.Type {
+			t.Errorf("Type mismatch: want: \"%v\", got: \"%v\"", want.Type, got.Type)
 		}
 
-		if want.BatchNumber != got.BatchNumber {
-			t.Errorf("BatchNumber mismatch: want: \"%v\", got: \"%v\"", want.BatchNumber, got.BatchNumber)
+		if want.Number != got.Number {
+			t.Errorf("Number mismatch: want: \"%v\", got: \"%v\"", want.Number, got.Number)
 		}
 
 		if want.Name != got.Name {
 			t.Errorf("Name mismatch: want: \"%v\", got: \"%v\"", want.Name, got.Name)
 		}
 
-		if want.SourceFile != got.SourceFile {
-			t.Errorf("SourceFile mismatch: want: \"%v\", got: \"%v\"", want.SourceFile, got.SourceFile)
+		if want.Source != got.Source {
+			t.Errorf("Source mismatch: want: \"%v\", got: \"%v\"", want.Source, got.Source)
 		}
 
 		if want.CollectionID != got.CollectionID {
@@ -151,20 +151,20 @@ func TestBatchGet(t *testing.T) {
 			t.Errorf("ID mismatch: want: \"%v\", got: \"%v\"", want.ID, got.ID)
 		}
 
-		if want.BatchType != got.BatchType {
-			t.Errorf("BatchType mismatch: want: \"%v\", got: \"%v\"", want.BatchType, got.BatchType)
+		if want.Type != got.Type {
+			t.Errorf("Type mismatch: want: \"%v\", got: \"%v\"", want.Type, got.Type)
 		}
 
-		if want.BatchNumber != got.BatchNumber {
-			t.Errorf("BatchNumber mismatch: want: \"%v\", got: \"%v\"", want.BatchNumber, got.BatchNumber)
+		if want.Number != got.Number {
+			t.Errorf("Number mismatch: want: \"%v\", got: \"%v\"", want.Number, got.Number)
 		}
 
 		if want.Name != got.Name {
 			t.Errorf("Name mismatch: want: \"%v\", got: \"%v\"", want.Name, got.Name)
 		}
 
-		if want.SourceFile != got.SourceFile {
-			t.Errorf("SourceFile mismatch: want: \"%v\", got: \"%v\"", want.SourceFile, got.SourceFile)
+		if want.Source != got.Source {
+			t.Errorf("Source mismatch: want: \"%v\", got: \"%v\"", want.Source, got.Source)
 		}
 
 		if want.CollectionID != got.CollectionID {
