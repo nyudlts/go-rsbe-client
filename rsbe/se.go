@@ -72,26 +72,10 @@ func SEGet(id string) (item SEEntry, err error) {
 }
 
 func SEGetByDigiID(digiID string) (item SEEntry, err error) {
-	path := fmt.Sprintf("/api/v0/search?scope=ses&digi_id=%s", digiID)
+	item.DigiID = digiID
 
-	var searchResult SearchResult
-
-	body, err := GetBody(path)
-	if err != nil {
-		return item, err
-	}
-
-	err = json.Unmarshal(body, &searchResult)
-	if err != nil {
-		return item, err
-	}
-
-	if searchResult.Response.NumFound != 1 {
-		return item, fmt.Errorf("Incorrect number of results. Expected 1, found %d", searchResult.Response.NumFound)
-	}
-
-	id := filepath.Base(searchResult.Response.Docs[0].URL)
-	return SEGet(id)
+	err = item.GetByDigiID()
+	return item, err
 }
 
 func SEDelete(id string) (err error) {
@@ -119,6 +103,30 @@ func (c *SEEntry) Get() (err error) {
 
 	return nil
 }
+
+func (c *SEEntry) GetByDigiID() (err error) {
+	path := fmt.Sprintf("/api/v0/search?scope=ses&digi_id=%s", c.DigiID)
+
+	var searchResult SearchResult
+
+	body, err := GetBody(path)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(body, &searchResult)
+	if err != nil {
+		return err
+	}
+
+	if searchResult.Response.NumFound != 1 {
+		return fmt.Errorf("Incorrect number of results. Expected 1, found %d", searchResult.Response.NumFound)
+	}
+
+	c.ID = filepath.Base(searchResult.Response.Docs[0].URL)
+	return c.Get()
+}
+
 
 func (c *SEEntry) Create() (err error) {
 	path := "/api/v0/ses"
