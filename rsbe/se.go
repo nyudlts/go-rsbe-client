@@ -75,10 +75,6 @@ func SEGetByDigiID(digiID string) (item SEEntry, err error) {
 	item.DigiID = digiID
 
 	err = item.GetByDigiID()
-	if err != nil {
-		return item, err
-	}
-
 	return item, err
 }
 
