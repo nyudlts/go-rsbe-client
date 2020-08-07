@@ -28,7 +28,7 @@ type SEEntry struct {
 	Phase         string `json:"phase,omitempty"`   // REQUIRED
 	Step          string `json:"step,omitempty"`    // REQUIRED
 	Status        string `json:"status,omitempty"`  // REQUIRED
-	Notes         string `json:"notes,omitempty"`   // REQUIRED
+	Notes         string `json:"notes,omitempty"`   
 	Label         string `json:"label,omitempty"`
 	Title         string `json:"title,omitempty"`
 	CreatedAt     string `json:"created_at,omitempty"`
