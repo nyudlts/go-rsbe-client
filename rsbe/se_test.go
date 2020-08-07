@@ -215,3 +215,37 @@ func TestSEGetByDigiID(t *testing.T) {
 	})
 
 }
+
+func TestGetByDigiIDFunc(t *testing.T) {
+	setupLocalhostClient()
+
+	want, err := SEGet("8c258cb2-d700-43be-8773-a61a7b9cd668")
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
+
+	t.Run("confirm that exiting SE is returned", func(t *testing.T) {
+		var got SEEntry
+
+		got.DigiID = "foo"
+		got.GetByDigiID()
+		if err != nil {
+			t.Errorf("Unexpected error: %s", err)
+		}
+
+		if got != want {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+	})
+
+	t.Run("confirm error is returned when not found", func(t *testing.T) {
+		var got SEEntry
+
+		got.DigiID = "fooX"
+		err = got.GetByDigiID()
+		if err == nil {
+			t.Errorf("Expected search for non-existant SE to return error, but err was nil")
+		}
+	})
+
+}
