@@ -28,7 +28,7 @@ type SEEntry struct {
 	Phase         string `json:"phase,omitempty"`   // REQUIRED
 	Step          string `json:"step,omitempty"`    // REQUIRED
 	Status        string `json:"status,omitempty"`  // REQUIRED
-	Notes         string `json:"notes,omitempty"`   
+	Notes         string `json:"notes,omitempty"`
 	Label         string `json:"label,omitempty"`
 	Title         string `json:"title,omitempty"`
 	CreatedAt     string `json:"created_at,omitempty"`
@@ -127,7 +127,6 @@ func (c *SEEntry) GetByDigiID() (err error) {
 	return c.Get()
 }
 
-
 func (c *SEEntry) Create() (err error) {
 	path := "/api/v0/ses"
 
@@ -177,7 +176,7 @@ func (e SEListEntry) ToString() string {
 }
 
 func (e SEEntry) ToString() string {
-	s := fmt.Sprintf("ID: %s, DigiID: %s, DOType: %s, Phase: %s, Step: %s, Status: %s, Label: %s, Title: %s, CreatedAt: %s , UpdatedAt: %s, BDIURL: %s, FMDsURL: %s, CollectionURL: %s, LockVersion: %d, Notes: %s", e.ID, e.DigiID, e.DOType, e.Phase, e.Step, e.Status, e.Label, e.Title, e.CreatedAt, e.UpdatedAt, e.BDIURL, e.FMDsURL, e.CollectionURL, e.LockVersion, e.Notes)
+	s := fmt.Sprintf("ID: %s, CollectionID: %s, DigiID: %s, DOType: %s, Phase: %s, Step: %s, Status: %s, Label: %s, Title: %s, CreatedAt: %s , UpdatedAt: %s, BDIURL: %s, FMDsURL: %s, CollectionURL: %s, LockVersion: %d, Notes: %s", e.ID, e.CollectionID, e.DigiID, e.DOType, e.Phase, e.Step, e.Status, e.Label, e.Title, e.CreatedAt, e.UpdatedAt, e.BDIURL, e.FMDsURL, e.CollectionURL, e.LockVersion, e.Notes)
 
 	return s
 }
