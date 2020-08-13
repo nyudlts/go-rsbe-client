@@ -46,8 +46,8 @@ type FMDEntry struct {
 }
 
 type FMDFormat struct {
-	PRONOM string `json:"pronom,omitempty"`
-	MIME   string `json:"mime,omitempty"`
+	PRONOMID string `json:"pronom,omitempty"`
+	MIMEType string `json:"mime,omitempty"`
 }
 
 type FMDData struct {
