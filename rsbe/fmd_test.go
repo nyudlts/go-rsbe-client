@@ -36,8 +36,8 @@ var fmdShow = FMDEntry{
 	CreatedAt:    "2020-07-13T02:13:10.297Z",
 	UpdatedAt:    "2020-07-13T02:13:10.297Z",
 	Formats: FMDFormat{
-		PRONOM: "fmt/14",
-		MIME:   "application/pdf",
+		PRONOMID: "fmt/14",
+		MIMEType:   "application/pdf",
 	},
 	Data: FMDData{
 		Searchable:      true,
@@ -68,7 +68,7 @@ var fmdToCreate = FMDEntry{
 	HashSHA256:   "57cb4643e48bdaf4aad877cbd1a5401341207964bbc3195cd798e34ce69f37fb",
 	HashSHA512:   "e21baae6bac92cd46cb3fb7d1117d529ee8c3d80f6e1a7c84ee599bc14bb7cd6c538c9161f75bd9d24f1ce714a9c422bedf55a132fb070e0c7a112316bfbc267",
 	Formats: FMDFormat{
-		PRONOM: "fmt/14",
+		PRONOMID: "fmt/14",
 	},
 	Data: FMDData{
 		Searchable: true,
@@ -190,12 +190,12 @@ func TestFMDGetFunc(t *testing.T) {
 			t.Errorf("UpdatedAt mismatch: want: \"%v\", got: \"%v\"", want.UpdatedAt, got.UpdatedAt)
 		}
 
-		if want.Formats.PRONOM != got.Formats.PRONOM {
-			t.Errorf("Formats.PRONOM Mismatch: want: \"%v\", got: \"%v\"", want.Formats.PRONOM, got.Formats.PRONOM)
+		if want.Formats.PRONOMID != got.Formats.PRONOMID {
+			t.Errorf("Formats.PRONOMID Mismatch: want: \"%v\", got: \"%v\"", want.Formats.PRONOMID, got.Formats.PRONOMID)
 		}
 
-		if want.Formats.MIME != got.Formats.MIME {
-			t.Errorf("Formats.MIME mismatch: want: \"%v\", got: \"%v\"", "foo", got.Formats.MIME)
+		if want.Formats.MIMEType != got.Formats.MIMEType {
+			t.Errorf("Formats.MIMEType mismatch: want: \"%v\", got: \"%v\"", "foo", got.Formats.MIMEType)
 		}
 
 		if want.Data.Duration != got.Data.Duration {
@@ -323,12 +323,12 @@ func TestFMDCreateFunc(t *testing.T) {
 			t.Errorf("UpdatedAt mismatch: want: \"%v\", got: \"%v\"", want.UpdatedAt, got.UpdatedAt)
 		}
 
-		if want.Formats.PRONOM != got.Formats.PRONOM {
-			t.Errorf("Formats.PRONOM Mismatch: want: \"%v\", got: \"%v\"", want.Formats.PRONOM, got.Formats.PRONOM)
+		if want.Formats.PRONOMID != got.Formats.PRONOMID {
+			t.Errorf("Formats.PRONOMID Mismatch: want: \"%v\", got: \"%v\"", want.Formats.PRONOMID, got.Formats.PRONOMID)
 		}
 
-		if want.Formats.MIME != got.Formats.MIME {
-			t.Errorf("Formats.MIME mismatch: want: \"%v\", got: \"%v\"", "foo", got.Formats.MIME)
+		if want.Formats.MIMEType != got.Formats.MIMEType {
+			t.Errorf("Formats.MIMEType mismatch: want: \"%v\", got: \"%v\"", "foo", got.Formats.MIMEType)
 		}
 
 		if want.Data.Duration != got.Data.Duration {
@@ -370,11 +370,11 @@ func TestFMDUpdateFunc(t *testing.T) {
 
 	_ = fmdToCreate.Get()
 
-	if fmdToCreate.Formats.PRONOM != "fmt/14" {
+	if fmdToCreate.Formats.PRONOMID != "fmt/14" {
 		t.Errorf("variable already updated: %s", fmdToCreate.ToString())
 	}
 
-	fmdToCreate.Formats.PRONOM = "fmt/99"
+	fmdToCreate.Formats.PRONOMID = "fmt/99"
 
 	err := fmdToCreate.Update()
 	if err != nil {
@@ -384,8 +384,8 @@ func TestFMDUpdateFunc(t *testing.T) {
 	_ = fmdToCreate.Get()
 
 	t.Run("confirm that elements updated", func(t *testing.T) {
-		if fmdToCreate.Formats.PRONOM != "fmt/99" {
-			t.Errorf("Formats was not updated: got: %s", fmdToCreate.Formats.PRONOM)
+		if fmdToCreate.Formats.PRONOMID != "fmt/99" {
+			t.Errorf("Formats was not updated: got: %s", fmdToCreate.Formats.PRONOMID)
 		}
 
 		if fmdToCreate.CreatedAt == fmdToCreate.UpdatedAt {
