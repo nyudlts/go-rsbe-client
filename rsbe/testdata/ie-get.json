@@ -1,0 +1,15 @@
+{
+    "id": "9ea98441-b6b6-46cf-b6c8-91dff385c6c8",
+    "coll_id": "b9612d5d-619a-4ceb-b620-d816e4b4340b",
+    "sys_num": "123456",
+    "phase": "registration",
+    "step": "loading",
+    "status": "done",
+    "notes": "glorious notes",
+    "title": "The White Whale",
+    "created_at": "2020-05-31T20:57:58.618Z",
+    "updated_at": "2020-05-31T20:57:58.618Z",
+    "fmds_url": "http://localhost:3000/api/v0/ies/9ea98441-b6b6-46cf-b6c8-91dff385c6c8/fmds",
+    "coll_url": "http://localhost:3000/api/v0/colls/b9612d5d-619a-4ceb-b620-d816e4b4340b",
+    "lock_version": 0
+}
