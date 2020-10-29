@@ -1,20 +1,22 @@
 package rsbe
 
 import (
+	"github.com/google/go-querystring/query"
+
 	"encoding/json"
-		"fmt"
+	"fmt"
 )
 
 type BatchToSEListEntry struct {
-	ID        string `json:"id,omitempty"`
-	BatchID   string `json:"batch_id,omitempty"`
-	SEID      string `json:"se_id,omitempty"`
-	Phase     string `json:"phase,omitempty"`
-	Step      string `json:"step,omitempty"`
-	Status    string `json:"status,omitempty"`
-	CreatedAt string `json:"created_at,omitempty"`
-	UpdatedAt string `json:"updated_at,omitempty"`
-	URL       string `json:"url,omitempty"`
+	ID        string `json:"id,omitempty" url:"id,omitempty"`
+	BatchID   string `json:"batch_id,omitempty" url:"batch_id,omitempty"`
+	SEID      string `json:"se_id,omitempty" url:"se_id,omitempty"`
+	Phase     string `json:"phase,omitempty" url:"phase,omitempty"`
+	Step      string `json:"step,omitempty" url:"step,omitempty"`
+	Status    string `json:"status,omitempty" url:"status,omitempty"`
+	CreatedAt string `json:"created_at,omitempty" url:"-"`
+	UpdatedAt string `json:"updated_at,omitempty" url:"-"`
+	URL       string `json:"url,omitempty" url:"-"`
 }
 
 type BatchToSEEntry struct {
@@ -33,9 +35,37 @@ type BatchToSEEntry struct {
 	LockVersion   int    `json:"lock_version,omitempty"`
 }
 
-func BatchToSEList() (list []BatchToSEListEntry, err error) {
+// Get a list of BatchToSEListEntry objects
+// Function accepts 0 or 1 BatchToSEListEntry parameters.
 
-	body, err := GetBody("/api/v0/batch_to_ses")
+// If a BatchToSEListEntry parameter is passed, the BatchID, SEID,
+// Phase, Step, and Status fields are added to the RSBE query as query
+// params.
+func BatchToSEList(b ...BatchToSEListEntry) (list []BatchToSEListEntry, err error) {
+
+	path := "/api/v0/batch_to_ses"
+
+	// check if there are any query parameters
+	switch len(b) {
+	case 0:
+		// noop
+	case 1:
+		// extract url.Values 
+		v, err := query.Values(b[0])
+		if err != nil {
+			return nil, err
+		}
+
+		// if encoded values are not empty, append to path
+		if v.Encode() != "" {
+			path += "?" + v.Encode()
+		}
+	default:
+		return list, fmt.Errorf("error: can only accept 0 or 1 BatchToSEListEntry arguments")
+	}
+
+	
+	body, err := GetBody(path)
 	if err != nil {
 		return nil, err
 	}
