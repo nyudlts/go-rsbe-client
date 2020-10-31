@@ -8,15 +8,15 @@ import (
 )
 
 type BatchToSEListEntry struct {
-	ID        string `json:"id,omitempty" url:"id,omitempty"`
+	ID        string `json:"id,omitempty"       url:"id,omitempty"`
 	BatchID   string `json:"batch_id,omitempty" url:"batch_id,omitempty"`
-	SEID      string `json:"se_id,omitempty" url:"se_id,omitempty"`
-	Phase     string `json:"phase,omitempty" url:"phase,omitempty"`
-	Step      string `json:"step,omitempty" url:"step,omitempty"`
-	Status    string `json:"status,omitempty" url:"status,omitempty"`
+	SEID      string `json:"se_id,omitempty"    url:"se_id,omitempty"`
+	Phase     string `json:"phase,omitempty"    url:"phase,omitempty"`
+	Step      string `json:"step,omitempty"     url:"step,omitempty"`
+	Status    string `json:"status,omitempty"   url:"status,omitempty"`
 	CreatedAt string `json:"created_at,omitempty" url:"-"`
 	UpdatedAt string `json:"updated_at,omitempty" url:"-"`
-	URL       string `json:"url,omitempty" url:"-"`
+	URL       string `json:"url,omitempty"        url:"-"`
 }
 
 type BatchToSEEntry struct {
@@ -50,7 +50,7 @@ func BatchToSEList(b ...BatchToSEListEntry) (list []BatchToSEListEntry, err erro
 	case 0:
 		// noop
 	case 1:
-		// extract url.Values 
+		// extract url.Values
 		v, err := query.Values(b[0])
 		if err != nil {
 			return nil, err
@@ -64,7 +64,6 @@ func BatchToSEList(b ...BatchToSEListEntry) (list []BatchToSEListEntry, err erro
 		return list, fmt.Errorf("error: can only accept 0 or 1 BatchToSEListEntry arguments")
 	}
 
-	
 	body, err := GetBody(path)
 	if err != nil {
 		return nil, err
