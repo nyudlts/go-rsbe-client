@@ -1,7 +1,7 @@
 package rsbe
 
 import (
-	//	"github.com/google/go-querystring/query"
+	"github.com/google/go-querystring/query"
 
 	"encoding/json"
 	"fmt"
@@ -33,8 +33,34 @@ type IEToSEEntry struct {
 	IEToSEsURL  string `json:"ie_to_ses_url,omitempty"`
 }
 
-func IEToSEList() (list []IEToSEListEntry, err error) {
+// Get a list of IEToSEListEntry objects
+// Function accepts 0 or 1 IEToSEListEntry parameters.
+
+// If an IEToSEListEntry argument is passed, the populated fields in the argument
+// are added to the RSBE query as query params as per the "url:" struct tags.
+func IEToSEList(filter ...IEToSEListEntry) (list []IEToSEListEntry, err error) {
+
 	path := fmt.Sprintf("/api/v0/ie_to_ses")
+
+	// check if there are any query parameters
+	switch len(filter) {
+	case 0:
+		// noop
+	case 1:
+		// extract url.Values
+		v, err := query.Values(filter[0])
+		if err != nil {
+			return nil, err
+		}
+
+		// if encoded values are not empty, append to path
+		if v.Encode() != "" {
+			path += "?" + v.Encode()
+		}
+	default:
+		return list, fmt.Errorf("error: can only accept 0 or 1 IEToSEListEntry arguments")
+	}
+
 
 	body, err := GetBody(path)
 	if err != nil {
