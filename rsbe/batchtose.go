@@ -8,12 +8,12 @@ import (
 )
 
 type BatchToSEListEntry struct {
-	ID        string `json:"id,omitempty"       url:"id,omitempty"`
-	BatchID   string `json:"batch_id,omitempty" url:"batch_id,omitempty"`
-	SEID      string `json:"se_id,omitempty"    url:"se_id,omitempty"`
-	Phase     string `json:"phase,omitempty"    url:"phase,omitempty"`
-	Step      string `json:"step,omitempty"     url:"step,omitempty"`
-	Status    string `json:"status,omitempty"   url:"status,omitempty"`
+	ID        string `json:"id,omitempty"         url:"id,omitempty"`
+	BatchID   string `json:"batch_id,omitempty"   url:"batch_id,omitempty"`
+	SEID      string `json:"se_id,omitempty"      url:"se_id,omitempty"`
+	Phase     string `json:"phase,omitempty"      url:"phase,omitempty"`
+	Step      string `json:"step,omitempty"       url:"step,omitempty"`
+	Status    string `json:"status,omitempty"     url:"status,omitempty"`
 	CreatedAt string `json:"created_at,omitempty" url:"-"`
 	UpdatedAt string `json:"updated_at,omitempty" url:"-"`
 	URL       string `json:"url,omitempty"        url:"-"`
