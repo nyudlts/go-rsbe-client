@@ -1,32 +1,21 @@
 package rsbe
 
 import (
+	//	"github.com/google/go-querystring/query"
+
 	"encoding/json"
 	"fmt"
-	//	"path/filepath"
 )
 
-// # Table name: ie_to_ses
-// #
-// #  id           :uuid             not null, primary key
-// #  ie_id        :uuid             not null
-// #  se_id        :uuid             not null
-// #  order        :integer          default(1), not null
-// #  section      :integer          default(1), not null
-// #  notes        :text
-// #  lock_version :integer
-// #  created_at   :datetime
-// #  updated_at   :datetime
-
 type IEToSEListEntry struct {
-	ID        string `json:"id,omitempty"`
-	IEID      string `json:"ie_id,omitempty"`   // REQUIRED
-	SEID      string `json:"se_id,omitempty"`   // REQUIRED
-	Order     int    `json:"order,omitempty"`   // REQUIRED if != 1
-	Section   int    `json:"section,omitempty"` // REQUIRED if != 1
-	CreatedAt string `json:"created_at,omitempty"`
-	UpdatedAt string `json:"updated_at,omitempty"`
-	URL       string `json:"url",omitempty"`
+	ID        string `json:"id,omitempty"         url:"id,omitempty"`
+	IEID      string `json:"ie_id,omitempty"      url:"ie_id,omitempty"`   // REQUIRED
+	SEID      string `json:"se_id,omitempty"      url:"se_id,omitempty"`   // REQUIRED
+	Order     int    `json:"order,omitempty"      url:"order,omitempty"`   // REQUIRED if != 1
+	Section   int    `json:"section,omitempty"    url:"section,omitempty"` // REQUIRED if != 1
+	CreatedAt string `json:"created_at,omitempty" url:"-"`
+	UpdatedAt string `json:"updated_at,omitempty" url:"-"`
+	URL       string `json:"url",omitempty"       url:"-"`
 }
 
 type IEToSEEntry struct {
@@ -41,11 +30,11 @@ type IEToSEEntry struct {
 	LockVersion int    `json:"lock_version,omitempty"`
 	IEURL       string `json:"ie_url,omitempty"`
 	SEURL       string `json:"se_url,omitempty"`
-	IEToSESURL  string `json:"ie_to_ses_url,omitempty"`
+	IEToSEsURL  string `json:"ie_to_ses_url,omitempty"`
 }
 
-func IEToSEList(IEID string) (list []IEListEntry, err error) {
-	path := fmt.Sprintf("/api/v0/ies/%s/ses", IEID)
+func IEToSEList() (list []IEToSEListEntry, err error) {
+	path := fmt.Sprintf("/api/v0/ie_to_ses")
 
 	body, err := GetBody(path)
 	if err != nil {
@@ -60,8 +49,8 @@ func IEToSEList(IEID string) (list []IEListEntry, err error) {
 	return list, nil
 }
 
-func IEGet(id string) (item IEEntry, err error) {
-	path := fmt.Sprintf("/api/v0/ies/%s", id)
+func IEToSEGet(id string) (item IEToSEEntry, err error) {
+	path := fmt.Sprintf("/api/v0/ie_to_ses/%s", id)
 
 	body, err := GetBody(path)
 	if err != nil {
@@ -76,8 +65,8 @@ func IEGet(id string) (item IEEntry, err error) {
 	return item, nil
 }
 
-func IEDelete(id string) (err error) {
-	path := "/api/v0/ies/" + id
+func IEToSEDelete(id string) (err error) {
+	path := "/api/v0/ie_to_ses/" + id
 
 	err = Delete(path)
 	if err != nil {
@@ -86,8 +75,8 @@ func IEDelete(id string) (err error) {
 	return nil
 }
 
-func (c *IEEntry) Get() (err error) {
-	path := fmt.Sprintf("/api/v0/ies/%s", c.ID)
+func (c *IEToSEEntry) Get() (err error) {
+	path := fmt.Sprintf("/api/v0/ie_to_ses/%s", c.ID)
 
 	body, err := GetBody(path)
 	if err != nil {
@@ -102,8 +91,8 @@ func (c *IEEntry) Get() (err error) {
 	return nil
 }
 
-func (c *IEEntry) Create() (err error) {
-	path := "/api/v0/ies"
+func (c *IEToSEEntry) Create() (err error) {
+	path := "/api/v0/ie_to_ses"
 
 	data, err := json.Marshal(c)
 	if err != nil {
@@ -123,8 +112,8 @@ func (c *IEEntry) Create() (err error) {
 	return nil
 }
 
-func (c *IEEntry) Update() (err error) {
-	path := "/api/v0/ies/" + c.ID
+func (c *IEToSEEntry) Update() (err error) {
+	path := "/api/v0/ie_to_ses/" + c.ID
 
 	data, err := json.Marshal(c)
 	if err != nil {
@@ -139,19 +128,19 @@ func (c *IEEntry) Update() (err error) {
 	return nil
 }
 
-func (c *IEEntry) Delete() (err error) {
-	return IEDelete(c.ID)
+func (c *IEToSEEntry) Delete() (err error) {
+	return IEToSEDelete(c.ID)
 }
 
-func (e IEListEntry) ToString() string {
-	s := fmt.Sprintf("ID: %s, SysNum: %s, Phase: %s, Step: %s, Status: %s, Title: %s, CreatedAt: %s , UpdatedAt: %s, URL: %s, CollectionURL: %s",
-		e.ID, e.SysNum, e.Phase, e.Step, e.Status, e.Title, e.CreatedAt, e.UpdatedAt, e.URL, e.CollectionURL)
+func (e IEToSEListEntry) ToString() string {
+	s := fmt.Sprintf("ID: %s, IEID: %s, SEID: %s, Order: %d, Section: %d, CreatedAt: %s , UpdatedAt: %s, URL: %s",
+		e.ID, e.IEID, e.SEID, e.Order, e.Section, e.CreatedAt, e.UpdatedAt, e.URL)
 
 	return s
 }
 
-func (e IEEntry) ToString() string {
-	s := fmt.Sprintf("ID: %s, CollectionID: %s, SysNum: %s, Phase: %s, Step: %s, Status: %s, Title: %s, Notes: %s, CreatedAt: %s , UpdatedAt: %s, FMDsURL: %s, CollectionURL: %s, LockVersion: %d", e.ID, e.CollectionID, e.SysNum, e.Phase, e.Step, e.Status, e.Title, e.Notes, e.CreatedAt, e.UpdatedAt, e.FMDsURL, e.CollectionURL, e.LockVersion)
+func (e IEToSEEntry) ToString() string {
+	s := fmt.Sprintf("ID: %s, IEID: %s, SEID: %s, Order: %d, Section: %d, Notes: %s, CreatedAt: %s , UpdatedAt: %s, IEURL: %s, SEURL: %s, IEToSEsURL: %s, LockVersion: %d", e.ID, e.IEID, e.SEID, e.Order, e.Section, e.Notes, e.CreatedAt, e.UpdatedAt, e.IEURL, e.SEURL, e.IEToSEsURL, e.LockVersion)
 
 	return s
 }

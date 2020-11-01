@@ -1,58 +1,31 @@
 package rsbe
 
 import (
-	"net/http/httptest"
+	//	"net/http/httptest"
 	"testing"
 )
 
-var ieListEntry = IEListEntry{
-	ID:            "9ea98441-b6b6-46cf-b6c8-91dff385c6c8",
-	SysNum:        "123456",
-	Phase:         "registration",
-	Step:          "loading",
-	Status:        "done",
-	Title:         "The White Whale",
-	CreatedAt:     "2020-05-31T20:57:58.618Z",
-	UpdatedAt:     "2020-05-31T20:57:58.618Z",
-	URL:           "http://localhost:3000/api/v0/ies/9ea98441-b6b6-46cf-b6c8-91dff385c6c8",
-	CollectionURL: "http://localhost:3000/api/v0/colls/b9612d5d-619a-4ceb-b620-d816e4b4340b",
+var ieToSEToCreate = IEToSEEntry{
+	ID:      "06de6d7a-89cd-476c-9e1d-55fdfabc3094",
+	IEID:    "9ea98441-b6b6-46cf-b6c8-91dff385c6c8",
+	SEID:    "8c258cb2-d700-43be-8773-a61a7b9cd668",
+	Order:   1,
+	Section: 23,
+	Notes:   "IE to SE Notes",
 }
 
-var ieShow = IEEntry{
-	ID:            "9ea98441-b6b6-46cf-b6c8-91dff385c6c8",
-	CollectionID:  "b9612d5d-619a-4ceb-b620-d816e4b4340b",
-	SysNum:        "123456",
-	Phase:         "registration",
-	Step:          "loading",
-	Status:        "done",
-	Title:         "The White Whale",
-	Notes:         "glorious notes",
-	CreatedAt:     "2020-05-31T20:57:58.618Z",
-	UpdatedAt:     "2020-05-31T20:57:58.618Z",
-	FMDsURL:       "http://localhost:3000/api/v0/ies/9ea98441-b6b6-46cf-b6c8-91dff385c6c8/fmds",
-	CollectionURL: "http://localhost:3000/api/v0/colls/b9612d5d-619a-4ceb-b620-d816e4b4340b",
-	LockVersion:   0,
-}
+func TestCollectionIEToSEList(t *testing.T) {
 
-var ieToCreate = IEEntry{
-	CollectionID: ieShow.CollectionID,
-	SysNum:       "b123888",
-	Phase:        "registration",
-	Step:         "loading",
-	Status:       "done",
-	Title:        "One Fish, Two Fish, Red Fish, Blue Fish",
-}
-
-func TestCollectionIEList(t *testing.T) {
-	mux := setupMux("/api/v0/colls/b9612d5d-619a-4ceb-b620-d816e4b4340b/ies", "testdata/ie-list.json")
-	ts := httptest.NewServer(mux)
-	defer ts.Close()
-
-	setupTestServerClient(ts)
+	setupLocalhostClient()
+	err := ieToSEToCreate.Create()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
+	defer ieToSEToCreate.Delete()
 
 	t.Run("result", func(t *testing.T) {
-		want := ieListEntry
-		got, err := CollectionIEList(ieShow.CollectionID)
+		want := ieToSEToCreate
+		got, err := IEToSEList()
 		if err != nil {
 			t.Errorf("Unexpected error: %s", err)
 		}
@@ -61,132 +34,256 @@ func TestCollectionIEList(t *testing.T) {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
 		}
 
-		if ieListEntry != got[0] {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		if got[0].ID != want.ID {
+			t.Errorf("ID Mismatch: want:\n\"%v\", got:\n\"%v\"", want.ID, got[0].ID)
+		}
+
+		if got[0].IEID != want.IEID {
+			t.Errorf("IEID Mismatch: want:\n\"%v\", got:\n\"%v\"", want.IEID, got[0].IEID)
+		}
+
+		if got[0].SEID != want.SEID {
+			t.Errorf("SEID Mismatch: want:\n\"%v\", got:\n\"%v\"", want.SEID, got[0].SEID)
+		}
+
+		if got[0].Order != want.Order {
+			t.Errorf("Order Mismatch: want:\n\"%v\", got:\n\"%v\"", want.Order, got[0].Order)
+		}
+
+		if got[0].Section != want.Section {
+			t.Errorf("Section Mismatch: want: %v, got: %v", want.Section, got[0].Section)
+		}
+
+		if got[0].CreatedAt == "" {
+			t.Errorf("CreatedAt is empty")
+		}
+
+		if got[0].UpdatedAt == "" {
+			t.Errorf("UpdatedAt is empty")
+		}
+
+		url := "http://localhost:3000/api/v0/ie_to_ses/06de6d7a-89cd-476c-9e1d-55fdfabc3094"
+		if got[0].URL != url {
+			t.Errorf("URL Mismatch: want: %v, got: %v", url, got[0].URL)
 		}
 	})
-
 }
 
 // test that struct method Get works
-func TestIEGetFunc(t *testing.T) {
+func TestIEToSEGetFunc(t *testing.T) {
 
-	mux := setupMux("/api/v0/ies/9ea98441-b6b6-46cf-b6c8-91dff385c6c8", "testdata/ie-get.json")
-	ts := httptest.NewServer(mux)
-	defer ts.Close()
-
-	setupTestServerClient(ts)
+	setupLocalhostClient()
+	err := ieToSEToCreate.Create()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
+	defer ieToSEToCreate.Delete()
 
 	t.Run("result", func(t *testing.T) {
-		want := ieShow
-		got := IEEntry{ID: "9ea98441-b6b6-46cf-b6c8-91dff385c6c8"}
+		want := ieToSEToCreate
+		got := IEToSEEntry{ID: ieToSEToCreate.ID}
 
 		err := got.Get()
 		if err != nil {
 			t.Errorf("Unexpected error: %s", err)
 		}
 
-		if got != want {
-			t.Errorf("Mismatch: want:\n\"%v\", got:\n\"%v\"", want, got)
+		if got.ID != want.ID {
+			t.Errorf("ID Mismatch: want:\n\"%v\", got:\n\"%v\"", want.ID, got.ID)
+		}
+
+		if got.IEID != want.IEID {
+			t.Errorf("IEID Mismatch: want:\n\"%v\", got:\n\"%v\"", want.IEID, got.IEID)
+		}
+
+		if got.SEID != want.SEID {
+			t.Errorf("SEID Mismatch: want:\n\"%v\", got:\n\"%v\"", want.SEID, got.SEID)
+		}
+
+		if got.Order != want.Order {
+			t.Errorf("Order Mismatch: want:\n\"%v\", got:\n\"%v\"", want.Order, got.Order)
+		}
+
+		if got.Section != want.Section {
+			t.Errorf("Section Mismatch: want: %v, got: %v", want.Section, got.Section)
+		}
+
+		if got.Notes != want.Notes {
+			t.Errorf("Notes Mismatch: want: %v, got: %v", want.Notes, got.Notes)
+		}
+
+		url := "http://localhost:3000/api/v0/ies/9ea98441-b6b6-46cf-b6c8-91dff385c6c8" 
+		if got.IEURL != url {
+			t.Errorf("IEURL Mismatch: want: %v, got: %v", url, got.IEURL)
+		}
+
+		url = "http://localhost:3000/api/v0/ses/8c258cb2-d700-43be-8773-a61a7b9cd668" 
+		if got.SEURL != url {
+			t.Errorf("SEURL Mismatch: want: %v, got: %v", url, got.SEURL)
+		}
+
+		url = "http://localhost:3000/api/v0/ie_to_ses"
+		if got.IEToSEsURL != url {
+			t.Errorf("SEURL Mismatch: want: %v, got: %v", url, got.IEToSEsURL)
+		}
+
+		if got.CreatedAt == "" {
+			t.Errorf("CreatedAt is empty")
+		}
+
+		if got.UpdatedAt == "" {
+			t.Errorf("UpdatedAt is empty")
 		}
 	})
-
 }
 
 // test that model-level Get works
-func TestIEGet(t *testing.T) {
+func TestIEToSEGet(t *testing.T) {
 
-	mux := setupMux("/api/v0/ies/9ea98441-b6b6-46cf-b6c8-91dff385c6c8", "testdata/ie-get.json")
-	ts := httptest.NewServer(mux)
-	defer ts.Close()
-
-	setupTestServerClient(ts)
+	setupLocalhostClient()
+	err := ieToSEToCreate.Create()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
+	defer ieToSEToCreate.Delete()
 
 	t.Run("confirm that expected resource was retrieved", func(t *testing.T) {
-		want := ieShow
-		got, err := IEGet("9ea98441-b6b6-46cf-b6c8-91dff385c6c8")
+		want := ieToSEToCreate
+		got, err := IEToSEGet("06de6d7a-89cd-476c-9e1d-55fdfabc3094")
 		if err != nil {
 			t.Errorf("Unexpected error: %s", err)
 		}
 
-		if got != want {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+
+		if got.ID != want.ID {
+			t.Errorf("ID Mismatch: want:\n\"%v\", got:\n\"%v\"", want.ID, got.ID)
+		}
+
+		if got.IEID != want.IEID {
+			t.Errorf("IEID Mismatch: want:\n\"%v\", got:\n\"%v\"", want.IEID, got.IEID)
+		}
+
+		if got.SEID != want.SEID {
+			t.Errorf("SEID Mismatch: want:\n\"%v\", got:\n\"%v\"", want.SEID, got.SEID)
+		}
+
+		if got.Order != want.Order {
+			t.Errorf("Order Mismatch: want:\n\"%v\", got:\n\"%v\"", want.Order, got.Order)
+		}
+
+		if got.Section != want.Section {
+			t.Errorf("Section Mismatch: want: %v, got: %v", want.Section, got.Section)
+		}
+
+		if got.Notes != want.Notes {
+			t.Errorf("Notes Mismatch: want: %v, got: %v", want.Notes, got.Notes)
+		}
+
+		url := "http://localhost:3000/api/v0/ies/9ea98441-b6b6-46cf-b6c8-91dff385c6c8" 
+		if got.IEURL != url {
+			t.Errorf("IEURL Mismatch: want: %v, got: %v", url, got.IEURL)
+		}
+
+		url = "http://localhost:3000/api/v0/ses/8c258cb2-d700-43be-8773-a61a7b9cd668" 
+		if got.SEURL != url {
+			t.Errorf("SEURL Mismatch: want: %v, got: %v", url, got.SEURL)
+		}
+
+		url = "http://localhost:3000/api/v0/ie_to_ses"
+		if got.IEToSEsURL != url {
+			t.Errorf("SEURL Mismatch: want: %v, got: %v", url, got.IEToSEsURL)
+		}
+
+		if got.CreatedAt == "" {
+			t.Errorf("CreatedAt is empty")
+		}
+
+		if got.UpdatedAt == "" {
+			t.Errorf("UpdatedAt is empty")
 		}
 	})
 }
 
-func TestIECreateFunc(t *testing.T) {
+func TestIEToSECreateFunc(t *testing.T) {
 	setupLocalhostClient()
 
-	err := ieToCreate.Create()
+	err := ieToSEToCreate.Create()
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}
 
 	t.Run("confirm that attributes updated", func(t *testing.T) {
-		if ieToCreate.ID == "" {
+		if ieToSEToCreate.ID == "" {
 			t.Errorf("ID not updated")
 		}
 
-		if ieToCreate.CreatedAt == "" {
+		if ieToSEToCreate.CreatedAt == "" {
 			t.Errorf("CreatedAt not updated")
 		}
 
-		if ieToCreate.UpdatedAt == "" {
+		if ieToSEToCreate.UpdatedAt == "" {
 			t.Errorf("UpdatedAt not updated")
 		}
 	})
 }
 
-func TestIEUpdateFunc(t *testing.T) {
+func TestIEToSEUpdateFunc(t *testing.T) {
 	setupLocalhostClient()
-
-	_ = ieToCreate.Get()
-
-	if ieToCreate.SysNum != "b123888" {
-		t.Errorf("variable already updated: %s", ieToCreate.ToString())
-	}
-
-	ieToCreate.SysNum = "x9988771"
-	ieToCreate.Title = "Hop on Pop!"
-
-	err := ieToCreate.Update()
+	id := ieToSEToCreate.ID
+	
+	sut, err := IEToSEGet(id)
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}
 
-	_ = ieToCreate.Get()
+	if sut.Order != 1 {
+		t.Errorf("variable already updated: %s", sut.ToString())
+	}
+
+	sut.Order = 97
+	sut.Notes = "Hop on Pop!"
+
+	err = sut.Update()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
+
+	sut = IEToSEEntry{}
+	sut, err = IEToSEGet(id)
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
 
 	t.Run("confirm that elements updated", func(t *testing.T) {
-		if ieToCreate.SysNum != "x9988771" {
-			t.Errorf("SysNum was not updated: got: %s", ieToCreate.SysNum)
+		if sut.Order != 97 {
+			t.Errorf("Order was not updated: got: %v", sut.Order)
 		}
 
-		if ieToCreate.Title != "Hop on Pop!" {
-			t.Errorf("Title was not updated: got: %s", ieToCreate.Title)
+		if sut.Notes != "Hop on Pop!" {
+			t.Errorf("Notes field was not updated: got: %s", sut.Notes)
 		}
 
-		if ieToCreate.CreatedAt == ieToCreate.UpdatedAt {
+		if sut.CreatedAt == sut.UpdatedAt {
 			t.Errorf("UpdatedAt not updated")
 		}
 	})
 }
 
-func TestIEDeleteFunc(t *testing.T) {
+func TestIEToSEDeleteFunc(t *testing.T) {
 	setupLocalhostClient()
 
-	_ = ieToCreate.Get()
+	_ = ieToSEToCreate.Get()
 
-	id := ieToCreate.ID
+	id := ieToSEToCreate.ID
 
-	err := ieToCreate.Delete()
+	err := ieToSEToCreate.Delete()
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}
 
 	t.Run("confirm that deleted item not found", func(t *testing.T) {
 		// should not be found, so err should NOT be nil
-		_, err = IEGet(id)
+		_, err = IEToSEGet(id)
 
 		if err == nil {
 			t.Errorf("err was nil")
