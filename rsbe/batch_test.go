@@ -1,6 +1,7 @@
 package rsbe
 
 import (
+	"net/http/httptest"
 	"testing"
 	"sort"
 )
@@ -90,6 +91,29 @@ func TestBatchList(t *testing.T) {
 			t.Errorf("UpdatedAt mismatch: want: \"%v\", got: \"%v\"", want.UpdatedAt, got.UpdatedAt)
 		}
 
+	})
+
+}
+
+func TestBatchReport(t *testing.T) {
+
+	mux := setupMux("/api/v0/batches/c44e95e9-5cca-4c26-8e52-12773334dc95/report", "testdata/batch-report.json")
+	ts := httptest.NewServer(mux)
+	defer ts.Close()
+
+	setupTestServerClient(ts)
+
+	t.Run("result", func(t *testing.T) {
+		report, err := BatchReportGet("c44e95e9-5cca-4c26-8e52-12773334dc95")
+		if err != nil {
+			t.Errorf("Unexpected error: %s", err)
+		}
+
+		want := "2020-11-27T01:05:44Z"
+		got  := report.TimeStamp
+		if want != got {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
 	})
 
 }

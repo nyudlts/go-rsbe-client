@@ -33,6 +33,17 @@ type BatchEntry struct {
 	LockVersion   int    `json:"lock_version,omitempty"`
 }
 
+type BatchReport struct {
+	TimeStamp string               `json:"report_timestamp"`
+	Info      BatchInfo            `json:"batch"`
+	SEs       []BatchToSEListEntry `json:"ses"`
+	IEs       []BatchToIEListEntry `json:"ies"`
+}
+
+type BatchInfo struct {
+	ID string `json:"id"`
+}
+
 func BatchList() (list []BatchListEntry, err error) {
 	path := fmt.Sprintf("/api/v0/batches")
 
@@ -51,6 +62,22 @@ func BatchList() (list []BatchListEntry, err error) {
 
 func BatchGet(id string) (item BatchEntry, err error) {
 	path := fmt.Sprintf("/api/v0/batches/%s", id)
+
+	body, err := GetBody(path)
+	if err != nil {
+		return item, err
+	}
+
+	err = json.Unmarshal(body, &item)
+	if err != nil {
+		return item, err
+	}
+
+	return item, nil
+}
+
+func BatchReportGet(id string) (item BatchReport, err error) {
+	path := fmt.Sprintf("/api/v0/batches/%s/report", id)
 
 	body, err := GetBody(path)
 	if err != nil {
