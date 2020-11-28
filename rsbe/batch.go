@@ -41,7 +41,13 @@ type BatchReport struct {
 }
 
 type BatchInfo struct {
-	ID string `json:"id"`
+	ID        string `json:"id"`
+	Type      string `json:"batch_type"`
+	Number    uint   `json:"batch_number"`
+	Name      string `json:"name"`
+	CreatedAt string `json:"created_at"`
+	UpdatedAt string `json:"updated_at"`
+	URL       string `json:"url"`
 }
 
 func BatchList() (list []BatchListEntry, err error) {

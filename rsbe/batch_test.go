@@ -2,8 +2,8 @@ package rsbe
 
 import (
 	"net/http/httptest"
-	"testing"
 	"sort"
+	"testing"
 )
 
 var batchToCreate = BatchEntry{
@@ -110,7 +110,49 @@ func TestBatchReport(t *testing.T) {
 		}
 
 		want := "2020-11-27T01:05:44Z"
-		got  := report.TimeStamp
+		got := report.TimeStamp
+		if want != got {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		want = "c44e95e9-5cca-4c26-8e52-12773334dc95"
+		got = report.Info.ID
+		if want != got {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		want = "publication"
+		got = report.Info.Type
+		if want != got {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		wantUInt := uint(1)
+		gotUInt := report.Info.Number
+		if wantUInt != gotUInt {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", wantUInt, gotUInt)
+		}
+
+		want = "HIDVL HTML5 Migration"
+		got = report.Info.Name
+		if want != got {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		want = "2020-10-18T02:52:27.827Z"
+		got = report.Info.CreatedAt
+		if want != got {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		want = "2020-11-13T05:03:27.638Z"
+		got = report.Info.UpdatedAt
+		if want != got {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		want = "https://rsbe.dlib.nyu.edu/api/v0/batches/c44e95e9-5cca-4c26-8e52-12773334dc95"
+		got = report.Info.URL
 		if want != got {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
 		}
