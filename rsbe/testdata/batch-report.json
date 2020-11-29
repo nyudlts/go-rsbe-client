@@ -11,7 +11,7 @@
     "stats": {
       "total": 1140,
       "ses": {
-        "total": 1140,
+        "total": 1139,
         "groups": [
           {
             "phase_step_status": "ip_prep/assembly/hold",
@@ -42,17 +42,18 @@
             "phase_step_status": "publication/qc/done",
             "count": 472,
             "index_url": "https://rsbe.dlib.nyu.edu/api/v0/batch_to_ses?batch_id=c44e95e9-5cca-4c26-8e52-12773334dc95&phase=publication&status=done&step=qc"
-          },
+          }
+        ]
+      },
+      "ies": {
+        "total": 1,
+        "groups": [
           {
             "phase_step_status": "rework/content_staging/queued",
             "count": 1,
             "index_url": "https://rsbe.dlib.nyu.edu/api/v0/batch_to_ses?batch_id=c44e95e9-5cca-4c26-8e52-12773334dc95&phase=rework&status=queued&step=content_staging"
           }
         ]
-      },
-      "ies": {
-        "total": 0,
-        "groups": []
       }
     }
   },
@@ -10307,16 +10308,18 @@
       "created_at": "2020-11-13T18:30:32.941Z",
       "updated_at": "2020-11-21T17:48:05.709Z",
       "url": "https://rsbe.dlib.nyu.edu/api/v0/ses/0e383513-1770-49fa-8c89-1d7fa32ed569"
-    },
-    {
-      "digi_id": "z34tmv6m",
-      "phase": "publication",
-      "step": "qc",
-      "status": "done",
-      "created_at": "2020-11-13T18:30:34.172Z",
-      "updated_at": "2020-11-21T17:48:07.129Z",
-      "url": "https://rsbe.dlib.nyu.edu/api/v0/ses/dcb20119-272d-46e5-8677-e07d14b964bc"
     }
   ],
-  "ies": []
+  "ies": [
+    {
+      "sys_num": "003348201",
+      "title": "test title",
+      "phase": "rework",
+      "step": "content_staging",
+      "status": "queued",
+      "created_at": "2020-11-13T18:30:34.172Z",
+      "updated_at": "2020-11-21T17:48:07.129Z",
+      "url": "https://rsbe.dlib.nyu.edu/api/v0/ies/dcb20119-272d-46e5-8677-e07d14b964bc"
+    }
+  ]
 }

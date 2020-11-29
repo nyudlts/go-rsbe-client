@@ -34,20 +34,59 @@ type BatchEntry struct {
 }
 
 type BatchReport struct {
-	TimeStamp string               `json:"report_timestamp"`
-	Info      BatchInfo            `json:"batch"`
-	SEs       []BatchToSEListEntry `json:"ses"`
-	IEs       []BatchToIEListEntry `json:"ies"`
+	TimeStamp string                   `json:"report_timestamp"`
+	Info      BatchInfo                `json:"batch"`
+	SEs       []BatchMemberSEListEntry `json:"ses"`
+	IEs       []BatchMemberIEListEntry `json:"ies"`
 }
 
 type BatchInfo struct {
-	ID        string `json:"id"`
-	Type      string `json:"batch_type"`
-	Number    uint   `json:"batch_number"`
-	Name      string `json:"name"`
+	ID        string     `json:"id"`
+	Type      string     `json:"batch_type"`
+	Number    uint       `json:"batch_number"`
+	Name      string     `json:"name"`
+	CreatedAt string     `json:"created_at"`
+	UpdatedAt string     `json:"updated_at"`
+	URL       string     `json:"url"`
+	Stats     BatchStats `json:"stats"`
+}
+
+type BatchStats struct {
+	Total   uint             `json:"total"`
+	SEStats BatchMemberStats `json:"ses"`
+	IEStats BatchMemberStats `json:"ies"`
+}
+
+type BatchMemberStats struct {
+	Total  uint              `json:"total"`
+	Groups []BatchGroupStats `json:"groups"`
+}
+
+type BatchGroupStats struct {
+	PhaseStepStatus string `json:"phase_step_status"`
+	Count           uint   `json:"count"`
+	URL             string `json:"index_url"`
+}
+
+type BatchMemberSEListEntry struct {
+	DigiID    string `json:"digi_id"`
+	Phase     string `json:"phase"`
+	Step      string `json:"step"`
+	Status    string `json:"status"`
 	CreatedAt string `json:"created_at"`
 	UpdatedAt string `json:"updated_at"`
-	URL       string `json:"url"`
+	SEURL     string `json:"url"`
+}
+
+type BatchMemberIEListEntry struct {
+	SysNum    string `json:"sys_num"`
+	Title     string `json:"title"`
+	Phase     string `json:"phase"`
+	Step      string `json:"step"`
+	Status    string `json:"status"`
+	CreatedAt string `json:"created_at"`
+	UpdatedAt string `json:"updated_at"`
+	IEURL     string `json:"url"`
 }
 
 func BatchList() (list []BatchListEntry, err error) {

@@ -156,6 +156,133 @@ func TestBatchReport(t *testing.T) {
 		if want != got {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
 		}
+
+		wantUInt = 1140
+		gotUInt = report.Info.Stats.Total
+		if wantUInt != gotUInt {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", wantUInt, gotUInt)
+		}
+
+		wantUInt = 1139
+		gotUInt = report.Info.Stats.SEStats.Total
+		if wantUInt != gotUInt {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", wantUInt, gotUInt)
+		}
+
+		want = "programmatic_edit/qc/active"
+		got = report.Info.Stats.SEStats.Groups[3].PhaseStepStatus
+		if want != got {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		wantUInt = 218
+		gotUInt = report.Info.Stats.SEStats.Groups[3].Count
+		if wantUInt != gotUInt {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", wantUInt, gotUInt)
+		}
+
+		want = "https://rsbe.dlib.nyu.edu/api/v0/batch_to_ses?batch_id=c44e95e9-5cca-4c26-8e52-12773334dc95&phase=programmatic_edit&status=active&step=qc"
+		got = report.Info.Stats.SEStats.Groups[3].URL
+		if want != got {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		want = "1ns1rppm"
+		got = report.SEs[4].DigiID
+		if want != got {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		want = "ip_prep"
+		got = report.SEs[4].Phase
+		if want != got {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		want = "derivative_generation"
+		got = report.SEs[4].Step
+		if want != got {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		want = "active"
+		got = report.SEs[4].Status
+		if want != got {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		want = "2020-11-13T15:01:16.509Z"
+		got = report.SEs[4].CreatedAt
+		if want != got {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		want = "2020-11-25T22:30:11.034Z"
+		got = report.SEs[4].UpdatedAt
+		if want != got {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		want = "https://rsbe.dlib.nyu.edu/api/v0/ses/72b8f70b-9a69-446d-9f22-05460252e07f"
+		got = report.SEs[4].SEURL
+		if want != got {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		wantUInt = 1
+		gotUInt = report.Info.Stats.IEStats.Total
+		if wantUInt != gotUInt {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", wantUInt, gotUInt)
+		}
+
+		want = "003348201"
+		got = report.IEs[0].SysNum
+		if want != got {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		want = "test title"
+		got = report.IEs[0].Title
+		if want != got {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		want = "rework"
+		got = report.IEs[0].Phase
+		if want != got {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		want = "content_staging"
+		got = report.IEs[0].Step
+		if want != got {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		want = "queued"
+		got = report.IEs[0].Status
+		if want != got {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		want = "2020-11-13T18:30:34.172Z"
+		got = report.IEs[0].CreatedAt
+		if want != got {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		want = "2020-11-21T17:48:07.129Z"
+		got = report.IEs[0].UpdatedAt
+		if want != got {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		want = "https://rsbe.dlib.nyu.edu/api/v0/ies/dcb20119-272d-46e5-8677-e07d14b964bc"
+		got = report.IEs[0].IEURL
+		if want != got {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
 	})
 
 }
