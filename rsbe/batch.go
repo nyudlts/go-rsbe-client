@@ -33,6 +33,62 @@ type BatchEntry struct {
 	LockVersion   int    `json:"lock_version,omitempty"`
 }
 
+type BatchReport struct {
+	TimeStamp string                   `json:"report_timestamp"`
+	Info      BatchInfo                `json:"batch"`
+	SEs       []BatchMemberSEListEntry `json:"ses"`
+	IEs       []BatchMemberIEListEntry `json:"ies"`
+}
+
+type BatchInfo struct {
+	ID        string     `json:"id"`
+	Type      string     `json:"batch_type"`
+	Number    uint       `json:"batch_number"`
+	Name      string     `json:"name"`
+	CreatedAt string     `json:"created_at"`
+	UpdatedAt string     `json:"updated_at"`
+	URL       string     `json:"url"`
+	Stats     BatchStats `json:"stats"`
+}
+
+type BatchStats struct {
+	Total   uint             `json:"total"`
+	SEStats BatchMemberStats `json:"ses"`
+	IEStats BatchMemberStats `json:"ies"`
+}
+
+type BatchMemberStats struct {
+	Total  uint              `json:"total"`
+	Groups []BatchGroupStats `json:"groups"`
+}
+
+type BatchGroupStats struct {
+	PhaseStepStatus string `json:"phase_step_status"`
+	Count           uint   `json:"count"`
+	URL             string `json:"index_url"`
+}
+
+type BatchMemberSEListEntry struct {
+	DigiID    string `json:"digi_id"`
+	Phase     string `json:"phase"`
+	Step      string `json:"step"`
+	Status    string `json:"status"`
+	CreatedAt string `json:"created_at"`
+	UpdatedAt string `json:"updated_at"`
+	SEURL     string `json:"url"`
+}
+
+type BatchMemberIEListEntry struct {
+	SysNum    string `json:"sys_num"`
+	Title     string `json:"title"`
+	Phase     string `json:"phase"`
+	Step      string `json:"step"`
+	Status    string `json:"status"`
+	CreatedAt string `json:"created_at"`
+	UpdatedAt string `json:"updated_at"`
+	IEURL     string `json:"url"`
+}
+
 func BatchList() (list []BatchListEntry, err error) {
 	path := fmt.Sprintf("/api/v0/batches")
 
@@ -51,6 +107,22 @@ func BatchList() (list []BatchListEntry, err error) {
 
 func BatchGet(id string) (item BatchEntry, err error) {
 	path := fmt.Sprintf("/api/v0/batches/%s", id)
+
+	body, err := GetBody(path)
+	if err != nil {
+		return item, err
+	}
+
+	err = json.Unmarshal(body, &item)
+	if err != nil {
+		return item, err
+	}
+
+	return item, nil
+}
+
+func BatchReportGet(id string) (item BatchReport, err error) {
+	path := fmt.Sprintf("/api/v0/batches/%s/report", id)
 
 	body, err := GetBody(path)
 	if err != nil {
