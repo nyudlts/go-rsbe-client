@@ -137,14 +137,14 @@ func (c *IEEntry) Delete() (err error) {
 }
 
 func (e IEListEntry) ToString() string {
-	s := fmt.Sprintf("ID: %s, SysNum: %s, Phase: %s, Step: %s, Status: %s, Title: %s, CreatedAt: %s , UpdatedAt: %s, URL: %s, CollectionURL: %s",
+	s := fmt.Sprintf("ID: %s, SysNum: %s, Phase: %s, Step: %s, Status: %s, Title: %s, CreatedAt: %s, UpdatedAt: %s, URL: %s, CollectionURL: %s",
 		e.ID, e.SysNum, e.Phase, e.Step, e.Status, e.Title, e.CreatedAt, e.UpdatedAt, e.URL, e.CollectionURL)
 
 	return s
 }
 
 func (e IEEntry) ToString() string {
-	s := fmt.Sprintf("ID: %s, CollectionID: %s, SysNum: %s, Phase: %s, Step: %s, Status: %s, Title: %s, Notes: %s, CreatedAt: %s , UpdatedAt: %s, FMDsURL: %s, CollectionURL: %s, LockVersion: %d", e.ID, e.CollectionID, e.SysNum, e.Phase, e.Step, e.Status, e.Title, e.Notes, e.CreatedAt, e.UpdatedAt, e.FMDsURL, e.CollectionURL, e.LockVersion)
+	s := fmt.Sprintf("ID: %s, CollectionID: %s, SysNum: %s, Phase: %s, Step: %s, Status: %s, Title: %s, Notes: %s, CreatedAt: %s, UpdatedAt: %s, FMDsURL: %s, CollectionURL: %s, LockVersion: %d", e.ID, e.CollectionID, e.SysNum, e.Phase, e.Step, e.Status, e.Title, e.Notes, e.CreatedAt, e.UpdatedAt, e.FMDsURL, e.CollectionURL, e.LockVersion)
 
 	return s
 }
