@@ -22,8 +22,8 @@ type EToFIDEntry struct {
 	FIDValue    string `json:"fid_value,omitempty"`
 	CreatedAt   string `json:"created_at,omitempty"`
 	UpdatedAt   string `json:"updated_at,omitempty"`
-	EURL        string `json:"eurl,omitempty"`         
-	LockVersion int    `json:"lock_version,omitempty"` 
+	EURL        string `json:"eurl,omitempty"`
+	LockVersion int    `json:"lock_version,omitempty"`
 }
 
 func EToFIDList() (list []EToFIDListEntry, err error) {
@@ -73,56 +73,56 @@ func (p *EToFIDEntry) Get() (err error) {
 	return nil
 }
 
-// func (p *EToFIDEntry) Create() (err error) {
-// 	path := "/api/v0/etofids"
+func (p *EToFIDEntry) Create() (err error) {
+	path := "/api/v0/etofids"
 
-// 	data, err := json.Marshal(p)
-// 	if err != nil {
-// 		return err
-// 	}
+	data, err := json.Marshal(p)
+	if err != nil {
+		return err
+	}
 
-// 	body, err := PostReturnBody(path, data)
-// 	if err != nil {
-// 		return err
-// 	}
+	body, err := PostReturnBody(path, data)
+	if err != nil {
+		return err
+	}
 
-// 	err = json.Unmarshal(body, p)
-// 	if err != nil {
-// 		return err
-// 	}
+	err = json.Unmarshal(body, p)
+	if err != nil {
+		return err
+	}
 
-// 	return nil
-// }
+	return nil
+}
 
-// func (c *EToFIDEntry) Update() (err error) {
-// 	path := "/api/v0/etofids/" + c.ID
+func (c *EToFIDEntry) Update() (err error) {
+	path := "/api/v0/etofids/" + c.ID
 
-// 	data, err := json.Marshal(c)
-// 	if err != nil {
-// 		return err
-// 	}
+	data, err := json.Marshal(c)
+	if err != nil {
+		return err
+	}
 
-// 	err = Put(path, data)
-// 	if err != nil {
-// 		return err
-// 	}
+	err = Put(path, data)
+	if err != nil {
+		return err
+	}
 
-// 	return nil
-// }
+	return nil
+}
 
-// func EToFIDDelete(id string) (err error) {
-// 	path := "/api/v0/etofids/" + id
+func EToFIDDelete(id string) (err error) {
+	path := "/api/v0/etofids/" + id
 
-// 	err = Delete(path)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	return nil
-// }
+	err = Delete(path)
+	if err != nil {
+		return err
+	}
+	return nil
+}
 
-// func (c *EToFIDEntry) Delete() (err error) {
-// 	return EToFIDDelete(c.ID)
-// }
+func (c *EToFIDEntry) Delete() (err error) {
+	return EToFIDDelete(c.ID)
+}
 
 func (e EToFIDListEntry) ToString() string {
 	s := fmt.Sprintf("ID: %s, EID: %s, EType: %s, FIDType: %s, FIDValue: %s, URL: %s",

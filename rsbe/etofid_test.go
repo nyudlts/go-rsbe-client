@@ -26,12 +26,12 @@ var etofidShow = EToFIDEntry{
 	LockVersion: 0,
 }
 
-// var etofidToCreate = EToFIDEntry{
-// 	EType: "ie",
-// 	EID:   "9ea98441-b6b6-46cf-b6c8-91dff385c6c8",
-// 	Role:  "notes",
-// 	FMDID: "f9f38cc5-0728-4f1a-85ec-e4cb6906d304",
-// }
+var etofidToCreate = EToFIDEntry{
+	EType:    "ie",
+	EID:      "9ea98441-b6b6-46cf-b6c8-91dff385c6c8",
+	FIDType:  "noid",
+	FIDValue: "7284f",
+}
 
 func TestEToFIDList(t *testing.T) {
 
@@ -95,77 +95,77 @@ func TestEToFIDGetFunc(t *testing.T) {
 
 }
 
-// func TestEToFIDCreateFunc(t *testing.T) {
-// 	setupLocalhostClient()
+func TestEToFIDCreateFunc(t *testing.T) {
+	setupLocalhostClient()
 
-// 	err := etofidToCreate.Create()
-// 	if err != nil {
-// 		t.Errorf("Unexpected error: %s", err)
-// 	}
+	err := etofidToCreate.Create()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
 
-// 	t.Run("confirm that attributes updated", func(t *testing.T) {
-// 		if etofidToCreate.ID == "" {
-// 			t.Errorf("ID not updated")
-// 		}
+	t.Run("confirm that attributes updated", func(t *testing.T) {
+		if etofidToCreate.ID == "" {
+			t.Errorf("ID not updated")
+		}
 
-// 		if etofidToCreate.CreatedAt == "" {
-// 			t.Errorf("CreatedAt not updated")
-// 		}
+		if etofidToCreate.CreatedAt == "" {
+			t.Errorf("CreatedAt not updated")
+		}
 
-// 		if etofidToCreate.UpdatedAt == "" {
-// 			t.Errorf("UpdatedAt not updated")
-// 		}
-// 	})
-// }
+		if etofidToCreate.UpdatedAt == "" {
+			t.Errorf("UpdatedAt not updated")
+		}
+	})
+}
 
-// func TestEToFIDUpdateFunc(t *testing.T) {
-// 	setupLocalhostClient()
+func TestEToFIDUpdateFunc(t *testing.T) {
+	setupLocalhostClient()
 
-// 	_ = etofidToCreate.Get()
+	_ = etofidToCreate.Get()
 
-// 	if etofidToCreate.Role != "notes" {
-// 		t.Errorf("variable already updated: %s", etofidToCreate.ToString())
-// 	}
+	if etofidToCreate.FIDValue != "7284f" {
+		t.Errorf("variable already updated: %s", etofidToCreate.ToString())
+	}
 
-// 	etofidToCreate.Role = "waffles"
+	etofidToCreate.FIDValue = "waffles"
 
-// 	err := etofidToCreate.Update()
-// 	if err != nil {
-// 		t.Errorf("Unexpected error: %s", err)
-// 	}
+	err := etofidToCreate.Update()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
 
-// 	_ = etofidToCreate.Get()
+	_ = etofidToCreate.Get()
 
-// 	t.Run("confirm that elements updated", func(t *testing.T) {
-// 		if etofidToCreate.Role != "waffles" {
-// 			t.Errorf("Role was not updated: got: %s", etofidToCreate.Role)
-// 		}
+	t.Run("confirm that elements updated", func(t *testing.T) {
+		if etofidToCreate.FIDValue != "waffles" {
+			t.Errorf("FIDValue was not updated: got: %s", etofidToCreate.FIDValue)
+		}
 
-// 		if etofidToCreate.CreatedAt == etofidToCreate.UpdatedAt {
-// 			t.Errorf("UpdatedAt not updated")
-// 		}
-// 	})
-// }
+		if etofidToCreate.CreatedAt == etofidToCreate.UpdatedAt {
+			t.Errorf("UpdatedAt not updated")
+		}
+	})
+}
 
-// func TestEToFIDDeleteFunc(t *testing.T) {
-// 	setupLocalhostClient()
+func TestEToFIDDeleteFunc(t *testing.T) {
+	setupLocalhostClient()
 
-// 	_ = etofidToCreate.Get()
+	_ = etofidToCreate.Get()
 
-// 	id := etofidToCreate.ID
+	id := etofidToCreate.ID
 
-// 	err := etofidToCreate.Delete()
-// 	if err != nil {
-// 		t.Errorf("Unexpected error: %s", err)
-// 	}
+	err := etofidToCreate.Delete()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
 
-// 	t.Run("confirm that deleted item not found", func(t *testing.T) {
-// 		// should not be found, so err should NOT be nil
-// 		_, err = EToFIDGet(id)
+	t.Run("confirm that deleted item not found", func(t *testing.T) {
+		// should not be found, so err should NOT be nil
+		_, err = EToFIDGet(id)
 
-// 		if err == nil {
-// 			t.Errorf("err was nil")
-// 		}
+		if err == nil {
+			t.Errorf("err was nil")
+		}
 
-// 	})
-// }
+	})
+}
