@@ -14,17 +14,17 @@ var etofidListEntry = EToFIDListEntry{
 	URL:      "http://localhost:3000/api/v0/etofids/5c4a0cf4-78c7-49cc-b227-9b017d85e65f",
 }
 
-// var etofidShow = EToFIDEntry{
-// 	ID:          "3ca8ecaf-6fae-48a5-8441-5a96e119ad28",
-// 	EType:       "se",
-// 	EID:         "8c258cb2-d700-43be-8773-a61a7b9cd668",
-// 	Role:        "master",
-// 	FMDID:       "4a3f8f8c-6dbe-4d7c-bff1-1b973f9f615c",
-// 	CreatedAt:   "2020-05-31T20:37:30.747Z",
-// 	UpdatedAt:   "2020-05-31T20:37:30.747Z",
-// 	EURL:        "http://localhost:3000/api/v0/ses/8c258cb2-d700-43be-8773-a61a7b9cd668",
-// 	LockVersion: 0,
-// }
+var etofidShow = EToFIDEntry{
+	ID:          "5c4a0cf4-78c7-49cc-b227-9b017d85e65f",
+	EType:       "se",
+	EID:         "8c258cb2-d700-43be-8773-a61a7b9cd668",
+	FIDType:     "handle",
+	FIDValue:    "2333.1/abc123",
+	CreatedAt:   "2021-05-28T16:39:08.102Z",
+	UpdatedAt:   "2021-05-28T16:39:08.102Z",
+	EURL:        "http://localhost:3000/api/v0/ses/8c258cb2-d700-43be-8773-a61a7b9cd668",
+	LockVersion: 0,
+}
 
 // var etofidToCreate = EToFIDEntry{
 // 	EType: "ie",
@@ -59,29 +59,41 @@ func TestEToFIDList(t *testing.T) {
 
 }
 
-// func TestEToFIDGetFunc(t *testing.T) {
+func TestEToFIDGetFunc(t *testing.T) {
 
-// 	mux := setupMux("/api/v0/etofids/3ca8ecaf-6fae-48a5-8441-5a96e119ad28", "testdata/etofid-get.json")
-// 	ts := httptest.NewServer(mux)
-// 	defer ts.Close()
+	mux := setupMux("/api/v0/etofids/5c4a0cf4-78c7-49cc-b227-9b017d85e65f", "testdata/etofid-get.json")
+	ts := httptest.NewServer(mux)
+	defer ts.Close()
 
-// 	setupTestServerClient(ts)
+	setupTestServerClient(ts)
 
-// 	t.Run("result", func(t *testing.T) {
-// 		want := etofidShow
-// 		got := EToFIDEntry{ID: "3ca8ecaf-6fae-48a5-8441-5a96e119ad28"}
+	t.Run("result", func(t *testing.T) {
+		want := etofidShow
+		got := EToFIDEntry{ID: "5c4a0cf4-78c7-49cc-b227-9b017d85e65f"}
 
-// 		err := got.Get()
-// 		if err != nil {
-// 			t.Errorf("Unexpected error: %s", err)
-// 		}
+		err := got.Get()
+		if err != nil {
+			t.Errorf("Unexpected error: %s", err)
+		}
 
-// 		if want.ID != got.ID {
-// 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
-// 		}
-// 	})
+		if want.ID != got.ID {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want.ID, got.ID)
+		}
 
-// }
+		if want.EType != got.EType {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want.EType, got.EType)
+		}
+		if want.FIDType != got.FIDType {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want.FIDType, got.FIDType)
+		}
+
+		if want.FIDValue != got.FIDValue {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want.FIDValue, got.FIDValue)
+		}
+
+	})
+
+}
 
 // func TestEToFIDCreateFunc(t *testing.T) {
 // 	setupLocalhostClient()
