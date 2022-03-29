@@ -1,5 +1,8 @@
 # Changelog
 
+### v0.4.0
+  * add Golang module files
+
 ### v0.3.2
   * renamed RSBE database snapshot and moved to rsbe/testsupport
   * added config file that can be used to access an RSBE instance
