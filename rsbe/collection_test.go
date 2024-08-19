@@ -6,37 +6,45 @@ import (
 )
 
 var collectionListEntry = CollectionListEntry{
-	ID:         "b9612d5d-619a-4ceb-b620-d816e4b4340b",
-	PartnerID:  "e6517775-6277-4e25-9373-ee7738e820b5",
-	Code:       "test",
-	Name:       "Test Collection",
-	Type:       "origin",
-	CreatedAt:  "2020-05-30T01:58:38.431Z",
-	UpdatedAt:  "2020-05-30T01:58:38.431Z",
-	URL:        "http://localhost:3000/api/v0/colls/b9612d5d-619a-4ceb-b620-d816e4b4340b",
-	PartnerURL: "http://localhost:3000/api/v0/partners/e6517775-6277-4e25-9373-ee7738e820b5",
+	ID:          "b9612d5d-619a-4ceb-b620-d816e4b4340b",
+	PartnerID:   "e6517775-6277-4e25-9373-ee7738e820b5",
+	OwnerID:     "1ca830b5-6a2b-43f9-b6bc-4dfeac3ee178",
+	Code:        "test",
+	DisplayCode: "T.C",
+	Name:        "Test Collection",
+	Type:        "origin",
+	CreatedAt:   "2020-05-30T01:58:38.431Z",
+	UpdatedAt:   "2024-08-19T14:53:30.432Z",
+	URL:         "http://localhost:3000/api/v0/colls/b9612d5d-619a-4ceb-b620-d816e4b4340b",
+	PartnerURL:  "http://localhost:3000/api/v0/partners/e6517775-6277-4e25-9373-ee7738e820b5",
+	OwnerURL:    "http://localhost:3000/api/v0/owners/1ca830b5-6a2b-43f9-b6bc-4dfeac3ee178",
 }
 
 var collectionShow = CollectionEntry{
 	ID:              "b9612d5d-619a-4ceb-b620-d816e4b4340b",
 	PartnerID:       "e6517775-6277-4e25-9373-ee7738e820b5",
+	OwnerID:         "1ca830b5-6a2b-43f9-b6bc-4dfeac3ee178",
 	Code:            "test",
+	DisplayCode:     "T.C",
 	Name:            "Test Collection",
 	Type:            "origin",
 	CreatedAt:       "2020-05-30T01:58:38.431Z",
-	UpdatedAt:       "2020-05-30T01:58:38.431Z",
+	UpdatedAt:       "2024-08-19T14:53:30.432Z",
 	Quota:           500,
 	ReadyForContent: true,
 	PartnerURL:      "http://localhost:3000/api/v0/partners/e6517775-6277-4e25-9373-ee7738e820b5",
+	OwnerURL:        "http://localhost:3000/api/v0/owners/1ca830b5-6a2b-43f9-b6bc-4dfeac3ee178",
 	SEsURL:          "http://localhost:3000/api/v0/colls/b9612d5d-619a-4ceb-b620-d816e4b4340b/ses",
 	IEsURL:          "http://localhost:3000/api/v0/colls/b9612d5d-619a-4ceb-b620-d816e4b4340b/ies",
 	RelPath:         "content/dlts/test",
-	LockVersion:     0,
+	LockVersion:     1,
 }
 
 var collectionToCreate = CollectionEntry{
 	PartnerID:       collectionShow.PartnerID,
+	OwnerID:         collectionShow.OwnerID,
 	Code:            "waffles",
+	DisplayCode:     "Big.Waffles",
 	Name:            "The Amazing Breakfast Collection",
 	Type:            "virtual",
 	RelPath:         "content/dlts/waffles",
@@ -64,7 +72,7 @@ func TestPartnerCollectionList(t *testing.T) {
 		}
 
 		if collectionListEntry != got[0] {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+			t.Errorf("Mismatch: want: \n\"%v\", \ngot: \n\"%v\"", want, got[0])
 		}
 	})
 
@@ -88,7 +96,7 @@ func TestCollectionGetFunc(t *testing.T) {
 		}
 
 		if got != want {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+			t.Errorf("Mismatch: want: \n\"%v\", \ngot: \n\"%v\"", want, got)
 		}
 	})
 
@@ -110,7 +118,7 @@ func TestCollectionGet(t *testing.T) {
 		}
 
 		if got != want {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+			t.Errorf("Mismatch: want: \n\"%v\", \ngot: \n\"%v\"", want, got)
 		}
 	})
 }
