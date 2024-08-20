@@ -78,6 +78,32 @@ func TestPartnerCollectionList(t *testing.T) {
 
 }
 
+func TestOwnerCollectionList(t *testing.T) {
+
+	mux := setupMux("/api/v0/owners/1ca830b5-6a2b-43f9-b6bc-4dfeac3ee178/colls/", "testdata/collection-list.json")
+	ts := httptest.NewServer(mux)
+	defer ts.Close()
+
+	setupTestServerClient(ts)
+
+	t.Run("result", func(t *testing.T) {
+		want := collectionListEntry
+		got, err := OwnerCollectionList(collectionShow.OwnerID)
+		if err != nil {
+			t.Errorf("Unexpected error: %s", err)
+		}
+
+		if 1 != len(got) {
+			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
+		}
+
+		if collectionListEntry != got[0] {
+			t.Errorf("Mismatch: want: \n\"%v\", \ngot: \n\"%v\"", want, got[0])
+		}
+	})
+
+}
+
 func TestCollectionGetFunc(t *testing.T) {
 
 	mux := setupMux("/api/v0/colls/b9612d5d-619a-4ceb-b620-d816e4b4340b", "testdata/collection-get.json")

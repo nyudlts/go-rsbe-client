@@ -56,6 +56,22 @@ func PartnerCollectionList(partnerID string) (collections []CollectionListEntry,
 	return collections, nil
 }
 
+func OwnerCollectionList(ownerID string) (collections []CollectionListEntry, err error) {
+	path := fmt.Sprintf("/api/v0/owners/%s/colls", ownerID)
+
+	body, err := GetBody(path)
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(body, &collections)
+	if err != nil {
+		return nil, err
+	}
+
+	return collections, nil
+}
+
 func CollectionGet(id string) (collection CollectionEntry, err error) {
 	path := fmt.Sprintf("/api/v0/colls/%s", id)
 
