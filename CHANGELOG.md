@@ -1,7 +1,7 @@
 # Changelog
 
 ### v0.5.0
-  * add owner functionality
+  * add `Owner` functionality to align with `RSBE API v0.7.0`
 
 ### v0.4.0
   * add Golang module files
