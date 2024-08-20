@@ -1,0 +1,5 @@
+---
+rsbe:
+  BaseURL:  "http://localhost:3000/"
+  User:     "foo"
+  Password: "bar"
