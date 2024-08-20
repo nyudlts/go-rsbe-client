@@ -6,27 +6,33 @@ import (
 )
 
 type CollectionListEntry struct {
-	ID         string `json:"id"`
-	PartnerID  string `json:"partner_id"`
-	Code       string `json:"code"`
-	Name       string `json:"name"`
-	Type       string `json:"coll_type"`
-	CreatedAt  string `json:"created_at"`
-	UpdatedAt  string `json:"updated_at"`
-	URL        string `json:"url"`
-	PartnerURL string `json:"partner_url"`
+	ID          string `json:"id"`
+	PartnerID   string `json:"partner_id"`
+	OwnerID	    string `json:"owner_id"`
+	Code        string `json:"code"`
+	DisplayCode string `json:"display_code"`
+	Name        string `json:"name"`
+	Type        string `json:"coll_type"`
+	CreatedAt   string `json:"created_at"`
+	UpdatedAt   string `json:"updated_at"`
+	URL         string `json:"url"`
+	PartnerURL  string `json:"partner_url"`
+	OwnerURL    string `json:"owner_url"`
 }
 
 type CollectionEntry struct {
 	ID              string `json:"id,omitempty"`
-	PartnerID       string `json:"partner_id,omitempty"`        // REQUIRED
-	Code            string `json:"code,omitempty"`              // REQUIRED
-	Name            string `json:"name,omitempty"`              // optional
+	PartnerID       string `json:"partner_id,omitempty"`        // REQUIRED for CREATE
+	OwnerID		string `json:"owner_id,omitempty"`          // REQUIRED    ""
+	Code            string `json:"code,omitempty"`              // REQUIRED    ""
+	DisplayCode     string `json:"display_code,omitempty"`      // REQUIRED    ""
+	Name            string `json:"name,omitempty"`              // optional    ""
 	Type            string `json:"coll_type,omitempty"`         // REQUIRED (origin, virtual)
-	Quota           int    `json:"quota,omitempty"`             // REQUIRED
-	RelPath         string `json:"rel_path,omitempty"`          // REQUIRED
+	Quota           int    `json:"quota,omitempty"`             // REQUIRED    ""
+	RelPath         string `json:"rel_path,omitempty"`          // REQUIRED    ""
 	ReadyForContent bool   `json:"ready_for_content,omitempty"` // optional
 	PartnerURL      string `json:"partner_url,omitempty"`
+	OwnerURL        string `json:"owner_url,omitempty"`
 	SEsURL          string `json:"ses_url,omitempty"`
 	IEsURL          string `json:"ies_url,omitempty"`
 	LockVersion     int    `json:"lock_version,omitempty"`
@@ -36,6 +42,22 @@ type CollectionEntry struct {
 
 func PartnerCollectionList(partnerID string) (collections []CollectionListEntry, err error) {
 	path := fmt.Sprintf("/api/v0/partners/%s/colls", partnerID)
+
+	body, err := GetBody(path)
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(body, &collections)
+	if err != nil {
+		return nil, err
+	}
+
+	return collections, nil
+}
+
+func OwnerCollectionList(ownerID string) (collections []CollectionListEntry, err error) {
+	path := fmt.Sprintf("/api/v0/owners/%s/colls", ownerID)
 
 	body, err := GetBody(path)
 	if err != nil {
@@ -134,14 +156,14 @@ func (c *CollectionEntry) Delete() (err error) {
 }
 
 func (e CollectionListEntry) ToString() string {
-	s := fmt.Sprintf("ID: %s, PartnerID: %s, Code: %s, Name: %s, Type: %s, CreatedAt: %s , UpdatedAt: %s, URL: %s, PartnerURL: %s",
-		e.ID, e.PartnerID, e.Code, e.Name, e.Type, e.CreatedAt, e.UpdatedAt, e.URL, e.PartnerURL)
+	s := fmt.Sprintf("ID: %s, PartnerID: %s, OwnerID: %s, Code: %s, DisplayCode: %s, Name: %s, Type: %s, CreatedAt: %s , UpdatedAt: %s, URL: %s, PartnerURL: %s, OwnerURL: %s",
+		e.ID, e.PartnerID, e.OwnerID, e.Code, e.DisplayCode, e.Name, e.Type, e.CreatedAt, e.UpdatedAt, e.URL, e.PartnerURL, e.OwnerURL)
 
 	return s
 }
 
 func (e CollectionEntry) ToString() string {
-	s := fmt.Sprintf("ID: %s, PartnerID: %s, Code: %s, Name: %s, Type: %s, CreatedAt: %s , UpdatedAt: %s, Quota: %d, ReadyForContent: %v, PartnerURL: %s, SEsURL: %s, IEsURL: %s, LockVersion: %d, RelPath: %s", e.ID, e.PartnerID, e.Code, e.Name, e.Type, e.CreatedAt, e.UpdatedAt, e.Quota, e.ReadyForContent, e.PartnerURL, e.SEsURL, e.IEsURL, e.LockVersion, e.RelPath)
+	s := fmt.Sprintf("ID: %s, PartnerID: %s, OwnerID: %s, Code: %s, DisplayCode: %s, Name: %s, Type: %s, CreatedAt: %s , UpdatedAt: %s, Quota: %d, ReadyForContent: %v, PartnerURL: %s, OwnerURL: %s, SEsURL: %s, IEsURL: %s, LockVersion: %d, RelPath: %s", e.ID, e.PartnerID, e.OwnerID, e.Code, e.DisplayCode, e.Name, e.Type, e.CreatedAt, e.UpdatedAt, e.Quota, e.ReadyForContent, e.PartnerURL, e.OwnerURL, e.SEsURL, e.IEsURL, e.LockVersion, e.RelPath)
 
 	return s
 }

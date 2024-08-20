@@ -85,12 +85,6 @@ func TestPartnerList(t *testing.T) {
 
 func TestPartnerGetFunc(t *testing.T) {
 
-	// mux := setupMux("/api/v0/partners/e6517775-6277-4e25-9373-ee7738e820b5", "testdata/partner-get.json")
-	// ts := httptest.NewServer(mux)
-	// defer ts.Close()
-
-	// setupTestServerClient(ts)
-
 	setupLocalhostClient()
 	t.Run("result", func(t *testing.T) {
 		want := partnerShow
