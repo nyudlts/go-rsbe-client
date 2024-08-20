@@ -1,0 +1,10 @@
+{
+  "id": "1ca830b5-6a2b-43f9-b6bc-4dfeac3ee178",
+  "name": "Test Owner",
+  "code": "test_owner",
+  "created_at": "2024-08-19T14:51:30.383Z",
+  "updated_at": "2024-08-19T14:51:30.383Z",
+  "owners_url": "http://localhost:3000/api/v0/owners",
+  "colls_url": "http://localhost:3000/api/v0/owners/1ca830b5-6a2b-43f9-b6bc-4dfeac3ee178/colls",
+  "lock_version": 0
+}

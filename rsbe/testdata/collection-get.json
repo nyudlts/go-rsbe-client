@@ -1,16 +1,19 @@
 {
   "id": "b9612d5d-619a-4ceb-b620-d816e4b4340b",
   "partner_id": "e6517775-6277-4e25-9373-ee7738e820b5",
+  "owner_id": "1ca830b5-6a2b-43f9-b6bc-4dfeac3ee178",
   "code": "test",
+  "display_code": "T.C",
   "name": "Test Collection",
   "coll_type": "origin",
   "created_at": "2020-05-30T01:58:38.431Z",
-  "updated_at": "2020-05-30T01:58:38.431Z",
+  "updated_at": "2024-08-19T14:53:30.432Z",
   "quota": 500,
   "ready_for_content": true,
   "partner_url": "http://localhost:3000/api/v0/partners/e6517775-6277-4e25-9373-ee7738e820b5",
+  "owner_url": "http://localhost:3000/api/v0/owners/1ca830b5-6a2b-43f9-b6bc-4dfeac3ee178",
   "ses_url": "http://localhost:3000/api/v0/colls/b9612d5d-619a-4ceb-b620-d816e4b4340b/ses",
   "ies_url": "http://localhost:3000/api/v0/colls/b9612d5d-619a-4ceb-b620-d816e4b4340b/ies",
-  "lock_version": 0,
+  "lock_version": 1,
   "rel_path": "content/dlts/test"
 }
