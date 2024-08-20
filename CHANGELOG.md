@@ -1,5 +1,8 @@
 # Changelog
 
+### v0.5.1
+  * add `RSBE API v0.7.0` development database dump needed for testing
+
 ### v0.5.0
   * add `Owner` functionality to align with `RSBE API v0.7.0`
 
