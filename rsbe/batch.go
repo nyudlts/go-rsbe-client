@@ -90,7 +90,7 @@ type BatchMemberIEListEntry struct {
 }
 
 func BatchList() (list []BatchListEntry, err error) {
-	path := fmt.Sprintf("/api/v0/batches")
+	path := "/api/v0/batches"
 
 	body, err := GetBody(path)
 	if err != nil {

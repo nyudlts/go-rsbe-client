@@ -57,7 +57,7 @@ func TestCollectionIEList(t *testing.T) {
 			t.Errorf("Unexpected error: %s", err)
 		}
 
-		if 1 != len(got) {
+		if len(got) != 1 {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
 		}
 
