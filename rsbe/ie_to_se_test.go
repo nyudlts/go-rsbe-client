@@ -30,7 +30,7 @@ func TestIEToSEList(t *testing.T) {
 			t.Errorf("Unexpected error: %s", err)
 		}
 
-		if 1 != len(got) {
+		if len(got) != 1 {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
 		}
 
@@ -107,7 +107,7 @@ func TestIEToSEListWithFilters(t *testing.T) {
 			t.Errorf("Unexpected error: %s", err)
 		}
 
-		if 2 != len(got) {
+		if len(got) != 2 {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", 2, len(got))
 		}
 
@@ -120,7 +120,7 @@ func TestIEToSEListWithFilters(t *testing.T) {
 			t.Errorf("Unexpected error: %s", err)
 		}
 
-		if 1 != len(got) {
+		if len(got) != 1 {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", 1, len(got))
 		}
 

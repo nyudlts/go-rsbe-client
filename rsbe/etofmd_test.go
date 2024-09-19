@@ -27,10 +27,10 @@ var etofmdShow = EToFMDEntry{
 }
 
 var etofmdToCreate = EToFMDEntry{
-	EType:       "ie",
-	EID:         "9ea98441-b6b6-46cf-b6c8-91dff385c6c8",
-	Role:        "notes",
-	FMDID:       "f9f38cc5-0728-4f1a-85ec-e4cb6906d304",
+	EType: "ie",
+	EID:   "9ea98441-b6b6-46cf-b6c8-91dff385c6c8",
+	Role:  "notes",
+	FMDID: "f9f38cc5-0728-4f1a-85ec-e4cb6906d304",
 }
 
 func TestEToFMDList(t *testing.T) {
@@ -48,7 +48,7 @@ func TestEToFMDList(t *testing.T) {
 			t.Errorf("Unexpected error: %s", err)
 		}
 
-		if 4 != len(got) {
+		if len(got) != 4 {
 			t.Errorf("Result Length Mismatch: want: 4, got: %d", len(got))
 		}
 

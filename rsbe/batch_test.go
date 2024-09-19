@@ -47,7 +47,7 @@ func TestBatchList(t *testing.T) {
 			t.Errorf("Unexpected error: %s", err)
 		}
 
-		if 2 != len(list) {
+		if len(list) != 2 {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", 2, len(list))
 		}
 

@@ -50,7 +50,7 @@ func TestBatchToIEList(t *testing.T) {
 			t.Errorf("Unexpected error: %s", err)
 		}
 
-		if 1 != len(list) {
+		if len(list) != 1 {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", 1, len(list))
 		}
 

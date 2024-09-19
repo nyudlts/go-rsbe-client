@@ -37,7 +37,7 @@ var fmdShow = FMDEntry{
 	UpdatedAt:    "2020-07-13T02:13:10.297Z",
 	Formats: FMDFormat{
 		PRONOMID: "fmt/14",
-		MIMEType:   "application/pdf",
+		MIMEType: "application/pdf",
 	},
 	Data: FMDData{
 		Searchable:      true,
@@ -90,7 +90,7 @@ func TestSEFMDList(t *testing.T) {
 			t.Errorf("Unexpected error: %s", err)
 		}
 
-		if 3 != len(got) {
+		if len(got) != 3 {
 			t.Errorf("Result Length Mismatch: want: 3, got: %d", len(got))
 		}
 
