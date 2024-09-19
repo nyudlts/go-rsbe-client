@@ -40,7 +40,7 @@ type IEToSEEntry struct {
 // are added to the RSBE query as query params as per the "url:" struct tags.
 func IEToSEList(filter ...IEToSEListEntry) (list []IEToSEListEntry, err error) {
 
-	path := fmt.Sprintf("/api/v0/ie_to_ses")
+	path := "/api/v0/ie_to_ses"
 
 	// check if there are any query parameters
 	switch len(filter) {

@@ -297,7 +297,7 @@ func TestBatchToSEGetFunc(t *testing.T) {
 			t.Errorf("BatchURL mismatch: want: \"%v\", got: \"%v\"", expect, got.BatchURL)
 		}
 
-		expect = fmt.Sprintf("http://localhost:3000/api/v0/batch_to_ses")
+		expect = "http://localhost:3000/api/v0/batch_to_ses"
 		if expect != got.BatchToSEsURL {
 			t.Errorf("BatchToSEsURL mismatch: want: \"%v\", got: \"%v\"", expect, got.BatchToSEsURL)
 		}
