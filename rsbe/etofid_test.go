@@ -48,7 +48,7 @@ func TestEToFIDList(t *testing.T) {
 			t.Errorf("Unexpected error: %s", err)
 		}
 
-		if 1 != len(got) {
+		if len(got) != 1 {
 			t.Errorf("Result Length Mismatch: want: 1, got: %d", len(got))
 		}
 

@@ -1,8 +1,8 @@
 package rsbe
 
 import (
-	"testing"
 	"net/http/httptest"
+	"testing"
 )
 
 var ownerListEntry = OwnerListEntry{
@@ -26,8 +26,8 @@ var ownerShow = OwnerEntry{
 }
 
 var ownerToCreate = OwnerEntry{
-	Code:    "test_owner_2",
-	Name:    "Test Owner 2",
+	Code: "test_owner_2",
+	Name: "Test Owner 2",
 }
 
 func TestOwnerList(t *testing.T) {
@@ -40,7 +40,7 @@ func TestOwnerList(t *testing.T) {
 			t.Errorf("Unexpected error: %s", err)
 		}
 
-		if 1 != len(got) {
+		if len(got) != 1 {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", 1, len(got))
 		}
 

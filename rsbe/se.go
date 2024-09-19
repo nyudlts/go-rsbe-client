@@ -120,7 +120,7 @@ func (c *SEEntry) GetByDigiID() (err error) {
 	}
 
 	if searchResult.Response.NumFound != 1 {
-		return fmt.Errorf("Incorrect number of results. Expected 1, found %d", searchResult.Response.NumFound)
+		return fmt.Errorf("incorrect number of results: expected 1, found %d", searchResult.Response.NumFound)
 	}
 
 	c.ID = filepath.Base(searchResult.Response.Docs[0].URL)

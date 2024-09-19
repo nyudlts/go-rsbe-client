@@ -69,7 +69,7 @@ func TestBatchToSEList(t *testing.T) {
 			t.Errorf("Unexpected error: %s", err)
 		}
 
-		if 1 != len(list) {
+		if len(list) != 1 {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", 1, len(list))
 		}
 
@@ -115,7 +115,7 @@ func TestBatchToSEList(t *testing.T) {
 			t.Errorf("Unexpected error: %s", err)
 		}
 
-		if 1 != len(list) {
+		if len(list) != 1 {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", 1, len(list))
 		}
 
@@ -175,7 +175,7 @@ func TestBatchToSEList(t *testing.T) {
 			t.Errorf("Unexpected error: %s", err)
 		}
 
-		if 2 != len(list) {
+		if len(list) != 2 {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", 2, len(list))
 		}
 
@@ -185,11 +185,11 @@ func TestBatchToSEList(t *testing.T) {
 			t.Errorf("Unexpected error: %s", err)
 		}
 
-		if 1 != len(list) {
+		if len(list) != 1 {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", 1, len(list))
 		}
 
-		if "8c258cb2-d700-43be-8773-a61a7b9cd668" != list[0].SEID {
+		if list[0].SEID != "8c258cb2-d700-43be-8773-a61a7b9cd668" {
 			t.Errorf("ID mismatch: want: \"8c258cb2-d700-43be-8773-a61a7b9cd668\", got: \"%v\"", list[0].SEID)
 		}
 
@@ -199,11 +199,11 @@ func TestBatchToSEList(t *testing.T) {
 			t.Errorf("Unexpected error: %s", err)
 		}
 
-		if 1 != len(list) {
+		if len(list) != 1 {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", 1, len(list))
 		}
 
-		if "cee91db3-ee73-4953-a05e-98f043d44f97" != list[0].SEID {
+		if list[0].SEID != "cee91db3-ee73-4953-a05e-98f043d44f97" {
 			t.Errorf("Status filter error. Got unexpected SEID: %v", list[0].SEID)
 		}
 
@@ -213,11 +213,11 @@ func TestBatchToSEList(t *testing.T) {
 			t.Errorf("Unexpected error: %s", err)
 		}
 
-		if 1 != len(list) {
+		if len(list) != 1 {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", 1, len(list))
 		}
 
-		if "8c258cb2-d700-43be-8773-a61a7b9cd668" != list[0].SEID {
+		if list[0].SEID != "8c258cb2-d700-43be-8773-a61a7b9cd668" {
 			t.Errorf("ID mismatch: want: \"8c258cb2-d700-43be-8773-a61a7b9cd668\", got: \"%v\"", list[0].SEID)
 		}
 
@@ -227,11 +227,11 @@ func TestBatchToSEList(t *testing.T) {
 			t.Errorf("Unexpected error: %s", err)
 		}
 
-		if 1 != len(list) {
+		if len(list) != 1 {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", 1, len(list))
 		}
 
-		if "cee91db3-ee73-4953-a05e-98f043d44f97" != list[0].SEID {
+		if list[0].SEID != "cee91db3-ee73-4953-a05e-98f043d44f97" {
 			t.Errorf("Status filter error. Got unexpected SEID: %v", list[0].SEID)
 		}
 	})
@@ -297,7 +297,7 @@ func TestBatchToSEGetFunc(t *testing.T) {
 			t.Errorf("BatchURL mismatch: want: \"%v\", got: \"%v\"", expect, got.BatchURL)
 		}
 
-		expect = fmt.Sprintf("http://localhost:3000/api/v0/batch_to_ses")
+		expect = "http://localhost:3000/api/v0/batch_to_ses"
 		if expect != got.BatchToSEsURL {
 			t.Errorf("BatchToSEsURL mismatch: want: \"%v\", got: \"%v\"", expect, got.BatchToSEsURL)
 		}

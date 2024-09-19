@@ -50,7 +50,7 @@ func TestBatchToIEList(t *testing.T) {
 			t.Errorf("Unexpected error: %s", err)
 		}
 
-		if 1 != len(list) {
+		if len(list) != 1 {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", 1, len(list))
 		}
 
@@ -151,7 +151,7 @@ func TestBatchToIEGetFunc(t *testing.T) {
 			t.Errorf("BatchURL mismatch: want: \"%v\", got: \"%v\"", expect, got.BatchURL)
 		}
 
-		expect = fmt.Sprintf("http://localhost:3000/api/v0/batch_to_ies")
+		expect = "http://localhost:3000/api/v0/batch_to_ies"
 		if expect != got.BatchToIEsURL {
 			t.Errorf("BatchToIEsURL mismatch: want: \"%v\", got: \"%v\"", expect, got.BatchToIEsURL)
 		}

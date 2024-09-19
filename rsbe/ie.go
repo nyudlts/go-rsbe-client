@@ -16,7 +16,7 @@ type IEListEntry struct {
 	Title         string `json:"title,omitempty"`
 	CreatedAt     string `json:"created_at,omitempty"`
 	UpdatedAt     string `json:"updated_at,omitempty"`
-	URL           string `json:"url",omitempty"`
+	URL           string `json:"url,omitempty"`
 	CollectionURL string `json:"coll_url,omitempty"`
 	LockVersion   int    `json:"lock_version,omitempty"`
 }

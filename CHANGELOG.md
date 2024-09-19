@@ -1,5 +1,11 @@
 # Changelog
 
+### v0.5.2
+  * correct `rsbe.Version` value
+  * correct `JSON` `URL` tags in `IEListEntry` and `IEToSEEntry`
+  * clean up code per `go.staticcheck` recommendations
+  * add `LICENSE.txt`
+
 ### v0.5.1
   * add `RSBE API v0.7.0` development database dump needed for testing
 
