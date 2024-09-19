@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 )
@@ -81,9 +82,12 @@ func Post(path string, data []byte) (resp *http.Response, err error) {
 	req.SetBasicAuth(conf.User, conf.Password)
 
 	resp, err = client.Do(req)
+	if err != nil {
+		return resp, err
+	}
 
 	if resp.StatusCode != 201 {
-		body, _ := ioutil.ReadAll(resp.Body)
+		body, _ := io.ReadAll(resp.Body)
 
 		var eMsg ErrMsg
 		_ = json.Unmarshal(body, &eMsg)
