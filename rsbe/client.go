@@ -47,7 +47,7 @@ func Get(path string) (resp *http.Response, err error) {
 		body, _ := ioutil.ReadAll(resp.Body)
 		var eMsg ErrMsg
 		_ = json.Unmarshal(body, &eMsg)
-		return resp, fmt.Errorf("Bad response: %d ; %v\n", resp.StatusCode, eMsg.Error)
+		return resp, fmt.Errorf("bad response: %d ; %v", resp.StatusCode, eMsg.Error)
 	}
 
 	return resp, nil
@@ -87,7 +87,7 @@ func Post(path string, data []byte) (resp *http.Response, err error) {
 
 		var eMsg ErrMsg
 		_ = json.Unmarshal(body, &eMsg)
-		return resp, fmt.Errorf("Bad response: %d ; %v\n", resp.StatusCode, eMsg.Error)
+		return resp, fmt.Errorf("bad response: %d ; %v", resp.StatusCode, eMsg.Error)
 	}
 
 	return resp, nil
@@ -151,7 +151,7 @@ func Delete(path string) (err error) {
 
 		var eMsg ErrMsg
 		_ = json.Unmarshal(body, &eMsg)
-		return fmt.Errorf("Bad response: %d ; %v\n", resp.StatusCode, eMsg.Error)
+		return fmt.Errorf("bad response: %d ; %v", resp.StatusCode, eMsg.Error)
 	}
 
 	return nil
