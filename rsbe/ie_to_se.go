@@ -15,7 +15,7 @@ type IEToSEListEntry struct {
 	Section   int    `json:"section,omitempty"    url:"section,omitempty"` // REQUIRED if != 1
 	CreatedAt string `json:"created_at,omitempty" url:"-"`
 	UpdatedAt string `json:"updated_at,omitempty" url:"-"`
-	URL       string `json:"url",omitempty"       url:"-"`
+	URL       string `json:"url,omitempty"        url:"-"`
 }
 
 type IEToSEEntry struct {
@@ -60,7 +60,6 @@ func IEToSEList(filter ...IEToSEListEntry) (list []IEToSEListEntry, err error) {
 	default:
 		return list, fmt.Errorf("error: can only accept 0 or 1 IEToSEListEntry arguments")
 	}
-
 
 	body, err := GetBody(path)
 	if err != nil {
