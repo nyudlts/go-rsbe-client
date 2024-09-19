@@ -3,6 +3,7 @@
 ### v0.5.2
   * correct `rsbe.Version` value
   * correct `JSON` `URL` tags in `IEListEntry` and `IEToSEEntry`
+  * clean up code per `go.staticcheck` recommendations
   * add `LICENSE.txt`
 
 ### v0.5.1
