@@ -8,7 +8,7 @@ import (
 type CollectionListEntry struct {
 	ID          string `json:"id"`
 	PartnerID   string `json:"partner_id"`
-	OwnerID	    string `json:"owner_id"`
+	OwnerID     string `json:"owner_id"`
 	Code        string `json:"code"`
 	DisplayCode string `json:"display_code"`
 	Name        string `json:"name"`
@@ -23,7 +23,7 @@ type CollectionListEntry struct {
 type CollectionEntry struct {
 	ID              string `json:"id,omitempty"`
 	PartnerID       string `json:"partner_id,omitempty"`        // REQUIRED for CREATE
-	OwnerID		string `json:"owner_id,omitempty"`          // REQUIRED    ""
+	OwnerID         string `json:"owner_id,omitempty"`          // REQUIRED    ""
 	Code            string `json:"code,omitempty"`              // REQUIRED    ""
 	DisplayCode     string `json:"display_code,omitempty"`      // REQUIRED    ""
 	Name            string `json:"name,omitempty"`              // optional    ""
@@ -156,14 +156,14 @@ func (c *CollectionEntry) Delete() (err error) {
 }
 
 func (e CollectionListEntry) ToString() string {
-	s := fmt.Sprintf("ID: %s, PartnerID: %s, OwnerID: %s, Code: %s, DisplayCode: %s, Name: %s, Type: %s, CreatedAt: %s , UpdatedAt: %s, URL: %s, PartnerURL: %s, OwnerURL: %s",
+	s := fmt.Sprintf("ID: %s, PartnerID: %s, OwnerID: %s, Code: %s, DisplayCode: %s, Name: %s, Type: %s, CreatedAt: %s, UpdatedAt: %s, URL: %s, PartnerURL: %s, OwnerURL: %s",
 		e.ID, e.PartnerID, e.OwnerID, e.Code, e.DisplayCode, e.Name, e.Type, e.CreatedAt, e.UpdatedAt, e.URL, e.PartnerURL, e.OwnerURL)
 
 	return s
 }
 
 func (e CollectionEntry) ToString() string {
-	s := fmt.Sprintf("ID: %s, PartnerID: %s, OwnerID: %s, Code: %s, DisplayCode: %s, Name: %s, Type: %s, CreatedAt: %s , UpdatedAt: %s, Quota: %d, ReadyForContent: %v, PartnerURL: %s, OwnerURL: %s, SEsURL: %s, IEsURL: %s, LockVersion: %d, RelPath: %s", e.ID, e.PartnerID, e.OwnerID, e.Code, e.DisplayCode, e.Name, e.Type, e.CreatedAt, e.UpdatedAt, e.Quota, e.ReadyForContent, e.PartnerURL, e.OwnerURL, e.SEsURL, e.IEsURL, e.LockVersion, e.RelPath)
+	s := fmt.Sprintf("ID: %s, PartnerID: %s, OwnerID: %s, Code: %s, DisplayCode: %s, Name: %s, Type: %s, CreatedAt: %s, UpdatedAt: %s, Quota: %d, ReadyForContent: %v, PartnerURL: %s, OwnerURL: %s, SEsURL: %s, IEsURL: %s, LockVersion: %d, RelPath: %s", e.ID, e.PartnerID, e.OwnerID, e.Code, e.DisplayCode, e.Name, e.Type, e.CreatedAt, e.UpdatedAt, e.Quota, e.ReadyForContent, e.PartnerURL, e.OwnerURL, e.SEsURL, e.IEsURL, e.LockVersion, e.RelPath)
 
 	return s
 }
