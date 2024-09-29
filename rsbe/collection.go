@@ -22,15 +22,15 @@ type CollectionListEntry struct {
 
 type CollectionEntry struct {
 	ID              string `json:"id,omitempty"`
-	PartnerID       string `json:"partner_id,omitempty"`        // REQUIRED for CREATE
-	OwnerID         string `json:"owner_id,omitempty"`          // REQUIRED    ""
-	Code            string `json:"code,omitempty"`              // REQUIRED    ""
-	DisplayCode     string `json:"display_code,omitempty"`      // REQUIRED    ""
-	Name            string `json:"name,omitempty"`              // optional    ""
-	Type            string `json:"coll_type,omitempty"`         // REQUIRED (origin, virtual)
-	Quota           int    `json:"quota,omitempty"`             // REQUIRED    ""
-	RelPath         string `json:"rel_path,omitempty"`          // REQUIRED    ""
-	ReadyForContent bool   `json:"ready_for_content,omitempty"` // optional
+	PartnerID       string `json:"partner_id,omitempty"`   // REQUIRED for CREATE
+	OwnerID         string `json:"owner_id,omitempty"`     // REQUIRED    ""
+	Code            string `json:"code,omitempty"`         // REQUIRED    ""
+	DisplayCode     string `json:"display_code,omitempty"` // REQUIRED    ""
+	Name            string `json:"name,omitempty"`         // optional    ""
+	Type            string `json:"coll_type,omitempty"`    // REQUIRED (origin, virtual)
+	Quota           int    `json:"quota"`                  // REQUIRED    ""
+	RelPath         string `json:"rel_path,omitempty"`     // REQUIRED    ""
+	ReadyForContent bool   `json:"ready_for_content"`      // REQUIRED    ""
 	PartnerURL      string `json:"partner_url,omitempty"`
 	OwnerURL        string `json:"owner_url,omitempty"`
 	SEsURL          string `json:"ses_url,omitempty"`
