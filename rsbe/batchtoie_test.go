@@ -5,9 +5,8 @@ import (
 	"testing"
 )
 
-var batchToIEListEntry = BatchToIEListEntry{}
-
-var batchToIEShow = BatchToIEEntry{}
+// var batchToIEListEntry = BatchToIEListEntry{}
+// var batchToIEShow = BatchToIEEntry{}
 
 var batchToIEToCreate = BatchToIEEntry{
 	BatchID: "32626389-c942-4e71-9b5a-5d7c7ca4d389",
