@@ -284,73 +284,7 @@ func TestFMDCreateFunc(t *testing.T) {
 			t.Errorf("Unexpected error: %s", err)
 		}
 
-		checkStringContains(t, got.ID, want.ID)
-		checkStringContains(t, got.PartnerID, want.PartnerID)
-		checkStringContains(t, got.CollectionID, want.CollectionID)
-		if want.Size != got.Size {
-			t.Errorf("Size mismatch: want: \"%v\", got: \"%v\"", want.Size, got.Size)
-		}
-		checkStringContains(t, got.Status, want.Status)
-		checkStringContains(t, got.OriginalName, want.OriginalName)
-		checkStringContains(t, got.Name, want.Name)
-		checkStringContains(t, got.Extension, want.Extension)
-		checkStringContains(t, got.MTime, want.MTime)
-		checkStringContains(t, got.CreatedAt, want.CreatedAt)
-		checkStringContains(t, got.UpdatedAt, want.UpdatedAt)
-		checkStringContains(t, got.Formats.MIMEType, want.Formats.MIMEType)
-		checkStringContains(t, got.Formats.PRONOMID, want.Formats.PRONOMID)
-
-		// if want.MTime != got.MTime {
-		// 	t.Errorf("MTime mismatch: want: \"%v\", got: \"%v\"", want.MTime, got.MTime)
-		// }
-
-		// if want.CreatedAt != got.CreatedAt {
-		// 	t.Errorf("CreatedAt mismatch: want: \"%v\", got: \"%v\"", want.CreatedAt, got.CreatedAt)
-		// }
-
-		// if want.UpdatedAt != got.UpdatedAt {
-		// 	t.Errorf("UpdatedAt mismatch: want: \"%v\", got: \"%v\"", want.UpdatedAt, got.UpdatedAt)
-		// }
-
-		// if want.Formats.PRONOMID != got.Formats.PRONOMID {
-		// 	t.Errorf("Formats.PRONOMID Mismatch: want: \"%v\", got: \"%v\"", want.Formats.PRONOMID, got.Formats.PRONOMID)
-		// }
-
-		// if want.Formats.MIMEType != got.Formats.MIMEType {
-		// 	t.Errorf("Formats.MIMEType mismatch: want: \"%v\", got: \"%v\"", "foo", got.Formats.MIMEType)
-		// }
-
-		// if want.Data.Duration != got.Data.Duration {
-		// 	t.Errorf("Data.Duration mismatch: want: \"%v\", got: \"%v\"", want.Data.Duration, got.Data.Duration)
-		// }
-
-		if want.Data.Bitrate != got.Data.Bitrate {
-			t.Errorf("Data.Bitrate mismatch: want: \"%v\", got: \"%v\"", want.Data.Bitrate, got.Data.Bitrate)
-		}
-
-		if want.Data.Width != got.Data.Width {
-			t.Errorf("Data.Width mismatch: want: \"%v\", got: \"%v\"", want.Data.Width, got.Data.Width)
-		}
-
-		if want.Data.Height != got.Data.Height {
-			t.Errorf("Data.Height mismatch: want: \"%v\", got: \"%v\"", want.Data.Height, got.Data.Height)
-		}
-
-		if want.Data.AspectRatio != got.Data.AspectRatio {
-			t.Errorf("Data.AspectRatio mismatch: want: \"%v\", got: \"%v\"", want.Data.AspectRatio, got.Data.AspectRatio)
-		}
-
-		if want.Data.XMLSchema != got.Data.XMLSchema {
-			t.Errorf("Data.XMLSchema mismatch: want: \"%v\", got: \"%v\"", want.Data.XMLSchema, got.Data.XMLSchema)
-		}
-
-		if want.Data.TranscriptionID != got.Data.TranscriptionID {
-			t.Errorf("Data.TranscriptionID Mismatch: want: \"%v\", got: \"%v\"", want.Data.TranscriptionID, got.Data.TranscriptionID)
-		}
-
-		if want.LockVersion != got.LockVersion {
-			t.Errorf("LockVersion mismatch: want: \"%v\", got: \"%v\"", want.LockVersion, got.LockVersion)
-		}
+		compareFMDValues(t, got, want, false)
 	})
 }
 
@@ -403,65 +337,7 @@ func TestFMDUpdateFunc(t *testing.T) {
 			t.Errorf("Unexpected error: %s", err)
 		}
 
-		checkStringContains(t, got.ID, want.ID)
-		checkStringContains(t, got.PartnerID, want.PartnerID)
-		checkStringContains(t, got.CollectionID, want.CollectionID)
-		checkStringContains(t, got.XIPID, want.XIPID)
-		if got.Size != want.Size {
-			t.Errorf("Size mismatch: want: \"%v\", got: \"%v\"", want.Size, got.Size)
-		}
-		checkStringContains(t, got.PresLevel, want.PresLevel)
-		checkStringContains(t, got.PresCommitment, want.PresCommitment)
-		checkStringContains(t, got.Status, want.Status)
-		if got.FormatValid != want.FormatValid {
-			t.Errorf("FormatValid mismatch: want: \"%v\", got: \"%v\"", want.FormatValid, got.FormatValid)
-		}
-		if got.FormatAcceptable != want.FormatAcceptable {
-			t.Errorf("FormatAcceptable mismatch: want: \"%v\", got: \"%v\"", want.FormatAcceptable, got.FormatAcceptable)
-		}
-		checkStringContains(t, got.OriginalName, want.OriginalName)
-		checkStringContains(t, got.Name, want.Name)
-		checkStringContains(t, got.Extension, want.Extension)
-		checkStringContains(t, got.MTime, want.MTime)
-		checkStringContains(t, got.HashMD5, want.HashMD5)
-		checkStringContains(t, got.HashSHA1, want.HashSHA1)
-		checkStringContains(t, got.HashSHA256, want.HashSHA256)
-		checkStringContains(t, got.HashSHA512, want.HashSHA512)
-		checkStringContains(t, got.Formats.MIMEType, want.Formats.MIMEType)
-		checkStringContains(t, got.Formats.PRONOMID, want.Formats.PRONOMID)
-		checkStringContains(t, got.CreatedAt, want.CreatedAt)
-
-		if got.UpdatedAt == want.UpdatedAt {
-			t.Errorf("UpdatedAt was not changed: want: \"%v\", got: \"%v\"", want.UpdatedAt, got.UpdatedAt)
-		}
-
-		if got.Data.Bitrate != want.Data.Bitrate {
-			t.Errorf("Data.Bitrate mismatch: want: \"%v\", got: \"%v\"", want.Data.Bitrate, got.Data.Bitrate)
-		}
-
-		if got.Data.Width != want.Data.Width {
-			t.Errorf("Data.Width mismatch: want: \"%v\", got: \"%v\"", want.Data.Width, got.Data.Width)
-		}
-
-		if got.Data.Height != want.Data.Height {
-			t.Errorf("Data.Height mismatch: want: \"%v\", got: \"%v\"", want.Data.Height, got.Data.Height)
-		}
-
-		if got.Data.AspectRatio != want.Data.AspectRatio {
-			t.Errorf("Data.AspectRatio mismatch: want: \"%v\", got: \"%v\"", want.Data.AspectRatio, got.Data.AspectRatio)
-		}
-
-		if got.Data.XMLSchema != want.Data.XMLSchema {
-			t.Errorf("Data.XMLSchema mismatch: want: \"%v\", got: \"%v\"", want.Data.XMLSchema, got.Data.XMLSchema)
-		}
-
-		if got.Data.TranscriptionID != want.Data.TranscriptionID {
-			t.Errorf("Data.TranscriptionID Mismatch: want: \"%v\", got: \"%v\"", want.Data.TranscriptionID, got.Data.TranscriptionID)
-		}
-
-		if got.LockVersion != want.LockVersion+1 {
-			t.Errorf("LockVersion mismatch: want: \"%v\", got: \"%v\"", want.LockVersion, got.LockVersion)
-		}
+		compareFMDValues(t, got, want, true)
 	})
 }
 
@@ -494,4 +370,138 @@ func TestFMDDeleteFunc(t *testing.T) {
 		}
 
 	})
+}
+
+// ------------------------------------------------------------------------------
+// Helper Functions
+// ------------------------------------------------------------------------------
+func compareFMDValues(t *testing.T, got, want FMDEntry, updated bool) {
+	if got.ID != want.ID {
+		t.Errorf("ID mismatch: want: \"%v\", got: \"%v\"", want.ID, got.ID)
+	}
+
+	if got.PartnerID != want.PartnerID {
+		t.Errorf("PartnerID mismatch: want: \"%v\", got: \"%v\"", want.PartnerID, got.PartnerID)
+	}
+
+	if got.CollectionID != want.CollectionID {
+		t.Errorf("CollectionID mismatch: want: \"%v\", got: \"%v\"", want.CollectionID, got.CollectionID)
+	}
+
+	if got.XIPID != want.XIPID {
+		t.Errorf("XIPID mismatch: want: \"%v\", got: \"%v\"", want.XIPID, got.XIPID)
+	}
+
+	if got.PresLevel != want.PresLevel {
+		t.Errorf("PresLevel mismatch: want: \"%v\", got: \"%v\"", want.PresLevel, got.PresLevel)
+	}
+
+	if got.PresCommitment != want.PresCommitment {
+		t.Errorf("PresCommitment mismatch: want: \"%v\", got: \"%v\"", want.PresCommitment, got.PresCommitment)
+	}
+
+	if got.Size != want.Size {
+		t.Errorf("Size mismatch: want: \"%v\", got: \"%v\"", want.Size, got.Size)
+	}
+
+	if got.Status != want.Status {
+		t.Errorf("Status mismatch: want: \"%v\", got: \"%v\"", want.Status, got.Status)
+	}
+
+	if got.FormatAcceptable != want.FormatAcceptable {
+		t.Errorf("FormatAcceptable mismatch: want: \"%v\", got: \"%v\"", want.FormatAcceptable, got.FormatAcceptable)
+	}
+
+	if got.FormatValid != want.FormatValid {
+		t.Errorf("FormatValid mismatch: want: \"%v\", got: \"%v\"", want.FormatValid, got.FormatValid)
+	}
+
+	if got.OriginalName != want.OriginalName {
+		t.Errorf("OriginalName mismatch: want: \"%v\", got: \"%v\"", want.OriginalName, got.OriginalName)
+	}
+
+	if got.Name != want.Name {
+		t.Errorf("Name mismatch: want: \"%v\", got: \"%v\"", want.Name, got.Name)
+	}
+
+	if got.Extension != want.Extension {
+		t.Errorf("Extension mismatch: want: \"%v\", got: \"%v\"", want.Extension, got.Extension)
+	}
+
+	if got.MTime != want.MTime {
+		t.Errorf("MTime mismatch: want: \"%v\", got: \"%v\"", want.MTime, got.MTime)
+	}
+
+	if got.HashMD5 != want.HashMD5 {
+		t.Errorf("HashMD5 mismatch: want: \"%v\", got: \"%v\"", want.HashMD5, got.HashMD5)
+	}
+
+	if got.HashSHA1 != want.HashSHA1 {
+		t.Errorf("HashSHA1 mismatch: want: \"%v\", got: \"%v\"", want.HashSHA1, got.HashSHA1)
+	}
+
+	if got.HashSHA256 != want.HashSHA256 {
+		t.Errorf("HashSHA256 mismatch: want: \"%v\", got: \"%v\"", want.HashSHA256, got.HashSHA256)
+	}
+
+	if got.HashSHA512 != want.HashSHA512 {
+		t.Errorf("HashSHA512 mismatch: want: \"%v\", got: \"%v\"", want.HashSHA512, got.HashSHA512)
+	}
+
+	if got.Formats.MIMEType != want.Formats.MIMEType {
+		t.Errorf("Formats.MIMEType mismatch: want: \"%v\", got: \"%v\"", want.Formats.MIMEType, got.Formats.MIMEType)
+	}
+
+	if got.Formats.PRONOMID != want.Formats.PRONOMID {
+		t.Errorf("Formats.PRONOMID Mismatch: want: \"%v\", got: \"%v\"", want.Formats.PRONOMID, got.Formats.PRONOMID)
+	}
+
+	if got.CreatedAt != want.CreatedAt {
+		t.Errorf("CreatedAt mismatch: want: \"%v\", got: \"%v\"", want.CreatedAt, got.CreatedAt)
+	}
+
+	if updated {
+		if got.UpdatedAt == want.UpdatedAt {
+			t.Errorf("UpdatedAt was not changed: want: \"%v\", got: \"%v\"", want.UpdatedAt, got.UpdatedAt)
+		}
+	} else {
+		if got.UpdatedAt != want.UpdatedAt {
+			t.Errorf("UpdatedAt was changed: want: \"%v\", got: \"%v\"", want.UpdatedAt, got.UpdatedAt)
+		}
+	}
+
+	if got.Data.Bitrate != want.Data.Bitrate {
+		t.Errorf("Data.Bitrate mismatch: want: \"%v\", got: \"%v\"", want.Data.Bitrate, got.Data.Bitrate)
+	}
+
+	if got.Data.Width != want.Data.Width {
+		t.Errorf("Data.Width mismatch: want: \"%v\", got: \"%v\"", want.Data.Width, got.Data.Width)
+	}
+
+	if got.Data.Height != want.Data.Height {
+		t.Errorf("Data.Height mismatch: want: \"%v\", got: \"%v\"", want.Data.Height, got.Data.Height)
+	}
+
+	if got.Data.AspectRatio != want.Data.AspectRatio {
+		t.Errorf("Data.AspectRatio mismatch: want: \"%v\", got: \"%v\"", want.Data.AspectRatio, got.Data.AspectRatio)
+	}
+
+	if got.Data.XMLSchema != want.Data.XMLSchema {
+		t.Errorf("Data.XMLSchema mismatch: want: \"%v\", got: \"%v\"", want.Data.XMLSchema, got.Data.XMLSchema)
+	}
+
+	if got.Data.TranscriptionID != want.Data.TranscriptionID {
+		t.Errorf("Data.TranscriptionID Mismatch: want: \"%v\", got: \"%v\"", want.Data.TranscriptionID, got.Data.TranscriptionID)
+	}
+
+	expectedLockVersion := want.LockVersion
+
+	if updated {
+		expectedLockVersion += 1
+	}
+
+	if got.LockVersion != expectedLockVersion {
+		t.Errorf("LockVersion mismatch: want: \"%v\", got: \"%v\"", want.LockVersion, expectedLockVersion)
+	}
+
 }
