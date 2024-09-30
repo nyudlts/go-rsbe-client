@@ -5,9 +5,8 @@ import (
 	"testing"
 )
 
-var batchToSEListEntry = BatchToSEListEntry{}
-
-var batchToSEShow = BatchToSEEntry{}
+// var batchToSEListEntry = BatchToSEListEntry{}
+// var batchToSEShow = BatchToSEEntry{}
 
 var seToCreateForBatchToSETest = SEEntry{
 	ID:           "cee91db3-ee73-4953-a05e-98f043d44f97",

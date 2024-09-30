@@ -41,6 +41,7 @@ var collectionShow = CollectionEntry{
 }
 
 var collectionToCreate = CollectionEntry{
+	ID:              "044f2d9d-ee53-478a-89a1-a95f0d0c5888",
 	PartnerID:       collectionShow.PartnerID,
 	OwnerID:         collectionShow.OwnerID,
 	Code:            "waffles",
@@ -156,12 +157,9 @@ func TestCollectionCreateFunc(t *testing.T) {
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}
+	defer collectionToCreate.Delete()
 
-	t.Run("confirm that attributes updated", func(t *testing.T) {
-		if collectionToCreate.ID == "" {
-			t.Errorf("ID not updated")
-		}
-
+	defer t.Run("confirm that attributes updated", func(t *testing.T) {
 		if collectionToCreate.CreatedAt == "" {
 			t.Errorf("CreatedAt not updated")
 		}
@@ -174,41 +172,67 @@ func TestCollectionCreateFunc(t *testing.T) {
 
 func TestCollectionUpdateFunc(t *testing.T) {
 	setupLocalhostClient()
-
-	_ = collectionToCreate.Get()
-
-	if collectionToCreate.Name != "The Amazing Breakfast Collection" {
-		t.Errorf("variable already updated: %s", collectionToCreate.ToString())
+	err := collectionToCreate.Create()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
 	}
+	defer collectionToCreate.Delete()
 
-	collectionToCreate.Name = "DogBiscuit"
-
-	err := collectionToCreate.Update()
+	err = collectionToCreate.Get()
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}
 
-	_ = collectionToCreate.Get()
+	collectionToCreate.Code = "dogbiscuit"
+	collectionToCreate.DisplayCode = "D.B"
+	collectionToCreate.Name = "Dog Biscuit"
+	collectionToCreate.Type = "origin"
+	collectionToCreate.RelPath = "content/dlts/dogbiscuit"
+	collectionToCreate.Quota = 0
+	collectionToCreate.ReadyForContent = false
 
-	t.Run("confirm that elements updated", func(t *testing.T) {
-		if collectionToCreate.Name != "DogBiscuit" {
-			t.Errorf("Name was not updated: got: %s", collectionToCreate.Name)
-		}
+	err = collectionToCreate.Update()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
 
-		if collectionToCreate.CreatedAt == collectionToCreate.UpdatedAt {
-			t.Errorf("UpeatedAt not updated")
-		}
-	})
+	err = collectionToCreate.Get()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
+
+	checkStringContains(t, collectionToCreate.Code, "dogbiscuit")
+	checkStringContains(t, collectionToCreate.DisplayCode, "D.B")
+	checkStringContains(t, collectionToCreate.Name, "Dog Biscuit")
+	checkStringContains(t, collectionToCreate.Type, "origin")
+	checkStringContains(t, collectionToCreate.RelPath, "content/dlts/dogbiscuit")
+	if collectionToCreate.Quota != 0 {
+		t.Errorf("Quota was not updated: got: %d", collectionToCreate.Quota)
+	}
+	if collectionToCreate.ReadyForContent != false {
+		t.Errorf("ReadyForContent was not updated: got: %t", collectionToCreate.ReadyForContent)
+	}
+
+	if collectionToCreate.CreatedAt == collectionToCreate.UpdatedAt {
+		t.Errorf("UpdatedAt not updated")
+	}
 }
 
 func TestCollectionDeleteFunc(t *testing.T) {
 	setupLocalhostClient()
+	err := collectionToCreate.Create()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
 
-	_ = collectionToCreate.Get()
+	err = collectionToCreate.Get()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
 
 	id := collectionToCreate.ID
 
-	err := collectionToCreate.Delete()
+	err = collectionToCreate.Delete()
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}
@@ -220,6 +244,5 @@ func TestCollectionDeleteFunc(t *testing.T) {
 		if err == nil {
 			t.Errorf("err was nil")
 		}
-
 	})
 }

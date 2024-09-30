@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 )
 
@@ -45,7 +44,7 @@ func Get(path string) (resp *http.Response, err error) {
 	}
 
 	if resp.StatusCode != 200 {
-		body, _ := ioutil.ReadAll(resp.Body)
+		body, _ := io.ReadAll(resp.Body)
 		var eMsg ErrMsg
 		_ = json.Unmarshal(body, &eMsg)
 		return resp, fmt.Errorf("bad response: %d ; %v", resp.StatusCode, eMsg.Error)
@@ -62,7 +61,7 @@ func GetBody(path string) (body []byte, err error) {
 	}
 	defer resp.Body.Close()
 
-	body, err = ioutil.ReadAll(resp.Body)
+	body, err = io.ReadAll(resp.Body)
 	if err != nil {
 		return body, err
 	}
@@ -104,7 +103,7 @@ func PostReturnBody(path string, data []byte) (body []byte, err error) {
 	}
 	defer resp.Body.Close()
 
-	body, err = ioutil.ReadAll(resp.Body)
+	body, err = io.ReadAll(resp.Body)
 	if err != nil {
 		return body, err
 	}
@@ -151,7 +150,7 @@ func Delete(path string) (err error) {
 	}
 
 	if resp.StatusCode != 204 {
-		body, _ := ioutil.ReadAll(resp.Body)
+		body, _ := io.ReadAll(resp.Body)
 
 		var eMsg ErrMsg
 		_ = json.Unmarshal(body, &eMsg)

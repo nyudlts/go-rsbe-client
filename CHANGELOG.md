@@ -1,5 +1,14 @@
 # Changelog
 
+### v0.5.3
+  * remove `omitempty` from the following:
+    * `Collection.Quota` 
+    * `Collection.ReadyForContent`
+    * `FMD.Size`
+    * `FMD.FormatValid`
+    * `FMD.FormatAcceptable`
+  * refactored tests for independence
+
 ### v0.5.2
   * correct `rsbe.Version` value
   * correct `JSON` `URL` tags in `IEListEntry` and `IEToSEEntry`
