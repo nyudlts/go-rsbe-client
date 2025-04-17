@@ -48,6 +48,7 @@ var collectionToCreate = CollectionEntry{
 	DisplayCode:     "Big.Waffles",
 	Name:            "The Amazing Breakfast Collection",
 	Type:            "virtual",
+	Classification:  "mixed_open_closed",
 	RelPath:         "content/dlts/waffles",
 	ReadyForContent: true,
 	Quota:           1000,

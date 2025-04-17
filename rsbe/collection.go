@@ -6,31 +6,33 @@ import (
 )
 
 type CollectionListEntry struct {
-	ID          string `json:"id"`
-	PartnerID   string `json:"partner_id"`
-	OwnerID     string `json:"owner_id"`
-	Code        string `json:"code"`
-	DisplayCode string `json:"display_code"`
-	Name        string `json:"name"`
-	Type        string `json:"coll_type"`
-	CreatedAt   string `json:"created_at"`
-	UpdatedAt   string `json:"updated_at"`
-	URL         string `json:"url"`
-	PartnerURL  string `json:"partner_url"`
-	OwnerURL    string `json:"owner_url"`
+	ID             string `json:"id"`
+	PartnerID      string `json:"partner_id"`
+	OwnerID        string `json:"owner_id"`
+	Code           string `json:"code"`
+	DisplayCode    string `json:"display_code"`
+	Name           string `json:"name"`
+	Type           string `json:"coll_type"`
+	Classification string `json:"classification"`
+	CreatedAt      string `json:"created_at"`
+	UpdatedAt      string `json:"updated_at"`
+	URL            string `json:"url"`
+	PartnerURL     string `json:"partner_url"`
+	OwnerURL       string `json:"owner_url"`
 }
 
 type CollectionEntry struct {
 	ID              string `json:"id,omitempty"`
-	PartnerID       string `json:"partner_id,omitempty"`   // REQUIRED for CREATE
-	OwnerID         string `json:"owner_id,omitempty"`     // REQUIRED    ""
-	Code            string `json:"code,omitempty"`         // REQUIRED    ""
-	DisplayCode     string `json:"display_code,omitempty"` // REQUIRED    ""
-	Name            string `json:"name,omitempty"`         // optional    ""
-	Type            string `json:"coll_type,omitempty"`    // REQUIRED (origin, virtual)
-	Quota           int    `json:"quota"`                  // REQUIRED    ""
-	RelPath         string `json:"rel_path,omitempty"`     // REQUIRED    ""
-	ReadyForContent bool   `json:"ready_for_content"`      // REQUIRED    ""
+	PartnerID       string `json:"partner_id"`         // REQUIRED for CREATE
+	OwnerID         string `json:"owner_id"`           // REQUIRED    ""
+	Code            string `json:"code"`               // REQUIRED    ""
+	DisplayCode     string `json:"display_code"`       // REQUIRED    ""
+	Name            string `json:"name,omitempty"`     // optional    ""
+	Type            string `json:"coll_type"`          // REQUIRED    ""  (origin, virtual)
+	Classification  string `json:"classification"`     // REQUIRED    ""
+	Quota           int    `json:"quota"`              // REQUIRED    ""
+	RelPath         string `json:"rel_path,omitempty"` // REQUIRED    ""
+	ReadyForContent bool   `json:"ready_for_content"`  // REQUIRED    ""
 	PartnerURL      string `json:"partner_url,omitempty"`
 	OwnerURL        string `json:"owner_url,omitempty"`
 	SEsURL          string `json:"ses_url,omitempty"`
