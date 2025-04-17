@@ -158,14 +158,24 @@ func (c *CollectionEntry) Delete() (err error) {
 }
 
 func (e CollectionListEntry) ToString() string {
-	s := fmt.Sprintf("ID: %s, PartnerID: %s, OwnerID: %s, Code: %s, DisplayCode: %s, Name: %s, Type: %s, CreatedAt: %s, UpdatedAt: %s, URL: %s, PartnerURL: %s, OwnerURL: %s",
-		e.ID, e.PartnerID, e.OwnerID, e.Code, e.DisplayCode, e.Name, e.Type, e.CreatedAt, e.UpdatedAt, e.URL, e.PartnerURL, e.OwnerURL)
+	s := fmt.Sprintf("ID: %s, PartnerID: %s, OwnerID: %s, "+
+		"Code: %s, DisplayCode: %s, Name: %s, Type: %s, Classification: %s, "+
+		"CreatedAt: %s, UpdatedAt: %s, URL: %s, PartnerURL: %s, OwnerURL: %s",
+		e.ID, e.PartnerID, e.OwnerID,
+		e.Code, e.DisplayCode, e.Name, e.Type, e.Classification,
+		e.CreatedAt, e.UpdatedAt, e.URL, e.PartnerURL, e.OwnerURL)
 
 	return s
 }
 
 func (e CollectionEntry) ToString() string {
-	s := fmt.Sprintf("ID: %s, PartnerID: %s, OwnerID: %s, Code: %s, DisplayCode: %s, Name: %s, Type: %s, CreatedAt: %s, UpdatedAt: %s, Quota: %d, ReadyForContent: %v, PartnerURL: %s, OwnerURL: %s, SEsURL: %s, IEsURL: %s, LockVersion: %d, RelPath: %s", e.ID, e.PartnerID, e.OwnerID, e.Code, e.DisplayCode, e.Name, e.Type, e.CreatedAt, e.UpdatedAt, e.Quota, e.ReadyForContent, e.PartnerURL, e.OwnerURL, e.SEsURL, e.IEsURL, e.LockVersion, e.RelPath)
-
+	s := fmt.Sprintf("ID: %s, PartnerID: %s, OwnerID: %s, Code: %s, "+
+		"DisplayCode: %s, Name: %s, Type: %s, Classification: %s, "+
+		"CreatedAt: %s, UpdatedAt: %s, Quota: %d, ReadyForContent: %v, "+
+		"PartnerURL: %s, OwnerURL: %s, SEsURL: %s, IEsURL: %s, "+
+		"LockVersion: %d, RelPath: %s", e.ID, e.PartnerID, e.OwnerID, e.Code,
+		e.DisplayCode, e.Name, e.Type, e.Classification,
+		e.CreatedAt, e.UpdatedAt, e.Quota, e.ReadyForContent,
+		e.PartnerURL, e.OwnerURL, e.SEsURL, e.IEsURL, e.LockVersion, e.RelPath)
 	return s
 }
