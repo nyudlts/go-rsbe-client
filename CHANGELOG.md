@@ -8,6 +8,7 @@
     * `Code`
     * `DisplayCode`
     * `Type`
+  * add `RSBE API v0.8.0` development database dump needed for testing
 
 ### v0.5.3
   * remove `omitempty` from the following:
