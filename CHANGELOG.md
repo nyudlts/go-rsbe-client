@@ -1,5 +1,14 @@
 # Changelog
 
+### v0.6.0
+  * add `Collection.Classification`
+  * remove `omitempty` from the following `Collection` fields:
+    * `PartnerID`
+    * `OwnerID`
+    * `Code`
+    * `DisplayCode`
+    * `Type`
+
 ### v0.5.3
   * remove `omitempty` from the following:
     * `Collection.Quota` 
