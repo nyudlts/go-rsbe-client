@@ -234,8 +234,11 @@ func TestCookieAuth(t *testing.T) {
 		c.LoginPath = "/api/v0/login"
 
 		// This will attempt to login but will fail since no server is running
-		// We're just testing that the configuration is accepted
-		ConfigureClient(c)
+		// We expect an error since no server is available
+		err := ConfigureClient(c)
+		if err == nil {
+			t.Errorf("Expected error when configuring cookie auth without server, got nil")
+		}
 
 		if conf.AuthType != AuthTypeCookie {
 			t.Errorf("Expected AuthType to be cookie, got %v", conf.AuthType)
@@ -253,10 +256,27 @@ func TestCookieAuth(t *testing.T) {
 		c.Password = "bar"
 		c.AuthType = AuthTypeBasic
 
-		ConfigureClient(c)
+		err := ConfigureClient(c)
+		if err != nil {
+			t.Errorf("Unexpected error: %v", err)
+		}
 
 		if conf.AuthType != AuthTypeBasic {
 			t.Errorf("Expected AuthType to be basic, got %v", conf.AuthType)
+		}
+	})
+
+	t.Run("test cookie auth without LoginPath returns error", func(t *testing.T) {
+		c := new(Config)
+		c.BaseURL = "http://localhost:3000"
+		c.User = "test@example.com"
+		c.Password = "testpass"
+		c.AuthType = AuthTypeCookie
+		// LoginPath is not set
+
+		err := ConfigureClient(c)
+		if err == nil {
+			t.Errorf("Expected error when LoginPath is not set for cookie auth, got nil")
 		}
 	})
 }
@@ -282,7 +302,10 @@ func TestBackwardCompatibility(t *testing.T) {
 		c.Password = "bar"
 		// AuthType is not set
 
-		ConfigureClient(c)
+		err := ConfigureClient(c)
+		if err != nil {
+			t.Fatalf("Unexpected error: %v", err)
+		}
 
 		// Test that basic auth is used
 		resp, err := Get("/api/v0/test")
@@ -366,7 +389,10 @@ func TestCookieAuthWithMockServer(t *testing.T) {
 		c.AuthType = AuthTypeCookie
 		c.LoginPath = "/api/v0/login"
 
-		ConfigureClient(c)
+		err := ConfigureClient(c)
+		if err != nil {
+			t.Fatalf("Unexpected error during ConfigureClient: %v", err)
+		}
 
 		if !loginCalled {
 			t.Errorf("Login endpoint was not called during ConfigureClient")

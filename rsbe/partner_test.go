@@ -24,7 +24,7 @@ func setupTestServerClient(ts *httptest.Server) {
 	c.Password = "bar"
 	c.AuthType = AuthTypeBasic
 
-	ConfigureClient(c)
+	_ = ConfigureClient(c)
 }
 
 func setupLocalhostClient() {
@@ -34,7 +34,7 @@ func setupLocalhostClient() {
 	c.Password = "bar"
 	c.AuthType = AuthTypeBasic
 
-	ConfigureClient(c)
+	_ = ConfigureClient(c)
 }
 
 var partnerListEntry = PartnerListEntry{

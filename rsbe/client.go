@@ -31,20 +31,21 @@ type Config struct {
 var conf *Config
 var client *http.Client
 
-func ConfigureClient(c *Config) {
+func ConfigureClient(c *Config) error {
 	conf = c
 	
 	// If cookie auth, perform login to get session cookie
 	if conf.AuthType == AuthTypeCookie {
 		if err := login(); err != nil {
-			// Note: We don't panic here, just log the error
-			// The error will surface on first API call
-			fmt.Printf("Warning: cookie authentication login failed: %v\n", err)
+			return fmt.Errorf("cookie authentication failed: %w", err)
 		}
 	}
+	
+	return nil
 }
 
 func init() {
+	// cookiejar.New with nil options never returns an error
 	jar, _ := cookiejar.New(nil)
 	client = &http.Client{
 		Jar: jar,
@@ -85,9 +86,14 @@ func login() error {
 	defer resp.Body.Close()
 	
 	if resp.StatusCode != 200 && resp.StatusCode != 201 {
-		respBody, _ := io.ReadAll(resp.Body)
+		respBody, err := io.ReadAll(resp.Body)
+		if err != nil {
+			return fmt.Errorf("login failed: %d (unable to read response body: %v)", resp.StatusCode, err)
+		}
 		var eMsg ErrMsg
-		_ = json.Unmarshal(respBody, &eMsg)
+		if err := json.Unmarshal(respBody, &eMsg); err != nil {
+			return fmt.Errorf("login failed: %d (response: %s)", resp.StatusCode, string(respBody))
+		}
 		return fmt.Errorf("login failed: %d ; %v", resp.StatusCode, eMsg.Error)
 	}
 	
