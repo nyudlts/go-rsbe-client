@@ -2,6 +2,8 @@ package rsbe
 
 import (
 	"encoding/json"
+	"net/http"
+	"net/http/httptest"
 	"path"
 	"testing"
 )
@@ -220,4 +222,168 @@ func TestClientDelete(t *testing.T) {
 		}
 	})
 
+}
+
+func TestCookieAuth(t *testing.T) {
+	t.Run("test cookie auth config", func(t *testing.T) {
+		c := new(Config)
+		c.BaseURL = "http://localhost:3000"
+		c.User = "test@example.com"
+		c.Password = "testpass"
+		c.AuthType = AuthTypeCookie
+		c.LoginPath = "/api/v0/login"
+
+		// This will attempt to login but will fail since no server is running
+		// We're just testing that the configuration is accepted
+		ConfigureClient(c)
+
+		if conf.AuthType != AuthTypeCookie {
+			t.Errorf("Expected AuthType to be cookie, got %v", conf.AuthType)
+		}
+
+		if conf.LoginPath != "/api/v0/login" {
+			t.Errorf("Expected LoginPath to be /api/v0/login, got %v", conf.LoginPath)
+		}
+	})
+
+	t.Run("test basic auth config", func(t *testing.T) {
+		c := new(Config)
+		c.BaseURL = "http://localhost:3000"
+		c.User = "foo"
+		c.Password = "bar"
+		c.AuthType = AuthTypeBasic
+
+		ConfigureClient(c)
+
+		if conf.AuthType != AuthTypeBasic {
+			t.Errorf("Expected AuthType to be basic, got %v", conf.AuthType)
+		}
+	})
+}
+
+func TestBackwardCompatibility(t *testing.T) {
+	t.Run("test config without AuthType defaults to basic auth", func(t *testing.T) {
+		// Create a simple test server that checks for basic auth
+		ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			user, pass, ok := r.BasicAuth()
+			if !ok || user != "foo" || pass != "bar" {
+				http.Error(w, "Unauthorized", http.StatusUnauthorized)
+				return
+			}
+			w.WriteHeader(http.StatusOK)
+			w.Write([]byte(`{"status":"ok"}`))
+		}))
+		defer ts.Close()
+
+		// Configure client without setting AuthType (should default to basic)
+		c := new(Config)
+		c.BaseURL = ts.URL
+		c.User = "foo"
+		c.Password = "bar"
+		// AuthType is not set
+
+		ConfigureClient(c)
+
+		// Test that basic auth is used
+		resp, err := Get("/api/v0/test")
+		if err != nil {
+			t.Errorf("Unexpected error: %s", err)
+		}
+
+		if resp.StatusCode != 200 {
+			t.Errorf("Expected status 200, got %d", resp.StatusCode)
+		}
+	})
+}
+
+func TestCookieAuthWithMockServer(t *testing.T) {
+	// Create a mock server
+	loginCalled := false
+	apiCalled := false
+	sessionCookie := "test-session-cookie"
+
+	mux := http.NewServeMux()
+	
+	// Mock login endpoint
+	mux.HandleFunc("/api/v0/login", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "POST" {
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+			return
+		}
+
+		loginCalled = true
+
+		// Verify the request body contains email and password
+		var loginReq struct {
+			Email    string `json:"email"`
+			Password string `json:"password"`
+		}
+		if err := json.NewDecoder(r.Body).Decode(&loginReq); err != nil {
+			http.Error(w, "Bad request", http.StatusBadRequest)
+			return
+		}
+
+		if loginReq.Email != "test@example.com" || loginReq.Password != "testpass" {
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
+
+		// Set a session cookie
+		http.SetCookie(w, &http.Cookie{
+			Name:  "session",
+			Value: sessionCookie,
+			Path:  "/",
+		})
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"status":"ok"}`))
+	})
+
+	// Mock API endpoint that requires authentication
+	mux.HandleFunc("/api/v0/test", func(w http.ResponseWriter, r *http.Request) {
+		apiCalled = true
+
+		// Check for session cookie
+		cookie, err := r.Cookie("session")
+		if err != nil || cookie.Value != sessionCookie {
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"data":"test"}`))
+	})
+
+	ts := httptest.NewServer(mux)
+	defer ts.Close()
+
+	t.Run("test successful cookie auth flow", func(t *testing.T) {
+		// Configure client with cookie auth
+		c := new(Config)
+		c.BaseURL = ts.URL
+		c.User = "test@example.com"
+		c.Password = "testpass"
+		c.AuthType = AuthTypeCookie
+		c.LoginPath = "/api/v0/login"
+
+		ConfigureClient(c)
+
+		if !loginCalled {
+			t.Errorf("Login endpoint was not called during ConfigureClient")
+		}
+
+		// Test that subsequent API calls use the cookie
+		resp, err := Get("/api/v0/test")
+		if err != nil {
+			t.Errorf("Unexpected error: %s", err)
+		}
+
+		if resp.StatusCode != 200 {
+			t.Errorf("Expected status 200, got %d", resp.StatusCode)
+		}
+
+		if !apiCalled {
+			t.Errorf("API endpoint was not called")
+		}
+	})
 }

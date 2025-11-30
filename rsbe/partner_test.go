@@ -22,6 +22,7 @@ func setupTestServerClient(ts *httptest.Server) {
 	c.BaseURL = ts.URL
 	c.User = "foo"
 	c.Password = "bar"
+	c.AuthType = AuthTypeBasic
 
 	ConfigureClient(c)
 }
@@ -31,6 +32,7 @@ func setupLocalhostClient() {
 	c.BaseURL = "http://localhost:3000"
 	c.User = "foo"
 	c.Password = "bar"
+	c.AuthType = AuthTypeBasic
 
 	ConfigureClient(c)
 }
