@@ -45,11 +45,26 @@ func ConfigureClient(c *Config) error {
 }
 
 func init() {
-	// cookiejar.New with nil options never returns an error
-	jar, _ := cookiejar.New(nil)
+	// cookiejar.New with nil options never returns an error according to the API docs
+	jar, err := cookiejar.New(nil)
+	if err != nil {
+		// This should never happen with nil options, but handle defensively
+		panic(fmt.Sprintf("failed to create cookie jar: %v", err))
+	}
 	client = &http.Client{
 		Jar: jar,
 	}
+}
+
+// setAuth applies the appropriate authentication method to the HTTP request
+// based on the configured AuthType. For basic auth, sets HTTP Basic Auth headers.
+// For cookie auth, cookies are automatically handled by the HTTP client's cookie jar.
+func setAuth(req *http.Request) {
+	// Default to basic auth if AuthType is not set or is explicitly basic
+	if conf.AuthType == AuthTypeBasic || conf.AuthType == "" {
+		req.SetBasicAuth(conf.User, conf.Password)
+	}
+	// Cookie auth: cookies are automatically handled by client.Jar
 }
 
 func login() error {
@@ -85,7 +100,7 @@ func login() error {
 	}
 	defer resp.Body.Close()
 	
-	if resp.StatusCode != 200 && resp.StatusCode != 201 {
+	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
 		respBody, err := io.ReadAll(resp.Body)
 		if err != nil {
 			return fmt.Errorf("login failed: %d (unable to read response body: %v)", resp.StatusCode, err)
@@ -107,11 +122,7 @@ func Get(path string) (resp *http.Response, err error) {
 		return nil, err
 	}
 	
-	// Default to basic auth if AuthType is not set or is explicitly basic
-	if conf.AuthType == AuthTypeBasic || conf.AuthType == "" {
-		req.SetBasicAuth(conf.User, conf.Password)
-	}
-	// Cookie auth: cookies are automatically handled by client.Jar
+	setAuth(req)
 
 	resp, err = client.Do(req)
 
@@ -154,12 +165,7 @@ func Post(path string, data []byte) (resp *http.Response, err error) {
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	
-	// Default to basic auth if AuthType is not set or is explicitly basic
-	if conf.AuthType == AuthTypeBasic || conf.AuthType == "" {
-		req.SetBasicAuth(conf.User, conf.Password)
-	}
-	// Cookie auth: cookies are automatically handled by client.Jar
+	setAuth(req)
 
 	resp, err = client.Do(req)
 	if err != nil {
@@ -201,12 +207,7 @@ func Put(path string, data []byte) (err error) {
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	
-	// Default to basic auth if AuthType is not set or is explicitly basic
-	if conf.AuthType == AuthTypeBasic || conf.AuthType == "" {
-		req.SetBasicAuth(conf.User, conf.Password)
-	}
-	// Cookie auth: cookies are automatically handled by client.Jar
+	setAuth(req)
 
 	resp, err := client.Do(req)
 	if err != nil {
@@ -229,11 +230,7 @@ func Delete(path string) (err error) {
 		return err
 	}
 	
-	// Default to basic auth if AuthType is not set or is explicitly basic
-	if conf.AuthType == AuthTypeBasic || conf.AuthType == "" {
-		req.SetBasicAuth(conf.User, conf.Password)
-	}
-	// Cookie auth: cookies are automatically handled by client.Jar
+	setAuth(req)
 
 	resp, err := client.Do(req)
 	if err != nil {
