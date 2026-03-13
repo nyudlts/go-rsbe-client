@@ -226,16 +226,14 @@ func TestClientDelete(t *testing.T) {
 
 func TestCookieAuth(t *testing.T) {
 	t.Run("test cookie auth config", func(t *testing.T) {
-		c := new(Config)
-		c.BaseURL = "http://localhost:3000"
-		c.User = "test@example.com"
-		c.Password = "testpass"
-		c.AuthType = AuthTypeCookie
-		c.LoginPath = "/api/v0/login"
+		c, err := GetConfig("cookie")
+		if err != nil {
+			t.Fatalf("Failed to get cookie config: %v", err)
+		}
 
 		// This will attempt to login but will fail since no server is running
 		// We expect an error since no server is available
-		err := ConfigureClient(c)
+		err = ConfigureClient(c)
 		if err == nil {
 			t.Errorf("Expected error when configuring cookie auth without server, got nil")
 		}
@@ -244,19 +242,18 @@ func TestCookieAuth(t *testing.T) {
 			t.Errorf("Expected AuthType to be cookie, got %v", conf.AuthType)
 		}
 
-		if conf.LoginPath != "/api/v0/login" {
-			t.Errorf("Expected LoginPath to be /api/v0/login, got %v", conf.LoginPath)
+		if conf.LoginPath == "" {
+			t.Errorf("Expected LoginPath to be set, got empty string")
 		}
 	})
 
 	t.Run("test basic auth config", func(t *testing.T) {
-		c := new(Config)
-		c.BaseURL = "http://localhost:3000"
-		c.User = "foo"
-		c.Password = "bar"
-		c.AuthType = AuthTypeBasic
+		c, err := GetConfig("basic")
+		if err != nil {
+			t.Fatalf("Failed to get basic config: %v", err)
+		}
 
-		err := ConfigureClient(c)
+		err = ConfigureClient(c)
 		if err != nil {
 			t.Errorf("Unexpected error: %v", err)
 		}
@@ -267,14 +264,14 @@ func TestCookieAuth(t *testing.T) {
 	})
 
 	t.Run("test cookie auth without LoginPath returns error", func(t *testing.T) {
-		c := new(Config)
-		c.BaseURL = "http://localhost:3000"
-		c.User = "test@example.com"
-		c.Password = "testpass"
-		c.AuthType = AuthTypeCookie
-		// LoginPath is not set
+		c, err := GetConfig("cookie")
+		if err != nil {
+			t.Fatalf("Failed to get cookie config: %v", err)
+		}
+		// Clear LoginPath to test error handling
+		c.LoginPath = ""
 
-		err := ConfigureClient(c)
+		err = ConfigureClient(c)
 		if err == nil {
 			t.Errorf("Expected error when LoginPath is not set for cookie auth, got nil")
 		}
@@ -295,14 +292,16 @@ func TestBackwardCompatibility(t *testing.T) {
 		}))
 		defer ts.Close()
 
-		// Configure client without setting AuthType (should default to basic)
-		c := new(Config)
+		// Get basic config and clear AuthType to test default behavior
+		c, err := GetConfig("basic")
+		if err != nil {
+			t.Fatalf("Failed to get basic config: %v", err)
+		}
 		c.BaseURL = ts.URL
-		c.User = "foo"
-		c.Password = "bar"
-		// AuthType is not set
+		// Clear AuthType to test default behavior
+		c.AuthType = ""
 
-		err := ConfigureClient(c)
+		err = ConfigureClient(c)
 		if err != nil {
 			t.Fatalf("Unexpected error: %v", err)
 		}
@@ -320,6 +319,12 @@ func TestBackwardCompatibility(t *testing.T) {
 }
 
 func TestCookieAuthWithMockServer(t *testing.T) {
+	// Get expected credentials from config
+	cookieConfig, err := GetConfig("cookie")
+	if err != nil {
+		t.Fatalf("Failed to get cookie config: %v", err)
+	}
+	
 	// Create a mock server
 	loginCalled := false
 	apiCalled := false
@@ -346,7 +351,7 @@ func TestCookieAuthWithMockServer(t *testing.T) {
 			return
 		}
 
-		if loginReq.Email != "test@example.com" || loginReq.Password != "testpass" {
+		if loginReq.Email != cookieConfig.User || loginReq.Password != cookieConfig.Password {
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
 		}
@@ -381,15 +386,18 @@ func TestCookieAuthWithMockServer(t *testing.T) {
 	defer ts.Close()
 
 	t.Run("test successful cookie auth flow", func(t *testing.T) {
-		// Configure client with cookie auth
-		c := new(Config)
+		// Get cookie config from configuration file
+		c, err := GetConfig("cookie")
+		if err != nil {
+			t.Fatalf("Failed to get cookie config: %v", err)
+		}
+		
+		// Override BaseURL to use the test server
 		c.BaseURL = ts.URL
-		c.User = "test@example.com"
-		c.Password = "testpass"
-		c.AuthType = AuthTypeCookie
+		// Set LoginPath for this specific test
 		c.LoginPath = "/api/v0/login"
 
-		err := ConfigureClient(c)
+		err = ConfigureClient(c)
 		if err != nil {
 			t.Fatalf("Unexpected error during ConfigureClient: %v", err)
 		}
