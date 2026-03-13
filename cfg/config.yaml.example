@@ -1,5 +1,18 @@
 ---
-rsbe:
-  BaseURL:  "http://localhost:3000/"
-  User:     "foo"
-  Password: "bar"
+# Test configuration file for go-rsbe-client
+# Set APP_ENV_FILE_PATH to point to this file when running tests
+environment: test
+
+configs:
+  basic:
+    BaseURL:  "http://localhost:3000/"
+    User:     "foo"
+    Password: "bar"
+  
+  cookie:
+    BaseURL:   "http://localhost:3000/"
+    User:      "foo"
+    Password:  "bar"
+    AuthType:  "cookie"
+    LoginPath: "/api/v0/sessions"
+

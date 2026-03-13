@@ -28,11 +28,15 @@ func setupTestServerClient(ts *httptest.Server) {
 }
 
 func setupLocalhostClient() {
-	c := new(Config)
-	c.BaseURL = "http://localhost:3000"
-	c.User = "foo"
-	c.Password = "bar"
-	c.AuthType = AuthTypeBasic
+	c, err := GetConfig("basic")
+	if err != nil {
+		// Fallback to hardcoded values if config not available
+		c = new(Config)
+		c.BaseURL = "http://localhost:3000"
+		c.User = "foo"
+		c.Password = "bar"
+		c.AuthType = AuthTypeBasic
+	}
 
 	_ = ConfigureClient(c)
 }
