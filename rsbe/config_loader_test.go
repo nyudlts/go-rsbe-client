@@ -46,8 +46,8 @@ func TestLoadConfig(t *testing.T) {
 			t.Fatalf("Unexpected error: %v", err)
 		}
 
-		if config.BaseURL != "http://localhost:3000/" {
-			t.Errorf("Expected BaseURL to be 'http://localhost:3000/', got '%s'", config.BaseURL)
+		if config.BaseURL != "http://localhost:3001/" {
+			t.Errorf("Expected BaseURL to be 'http://localhost:3001/', got '%s'", config.BaseURL)
 		}
 
 		if config.AuthType != AuthTypeCookie {
