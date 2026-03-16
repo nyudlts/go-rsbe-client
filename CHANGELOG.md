@@ -1,5 +1,9 @@
 # Changelog
 
+### v0.6.1
+  * add `Classification` to `Collection` `ToString()` methods
+  * add `RSBE API v0.8.0` development database dump needed for testing
+
 ### v0.6.0
   * add `Collection.Classification`
   * remove `omitempty` from the following `Collection` fields:
@@ -8,7 +12,6 @@
     * `Code`
     * `DisplayCode`
     * `Type`
-  * add `RSBE API v0.8.0` development database dump needed for testing
 
 ### v0.5.3
   * remove `omitempty` from the following:
