@@ -6,6 +6,8 @@ import (
 	"net/http/httptest"
 	"path"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestClientGet(t *testing.T) {
@@ -227,54 +229,34 @@ func TestClientDelete(t *testing.T) {
 func TestCookieAuth(t *testing.T) {
 	t.Run("test cookie auth config", func(t *testing.T) {
 		c, err := GetConfig("cookie")
-		if err != nil {
-			t.Fatalf("Failed to get cookie config: %v", err)
-		}
+		assert.NoError(t, err, "Failed to get cookie config")
 
-		// This will attempt to login but will fail since no server is running
-		// We expect an error since no server is available
-		err = ConfigureClient(c)
-		if err == nil {
-			t.Errorf("Expected error when configuring cookie auth without server, got nil")
-		}
-
-		if conf.AuthType != AuthTypeCookie {
-			t.Errorf("Expected AuthType to be cookie, got %v", conf.AuthType)
-		}
-
-		if conf.LoginPath == "" {
-			t.Errorf("Expected LoginPath to be set, got empty string")
-		}
+		assert.NoError(t, ConfigureClient(c), "ConfigureClient should only return an error if the server is down")
+		assert.Equal(t, conf.AuthType, AuthTypeCookie, "AuthType should be set to cookie after ConfigureClient")
+		assert.Equal(t, conf.User, c.User, "Configured User should match config User")
+		assert.Equal(t, conf.Password, c.Password, "Configured Password should match config Password")
+		assert.NotEmpty(t, conf.LoginPath, "Expected LoginPath to be set")
 	})
 
 	t.Run("test basic auth config", func(t *testing.T) {
 		c, err := GetConfig("basic")
-		if err != nil {
-			t.Fatalf("Failed to get basic config: %v", err)
-		}
+		assert.NoError(t, err, "Failed to get basic config")
 
-		err = ConfigureClient(c)
-		if err != nil {
-			t.Errorf("Unexpected error: %v", err)
-		}
-
-		if conf.AuthType != AuthTypeBasic {
-			t.Errorf("Expected AuthType to be basic, got %v", conf.AuthType)
-		}
+		assert.NoError(t, ConfigureClient(c), "ConfigureClient should only return an error if the server is down")
+		assert.Equal(t, conf.AuthType, AuthTypeBasic, "Expected AuthType to be basic after ConfigureClient")
+		assert.Equal(t, conf.User, c.User, "Configured User should match config User")
+		assert.Equal(t, conf.Password, c.Password, "Configured Password should match config Password")
+		assert.Empty(t, conf.LoginPath, "Expected LoginPath to be empty for basic auth")
 	})
 
 	t.Run("test cookie auth without LoginPath returns error", func(t *testing.T) {
 		c, err := GetConfig("cookie")
-		if err != nil {
-			t.Fatalf("Failed to get cookie config: %v", err)
-		}
+		assert.NoError(t, err, "Failed to get cookie config")
+
 		// Clear LoginPath to test error handling
 		c.LoginPath = ""
 
-		err = ConfigureClient(c)
-		if err == nil {
-			t.Errorf("Expected error when LoginPath is not set for cookie auth, got nil")
-		}
+		assert.Error(t, ConfigureClient(c), "Expected ConfigureClient to return error when LoginPath is not set for cookie auth")
 	})
 }
 
@@ -324,14 +306,14 @@ func TestCookieAuthWithMockServer(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to get cookie config: %v", err)
 	}
-	
+
 	// Create a mock server
 	loginCalled := false
 	apiCalled := false
 	sessionCookie := "test-session-cookie"
 
 	mux := http.NewServeMux()
-	
+
 	// Mock login endpoint
 	mux.HandleFunc("/api/v0/login", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "POST" {
@@ -391,7 +373,7 @@ func TestCookieAuthWithMockServer(t *testing.T) {
 		if err != nil {
 			t.Fatalf("Failed to get cookie config: %v", err)
 		}
-		
+
 		// Override BaseURL to use the test server
 		c.BaseURL = ts.URL
 		// Set LoginPath for this specific test
