@@ -33,8 +33,8 @@ func setupTestServerClient(ts *httptest.Server) {
 }
 
 func setupLocalhostClient() {
-	c, err := GetConfig("basic")
-	//c, err := GetConfig("cookie")
+	//c, err := GetConfig("basic")
+	c, err := GetConfig("cookie")
 	if err != nil {
 		panic(err)
 	}
@@ -144,6 +144,8 @@ func TestPartnerCreateFunc(t *testing.T) {
 
 	err := partnerToCreate.Create()
 	require.NoError(t, err, "Partner Create failed")
+	defer partnerToCreate.Purge()
+
 	require.NoError(t, partnerToCreate.Get(), "Partner Get failed")
 
 	t.Run("confirm that attributes updated", func(t *testing.T) {
@@ -164,7 +166,12 @@ func TestPartnerCreateFunc(t *testing.T) {
 func TestPartnerUpdateFunc(t *testing.T) {
 	setupLocalhostClient()
 
-	_ = partnerToCreate.Get()
+	err := partnerToCreate.Create()
+	require.NoError(t, err, "Partner Create failed")
+	defer partnerToCreate.Purge()
+
+	err = partnerToCreate.Get()
+	require.NoError(t, err, "Partner Get failed")
 
 	if partnerToCreate.Name != "Waffles and Syrup" {
 		t.Errorf("variable already updated: %s", partnerToCreate.ToString())
@@ -172,7 +179,7 @@ func TestPartnerUpdateFunc(t *testing.T) {
 
 	partnerToCreate.Name = "WAFFLES WAFFLES WAFFLES"
 
-	err := partnerToCreate.Update()
+	err = partnerToCreate.Update()
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}
@@ -185,7 +192,7 @@ func TestPartnerUpdateFunc(t *testing.T) {
 		}
 
 		if partnerToCreate.CreatedAt == partnerToCreate.UpdatedAt {
-			t.Errorf("UpeatedAt not updated")
+			t.Errorf("UpdatedAt not updated")
 		}
 	})
 }
@@ -193,11 +200,18 @@ func TestPartnerUpdateFunc(t *testing.T) {
 func TestPartnerDeleteFunc(t *testing.T) {
 	setupLocalhostClient()
 
-	_ = partnerToCreate.Get()
+	err := partnerToCreate.Create()
+	require.NoError(t, err, "Partner Create failed")
+	// the Purge() call is needed because Delete() is a soft delete,
+	// the record will still exist and needs to be purged
+	defer partnerToCreate.Purge()
+
+	err = partnerToCreate.Get()
+	require.NoError(t, err, "Partner Get failed")
 
 	id := partnerToCreate.ID
 
-	err := partnerToCreate.Delete()
+	err = partnerToCreate.Delete()
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}
