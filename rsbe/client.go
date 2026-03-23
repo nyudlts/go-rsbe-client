@@ -33,14 +33,14 @@ var client *http.Client
 
 func ConfigureClient(c *Config) error {
 	conf = c
-	
+
 	// If cookie auth, perform login to get session cookie
 	if conf.AuthType == AuthTypeCookie {
 		if err := login(); err != nil {
 			return fmt.Errorf("cookie authentication failed: %w", err)
 		}
 	}
-	
+
 	return nil
 }
 
@@ -71,9 +71,9 @@ func login() error {
 	if conf.LoginPath == "" {
 		return fmt.Errorf("LoginPath is required for cookie authentication")
 	}
-	
+
 	url := fmt.Sprintf("%s%s", conf.BaseURL, conf.LoginPath)
-	
+
 	body := struct {
 		Email    string `json:"email"`
 		Password string `json:"password"`
@@ -81,25 +81,25 @@ func login() error {
 		Email:    conf.User,
 		Password: conf.Password,
 	}
-	
+
 	data, err := json.Marshal(body)
 	if err != nil {
 		return err
 	}
-	
+
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(data))
 	if err != nil {
 		return err
 	}
-	
+
 	req.Header.Set("Content-Type", "application/json")
-	
+
 	resp, err := client.Do(req)
 	if err != nil {
 		return err
 	}
 	defer resp.Body.Close()
-	
+
 	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
 		respBody, err := io.ReadAll(resp.Body)
 		if err != nil {
@@ -111,7 +111,7 @@ func login() error {
 		}
 		return fmt.Errorf("login failed: %d ; %v", resp.StatusCode, eMsg.Error)
 	}
-	
+
 	return nil
 }
 
@@ -121,7 +121,7 @@ func Get(path string) (resp *http.Response, err error) {
 	if err != nil {
 		return nil, err
 	}
-	
+
 	setAuth(req)
 
 	resp, err = client.Do(req)
@@ -229,7 +229,33 @@ func Delete(path string) (err error) {
 	if err != nil {
 		return err
 	}
-	
+
+	setAuth(req)
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+
+	if resp.StatusCode != 204 {
+		body, _ := io.ReadAll(resp.Body)
+
+		var eMsg ErrMsg
+		_ = json.Unmarshal(body, &eMsg)
+		return fmt.Errorf("bad response: %d ; %v", resp.StatusCode, eMsg.Error)
+	}
+
+	return nil
+}
+
+func Purge(path string) (err error) {
+	url := fmt.Sprintf("%s%s?purge=true", conf.BaseURL, path)
+
+	req, err := http.NewRequest("DELETE", url, nil)
+	if err != nil {
+		return err
+	}
+
 	setAuth(req)
 
 	resp, err := client.Do(req)
