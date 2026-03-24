@@ -102,6 +102,7 @@ func TestEToFIDCreateFunc(t *testing.T) {
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}
+	defer etofidToCreate.Purge()
 
 	t.Run("confirm that attributes updated", func(t *testing.T) {
 		if etofidToCreate.ID == "" {
@@ -121,6 +122,12 @@ func TestEToFIDCreateFunc(t *testing.T) {
 func TestEToFIDUpdateFunc(t *testing.T) {
 	setupLocalhostClient()
 
+	err := etofidToCreate.Create()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
+	defer etofidToCreate.Purge()
+
 	_ = etofidToCreate.Get()
 
 	if etofidToCreate.FIDValue != "7284f" {
@@ -129,7 +136,7 @@ func TestEToFIDUpdateFunc(t *testing.T) {
 
 	etofidToCreate.FIDValue = "waffles"
 
-	err := etofidToCreate.Update()
+	err = etofidToCreate.Update()
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}
@@ -150,11 +157,19 @@ func TestEToFIDUpdateFunc(t *testing.T) {
 func TestEToFIDDeleteFunc(t *testing.T) {
 	setupLocalhostClient()
 
+	err := etofidToCreate.Create()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
+	// the Purge() call is needed because Delete() is a soft delete,
+	// the record will still exist and needs to be purged
+	defer etofidToCreate.Purge()
+
 	_ = etofidToCreate.Get()
 
 	id := etofidToCreate.ID
 
-	err := etofidToCreate.Delete()
+	err = etofidToCreate.Delete()
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}

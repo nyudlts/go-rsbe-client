@@ -3,6 +3,8 @@ package rsbe
 import (
 	"net/http/httptest"
 	"testing"
+
+	"github.com/nyudlts/go-rsbe-client/rsbe/internal/testutils"
 )
 
 var fmdListEntry = FMDListEntry{
@@ -186,13 +188,8 @@ func TestFMDGetFunc(t *testing.T) {
 			t.Errorf("MTime mismatch: want: \"%v\", got: \"%v\"", want.MTime, got.MTime)
 		}
 
-		if want.CreatedAt != got.CreatedAt {
-			t.Errorf("CreatedAt mismatch: want: \"%v\", got: \"%v\"", want.CreatedAt, got.CreatedAt)
-		}
-
-		if want.UpdatedAt != got.UpdatedAt {
-			t.Errorf("UpdatedAt mismatch: want: \"%v\", got: \"%v\"", want.UpdatedAt, got.UpdatedAt)
-		}
+		testutils.AssertEquivalentTimestamps(t, want.CreatedAt, got.CreatedAt)
+		testutils.AssertEquivalentTimestamps(t, want.UpdatedAt, got.UpdatedAt)
 
 		if want.Formats.PRONOMID != got.Formats.PRONOMID {
 			t.Errorf("Formats.PRONOMID Mismatch: want: \"%v\", got: \"%v\"", want.Formats.PRONOMID, got.Formats.PRONOMID)
@@ -253,7 +250,7 @@ func TestFMDCreateFunc(t *testing.T) {
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}
-	defer fmdToCreate.Delete()
+	defer fmdToCreate.Purge()
 
 	t.Run("confirm that attributes updated", func(t *testing.T) {
 		if fmdToCreate.ID == "" {
@@ -295,7 +292,7 @@ func TestFMDUpdateFunc(t *testing.T) {
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}
-	defer fmdToCreate.Delete()
+	defer fmdToCreate.Purge()
 
 	err = fmdToCreate.Get()
 	if err != nil {
@@ -348,6 +345,9 @@ func TestFMDDeleteFunc(t *testing.T) {
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}
+	// the Purge() call is needed because Delete() is a soft delete,
+	// the record will still exist and needs to be purged
+	defer fmdToCreate.Purge()
 
 	err = fmdToCreate.Get()
 	if err != nil {
@@ -456,9 +456,7 @@ func compareFMDValues(t *testing.T, got, want FMDEntry, updated bool) {
 		t.Errorf("Formats.PRONOMID Mismatch: want: \"%v\", got: \"%v\"", want.Formats.PRONOMID, got.Formats.PRONOMID)
 	}
 
-	if got.CreatedAt != want.CreatedAt {
-		t.Errorf("CreatedAt mismatch: want: \"%v\", got: \"%v\"", want.CreatedAt, got.CreatedAt)
-	}
+	testutils.AssertEquivalentTimestamps(t, want.CreatedAt, got.CreatedAt)
 
 	if updated {
 		if got.UpdatedAt == want.UpdatedAt {

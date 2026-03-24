@@ -21,7 +21,7 @@ func TestIEToSEList(t *testing.T) {
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}
-	defer ieToSEToCreate.Delete()
+	defer ieToSEToCreate.Purge()
 
 	t.Run("result", func(t *testing.T) {
 		want := ieToSEToCreate
@@ -76,14 +76,14 @@ func TestIEToSEListWithFilters(t *testing.T) {
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}
-	defer ieToSEToCreate.Delete()
+	defer ieToSEToCreate.Purge()
 
 	ieToCreate.ID = "56c61005-ba14-47dc-a073-a03f66cf84e6"
 	err = ieToCreate.Create()
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}
-	defer ieToCreate.Delete()
+	defer ieToCreate.Purge()
 
 	ieToSEToCreate1 := IEToSEEntry{
 		ID:      "eff4ef7e-961a-4687-8707-990584fa6660",
@@ -97,7 +97,7 @@ func TestIEToSEListWithFilters(t *testing.T) {
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}
-	defer ieToSEToCreate1.Delete()
+	defer ieToSEToCreate1.Purge()
 
 	t.Run("check that proper results are returned", func(t *testing.T) {
 
@@ -167,7 +167,7 @@ func TestIEToSEGetFunc(t *testing.T) {
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}
-	defer ieToSEToCreate.Delete()
+	defer ieToSEToCreate.Purge()
 
 	t.Run("result", func(t *testing.T) {
 		want := ieToSEToCreate
@@ -235,7 +235,7 @@ func TestIEToSEGet(t *testing.T) {
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}
-	defer ieToSEToCreate.Delete()
+	defer ieToSEToCreate.Purge()
 
 	t.Run("confirm that expected resource was retrieved", func(t *testing.T) {
 		want := ieToSEToCreate
@@ -300,6 +300,7 @@ func TestIEToSECreateFunc(t *testing.T) {
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}
+	defer ieToSEToCreate.Purge()
 
 	t.Run("confirm that attributes updated", func(t *testing.T) {
 		if ieToSEToCreate.ID == "" {
@@ -318,6 +319,13 @@ func TestIEToSECreateFunc(t *testing.T) {
 
 func TestIEToSEUpdateFunc(t *testing.T) {
 	setupLocalhostClient()
+
+	err := ieToSEToCreate.Create()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
+	defer ieToSEToCreate.Purge()
+
 	id := ieToSEToCreate.ID
 
 	sut, err := IEToSEGet(id)
@@ -361,11 +369,19 @@ func TestIEToSEUpdateFunc(t *testing.T) {
 func TestIEToSEDeleteFunc(t *testing.T) {
 	setupLocalhostClient()
 
+	err := ieToSEToCreate.Create()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
+	// the Purge() call is needed because Delete() is a soft delete,
+	// the record will still exist and needs to be purged
+	defer ieToSEToCreate.Purge()
+
 	_ = ieToSEToCreate.Get()
 
 	id := ieToSEToCreate.ID
 
-	err := ieToSEToCreate.Delete()
+	err = ieToSEToCreate.Delete()
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}

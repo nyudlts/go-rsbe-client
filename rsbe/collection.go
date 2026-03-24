@@ -3,6 +3,8 @@ package rsbe
 import (
 	"encoding/json"
 	"fmt"
+
+	"github.com/google/uuid"
 )
 
 type CollectionListEntry struct {
@@ -75,6 +77,11 @@ func OwnerCollectionList(ownerID string) (collections []CollectionListEntry, err
 }
 
 func CollectionGet(id string) (collection CollectionEntry, err error) {
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return CollectionEntry{}, fmt.Errorf("id is not a UUID: %s", err.Error())
+	}
+
 	path := fmt.Sprintf("/api/v0/colls/%s", id)
 
 	body, err := GetBody(path)
@@ -91,6 +98,11 @@ func CollectionGet(id string) (collection CollectionEntry, err error) {
 }
 
 func CollectionDelete(id string) (err error) {
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return fmt.Errorf("id is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/colls/" + id
 
 	err = Delete(path)
@@ -100,7 +112,27 @@ func CollectionDelete(id string) (err error) {
 	return nil
 }
 
+func CollectionPurge(id string) (err error) {
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return fmt.Errorf("id is not a UUID: %s", err.Error())
+	}
+
+	path := "/api/v0/colls/" + id
+
+	err = Purge(path)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (c *CollectionEntry) Get() (err error) {
+	_, err = uuid.Parse(c.ID)
+	if err != nil {
+		return fmt.Errorf("ID is not a UUID: %s", err.Error())
+	}
+
 	path := fmt.Sprintf("/api/v0/colls/%s", c.ID)
 
 	body, err := GetBody(path)
@@ -138,6 +170,11 @@ func (c *CollectionEntry) Create() (err error) {
 }
 
 func (c *CollectionEntry) Update() (err error) {
+	_, err = uuid.Parse(c.ID)
+	if err != nil {
+		return fmt.Errorf("ID is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/colls/" + c.ID
 
 	data, err := json.Marshal(c)
@@ -155,6 +192,10 @@ func (c *CollectionEntry) Update() (err error) {
 
 func (c *CollectionEntry) Delete() (err error) {
 	return CollectionDelete(c.ID)
+}
+
+func (c *CollectionEntry) Purge() (err error) {
+	return CollectionPurge(c.ID)
 }
 
 func (e CollectionListEntry) ToString() string {

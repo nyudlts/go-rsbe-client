@@ -3,6 +3,8 @@ package rsbe
 import (
 	"encoding/json"
 	"fmt"
+
+	"github.com/google/uuid"
 )
 
 type FMDListEntry struct {
@@ -86,6 +88,11 @@ func fmdList(path string) (list []FMDListEntry, err error) {
 }
 
 func FMDGet(id string) (item FMDEntry, err error) {
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return FMDEntry{}, fmt.Errorf("id is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/fmds/" + id
 
 	body, err := GetBody(path)
@@ -102,6 +109,11 @@ func FMDGet(id string) (item FMDEntry, err error) {
 }
 
 func (p *FMDEntry) Get() (err error) {
+	_, err = uuid.Parse(p.ID)
+	if err != nil {
+		return fmt.Errorf("ID is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/fmds/" + p.ID
 
 	body, err := GetBody(path)
@@ -139,6 +151,11 @@ func (p *FMDEntry) Create() (err error) {
 }
 
 func (c *FMDEntry) Update() (err error) {
+	_, err = uuid.Parse(c.ID)
+	if err != nil {
+		return fmt.Errorf("ID is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/fmds/" + c.ID
 
 	data, err := json.Marshal(c)
@@ -155,6 +172,11 @@ func (c *FMDEntry) Update() (err error) {
 }
 
 func FMDDelete(id string) (err error) {
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return fmt.Errorf("id is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/fmds/" + id
 
 	err = Delete(path)
@@ -166,6 +188,25 @@ func FMDDelete(id string) (err error) {
 
 func (c *FMDEntry) Delete() (err error) {
 	return FMDDelete(c.ID)
+}
+
+func FMDPurge(id string) (err error) {
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return fmt.Errorf("id is not a UUID: %s", err.Error())
+	}
+
+	path := "/api/v0/fmds/" + id
+
+	err = Purge(path)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (c *FMDEntry) Purge() (err error) {
+	return FMDPurge(c.ID)
 }
 
 func (e FMDListEntry) ToString() string {

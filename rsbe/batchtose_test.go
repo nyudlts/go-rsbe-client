@@ -3,6 +3,8 @@ package rsbe
 import (
 	"fmt"
 	"testing"
+
+	"github.com/nyudlts/go-rsbe-client/rsbe/internal/testutils"
 )
 
 // var batchToSEListEntry = BatchToSEListEntry{}
@@ -43,6 +45,7 @@ func TestBatchToSECreateFunc(t *testing.T) {
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}
+	defer batchToSEToCreate.Purge()
 
 	t.Run("confirm that attributes updated", func(t *testing.T) {
 		if batchToSEToCreate.ID == "" {
@@ -61,6 +64,12 @@ func TestBatchToSECreateFunc(t *testing.T) {
 
 func TestBatchToSEList(t *testing.T) {
 	setupLocalhostClient()
+
+	err := batchToSEToCreate.Create()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
+	defer batchToSEToCreate.Purge()
 
 	t.Run("check that proper attribute values are returned", func(t *testing.T) {
 		list, err := BatchToSEList()
@@ -99,13 +108,8 @@ func TestBatchToSEList(t *testing.T) {
 			t.Errorf("Status mismatch: want: \"%v\", got: \"%v\"", want.Status, got.Status)
 		}
 
-		if want.CreatedAt != got.CreatedAt {
-			t.Errorf("CreatedAt mismatch: want: \"%v\", got: \"%v\"", want.CreatedAt, got.CreatedAt)
-		}
-
-		if want.UpdatedAt != got.UpdatedAt {
-			t.Errorf("UpdatedAt mismatch: want: \"%v\", got: \"%v\"", want.UpdatedAt, got.UpdatedAt)
-		}
+		testutils.AssertEquivalentTimestamps(t, want.CreatedAt, got.CreatedAt)
+		testutils.AssertEquivalentTimestamps(t, want.UpdatedAt, got.UpdatedAt)
 	})
 
 	t.Run("check that proper attribute values are returned when an empty BatchToSEListEntry is passed", func(t *testing.T) {
@@ -145,13 +149,8 @@ func TestBatchToSEList(t *testing.T) {
 			t.Errorf("Status mismatch: want: \"%v\", got: \"%v\"", want.Status, got.Status)
 		}
 
-		if want.CreatedAt != got.CreatedAt {
-			t.Errorf("CreatedAt mismatch: want: \"%v\", got: \"%v\"", want.CreatedAt, got.CreatedAt)
-		}
-
-		if want.UpdatedAt != got.UpdatedAt {
-			t.Errorf("UpdatedAt mismatch: want: \"%v\", got: \"%v\"", want.UpdatedAt, got.UpdatedAt)
-		}
+		testutils.AssertEquivalentTimestamps(t, want.CreatedAt, got.CreatedAt)
+		testutils.AssertEquivalentTimestamps(t, want.UpdatedAt, got.UpdatedAt)
 	})
 
 	t.Run("check that proper list entries when a populated BatchToSEListEntry is passed", func(t *testing.T) {
@@ -160,13 +159,13 @@ func TestBatchToSEList(t *testing.T) {
 		if err != nil {
 			t.Errorf("Error setting up test: %s", err)
 		}
-		defer seToCreateForBatchToSETest.Delete()
+		defer seToCreateForBatchToSETest.Purge()
 
 		err = batchToSEToCreate2.Create()
 		if err != nil {
 			t.Errorf("Error setting up test: %s", err)
 		}
-		defer batchToSEToCreate2.Delete()
+		defer batchToSEToCreate2.Purge()
 
 		// filter by BatchID
 		list, err := BatchToSEList(BatchToSEListEntry{BatchID: "32626389-c942-4e71-9b5a-5d7c7ca4d389"})
@@ -239,6 +238,12 @@ func TestBatchToSEList(t *testing.T) {
 func TestBatchToSEGetFunc(t *testing.T) {
 	setupLocalhostClient()
 
+	err := batchToSEToCreate.Create()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
+	defer batchToSEToCreate.Purge()
+
 	t.Run("check that proper attribute values are returned", func(t *testing.T) {
 		want := batchToSEToCreate
 		got, err := BatchToSEGet(want.ID)
@@ -270,13 +275,8 @@ func TestBatchToSEGetFunc(t *testing.T) {
 			t.Errorf("Status mismatch: want: \"%v\", got: \"%v\"", want.Status, got.Status)
 		}
 
-		if want.CreatedAt != got.CreatedAt {
-			t.Errorf("CreatedAt mismatch: want: \"%v\", got: \"%v\"", want.CreatedAt, got.CreatedAt)
-		}
-
-		if want.UpdatedAt != got.UpdatedAt {
-			t.Errorf("UpdatedAt mismatch: want: \"%v\", got: \"%v\"", want.UpdatedAt, got.UpdatedAt)
-		}
+		testutils.AssertEquivalentTimestamps(t, want.CreatedAt, got.CreatedAt)
+		testutils.AssertEquivalentTimestamps(t, want.UpdatedAt, got.UpdatedAt)
 
 		if want.Notes != got.Notes {
 			t.Errorf("Notes mismatch: want: \"%v\", got: \"%v\"", want.Notes, got.Notes)
@@ -307,7 +307,13 @@ func TestBatchToSEGetFunc(t *testing.T) {
 func TestBatchToSEUpdateFunc(t *testing.T) {
 	setupLocalhostClient()
 
-	err := batchToSEToCreate.Get()
+	err := batchToSEToCreate.Create()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
+	defer batchToSEToCreate.Purge()
+
+	err = batchToSEToCreate.Get()
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}
@@ -342,7 +348,15 @@ func TestBatchToSEUpdateFunc(t *testing.T) {
 func TestBatchToSEDeleteFunc(t *testing.T) {
 	setupLocalhostClient()
 
-	err := batchToSEToCreate.Get()
+	err := batchToSEToCreate.Create()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
+	// the Purge() call is needed because Delete() is a soft delete,
+	// the record will still exist and needs to be purged
+	defer batchToSEToCreate.Purge()
+
+	err = batchToSEToCreate.Get()
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}

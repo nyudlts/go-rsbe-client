@@ -3,6 +3,8 @@ package rsbe
 import (
 	"encoding/json"
 		"fmt"
+
+	"github.com/google/uuid"
 )
 
 type BatchToIEListEntry struct {
@@ -49,6 +51,11 @@ func BatchToIEList() (list []BatchToIEListEntry, err error) {
 }
 
 func BatchToIEGet(id string) (item BatchToIEEntry, err error) {
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return BatchToIEEntry{}, fmt.Errorf("id is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/batch_to_ies/" + id
 
 	body, err := GetBody(path)
@@ -65,6 +72,11 @@ func BatchToIEGet(id string) (item BatchToIEEntry, err error) {
 }
 
 func (p *BatchToIEEntry) Get() (err error) {
+	_, err = uuid.Parse(p.ID)
+	if err != nil {
+		return fmt.Errorf("ID is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/batch_to_ies/" + p.ID
 
 	body, err := GetBody(path)
@@ -102,6 +114,11 @@ func (p *BatchToIEEntry) Create() (err error) {
 }
 
 func (c *BatchToIEEntry) Update() (err error) {
+	_, err = uuid.Parse(c.ID)
+	if err != nil {
+		return fmt.Errorf("ID is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/batch_to_ies/" + c.ID
 
 	data, err := json.Marshal(c)
@@ -118,6 +135,11 @@ func (c *BatchToIEEntry) Update() (err error) {
 }
 
 func BatchToIEDelete(id string) (err error) {
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return fmt.Errorf("id is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/batch_to_ies/" + id
 
 	err = Delete(path)
@@ -129,6 +151,25 @@ func BatchToIEDelete(id string) (err error) {
 
 func (c *BatchToIEEntry) Delete() (err error) {
 	return BatchToIEDelete(c.ID)
+}
+
+func BatchToIEPurge(id string) (err error) {
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return fmt.Errorf("id is not a UUID: %s", err.Error())
+	}
+
+	path := "/api/v0/batch_to_ies/" + id
+
+	err = Purge(path)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (c *BatchToIEEntry) Purge() (err error) {
+	return BatchToIEPurge(c.ID)
 }
 
 func (e BatchToIEListEntry) ToString() string {

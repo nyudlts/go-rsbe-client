@@ -3,6 +3,8 @@ package rsbe
 import (
 	"encoding/json"
 	"fmt"
+
+	"github.com/google/uuid"
 )
 
 type OwnerListEntry struct {
@@ -41,6 +43,11 @@ func OwnerList() (owners []OwnerListEntry, err error) {
 }
 
 func OwnerGet(id string) (owner OwnerEntry, err error) {
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return OwnerEntry{}, fmt.Errorf("id is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/owners/" + id
 
 	body, err := GetBody(path)
@@ -57,6 +64,11 @@ func OwnerGet(id string) (owner OwnerEntry, err error) {
 }
 
 func (p *OwnerEntry) Get() (err error) {
+	_, err = uuid.Parse(p.ID)
+	if err != nil {
+		return fmt.Errorf("ID is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/owners/" + p.ID
 
 	body, err := GetBody(path)
@@ -94,6 +106,11 @@ func (p *OwnerEntry) Create() (err error) {
 }
 
 func (p *OwnerEntry) Update() (err error) {
+	_, err = uuid.Parse(p.ID)
+	if err != nil {
+		return fmt.Errorf("ID is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/owners/" + p.ID
 
 	data, err := json.Marshal(p)
@@ -110,6 +127,11 @@ func (p *OwnerEntry) Update() (err error) {
 }
 
 func OwnerDelete(id string) (err error) {
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return fmt.Errorf("id is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/owners/" + id
 
 	err = Delete(path)
@@ -121,6 +143,25 @@ func OwnerDelete(id string) (err error) {
 
 func (p *OwnerEntry) Delete() (err error) {
 	return OwnerDelete(p.ID)
+}
+
+func OwnerPurge(id string) (err error) {
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return fmt.Errorf("id is not a UUID: %s", err.Error())
+	}
+
+	path := "/api/v0/owners/" + id
+
+	err = Purge(path)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *OwnerEntry) Purge() (err error) {
+	return OwnerPurge(p.ID)
 }
 
 func (e OwnerListEntry) ToString() string {

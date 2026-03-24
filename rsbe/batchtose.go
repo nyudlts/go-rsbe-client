@@ -2,6 +2,7 @@ package rsbe
 
 import (
 	"github.com/google/go-querystring/query"
+	"github.com/google/uuid"
 
 	"encoding/json"
 	"fmt"
@@ -78,6 +79,11 @@ func BatchToSEList(b ...BatchToSEListEntry) (list []BatchToSEListEntry, err erro
 }
 
 func BatchToSEGet(id string) (item BatchToSEEntry, err error) {
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return BatchToSEEntry{}, fmt.Errorf("id is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/batch_to_ses/" + id
 
 	body, err := GetBody(path)
@@ -94,6 +100,11 @@ func BatchToSEGet(id string) (item BatchToSEEntry, err error) {
 }
 
 func (p *BatchToSEEntry) Get() (err error) {
+	_, err = uuid.Parse(p.ID)
+	if err != nil {
+		return fmt.Errorf("ID is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/batch_to_ses/" + p.ID
 
 	body, err := GetBody(path)
@@ -131,6 +142,11 @@ func (p *BatchToSEEntry) Create() (err error) {
 }
 
 func (c *BatchToSEEntry) Update() (err error) {
+	_, err = uuid.Parse(c.ID)
+	if err != nil {
+		return fmt.Errorf("ID is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/batch_to_ses/" + c.ID
 
 	data, err := json.Marshal(c)
@@ -147,6 +163,11 @@ func (c *BatchToSEEntry) Update() (err error) {
 }
 
 func BatchToSEDelete(id string) (err error) {
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return fmt.Errorf("id is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/batch_to_ses/" + id
 
 	err = Delete(path)
@@ -158,6 +179,25 @@ func BatchToSEDelete(id string) (err error) {
 
 func (c *BatchToSEEntry) Delete() (err error) {
 	return BatchToSEDelete(c.ID)
+}
+
+func BatchToSEPurge(id string) (err error) {
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return fmt.Errorf("id is not a UUID: %s", err.Error())
+	}
+
+	path := "/api/v0/batch_to_ses/" + id
+
+	err = Purge(path)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (c *BatchToSEEntry) Purge() (err error) {
+	return BatchToSEPurge(c.ID)
 }
 
 func (e BatchToSEListEntry) ToString() string {

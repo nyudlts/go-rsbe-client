@@ -24,6 +24,7 @@ func TestBatchCreateFunc(t *testing.T) {
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}
+	defer batchToCreate.Purge()
 
 	t.Run("confirm that attributes updated", func(t *testing.T) {
 		if batchToCreate.ID == "" {
@@ -42,6 +43,12 @@ func TestBatchCreateFunc(t *testing.T) {
 
 func TestBatchList(t *testing.T) {
 	setupLocalhostClient()
+
+	err := batchToCreate.Create()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
+	defer batchToCreate.Purge()
 
 	t.Run("check that proper attribute values are returned", func(t *testing.T) {
 		list, err := BatchList()
@@ -259,6 +266,12 @@ func TestBatchReport(t *testing.T) {
 func TestBatchGetFunc(t *testing.T) {
 	setupLocalhostClient()
 
+	err := batchToCreate.Create()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
+	defer batchToCreate.Purge()
+
 	t.Run("check that proper attribute values are returned", func(t *testing.T) {
 		want := batchToCreate
 		got, err := BatchGet(want.ID)
@@ -302,6 +315,12 @@ func TestBatchGetFunc(t *testing.T) {
 
 func TestBatchGet(t *testing.T) {
 	setupLocalhostClient()
+
+	err := batchToCreate.Create()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
+	defer batchToCreate.Purge()
 
 	t.Run("confirm that expected batch was retrieved", func(t *testing.T) {
 		want := batchToCreate
@@ -347,7 +366,13 @@ func TestBatchGet(t *testing.T) {
 func TestBatchUpdateFunc(t *testing.T) {
 	setupLocalhostClient()
 
-	err := batchToCreate.Get()
+	err := batchToCreate.Create()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
+	defer batchToCreate.Purge()
+
+	err = batchToCreate.Get()
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}
@@ -382,7 +407,15 @@ func TestBatchUpdateFunc(t *testing.T) {
 func TestBatchDeleteFunc(t *testing.T) {
 	setupLocalhostClient()
 
-	err := batchToCreate.Get()
+	err := batchToCreate.Create()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
+	// the Purge() call is needed because Delete() is a soft delete,
+	// the record will still exist and needs to be purged
+	defer batchToCreate.Purge()
+
+	err = batchToCreate.Get()
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}
