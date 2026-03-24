@@ -1,9 +1,6 @@
 package rsbe
 
 import (
-	"os"
-
-	"net/http"
 	"net/http/httptest"
 	"testing"
 
@@ -11,36 +8,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
-
-func setupMux(apiPath string, filePath string) (mux *http.ServeMux) {
-	mux = http.NewServeMux()
-	mux.HandleFunc(apiPath, func(w http.ResponseWriter, _ *http.Request) {
-		data, _ := os.ReadFile(filePath)
-		w.Write(data)
-	})
-
-	return mux
-}
-
-func setupTestServerClient(ts *httptest.Server) {
-	c := new(Config)
-	c.BaseURL = ts.URL
-	c.User = "foo"
-	c.Password = "bar"
-	c.AuthType = AuthTypeBasic
-
-	_ = ConfigureClient(c)
-}
-
-func setupLocalhostClient() {
-	//c, err := GetConfig("basic")
-	c, err := GetConfig("cookie")
-	if err != nil {
-		panic(err)
-	}
-
-	_ = ConfigureClient(c)
-}
 
 var partnerListEntry = PartnerListEntry{
 	ID:        "e6517775-6277-4e25-9373-ee7738e820b5",
