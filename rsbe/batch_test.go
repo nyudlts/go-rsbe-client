@@ -4,6 +4,8 @@ import (
 	"net/http/httptest"
 	"sort"
 	"testing"
+
+	"github.com/nyudlts/go-rsbe-client/rsbe/internal/testutils"
 )
 
 var batchToCreate = BatchEntry{
@@ -83,13 +85,8 @@ func TestBatchList(t *testing.T) {
 			t.Errorf("CollectionID mismatch: want: \"%v\", got: \"%v\"", want.CollectionID, got.CollectionID)
 		}
 
-		if want.CreatedAt != got.CreatedAt {
-			t.Errorf("CreatedAt mismatch: want: \"%v\", got: \"%v\"", want.CreatedAt, got.CreatedAt)
-		}
-
-		if want.UpdatedAt != got.UpdatedAt {
-			t.Errorf("UpdatedAt mismatch: want: \"%v\", got: \"%v\"", want.UpdatedAt, got.UpdatedAt)
-		}
+		testutils.AssertEquivalentTimestamps(t, want.CreatedAt, got.CreatedAt)
+		testutils.AssertEquivalentTimestamps(t, want.UpdatedAt, got.UpdatedAt)
 
 	})
 
@@ -109,14 +106,10 @@ func TestBatchReport(t *testing.T) {
 			t.Errorf("Unexpected error: %s", err)
 		}
 
-		want := "2020-11-27T01:05:44Z"
-		got := report.TimeStamp
-		if want != got {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
-		}
+		testutils.AssertEquivalentTimestamps(t, "2020-11-27T01:05:44Z", report.TimeStamp)
 
-		want = "c44e95e9-5cca-4c26-8e52-12773334dc95"
-		got = report.Info.ID
+		want := "c44e95e9-5cca-4c26-8e52-12773334dc95"
+		got := report.Info.ID
 		if want != got {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
 		}
@@ -139,17 +132,9 @@ func TestBatchReport(t *testing.T) {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
 		}
 
-		want = "2020-10-18T02:52:27.827Z"
-		got = report.Info.CreatedAt
-		if want != got {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
-		}
+		testutils.AssertEquivalentTimestamps(t, "2020-10-18T02:52:27.827Z", report.Info.CreatedAt)
 
-		want = "2020-11-13T05:03:27.638Z"
-		got = report.Info.UpdatedAt
-		if want != got {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
-		}
+		testutils.AssertEquivalentTimestamps(t, "2020-11-13T05:03:27.638Z", report.Info.UpdatedAt)
 
 		want = "https://rsbe.dlib.nyu.edu/api/v0/batches/c44e95e9-5cca-4c26-8e52-12773334dc95"
 		got = report.Info.URL
@@ -211,17 +196,9 @@ func TestBatchReport(t *testing.T) {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
 		}
 
-		want = "2020-11-13T15:01:16.509Z"
-		got = report.SEs[4].CreatedAt
-		if want != got {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
-		}
+		testutils.AssertEquivalentTimestamps(t, "2020-11-13T15:01:16.509Z", report.SEs[4].CreatedAt)
 
-		want = "2020-11-25T22:30:11.034Z"
-		got = report.SEs[4].UpdatedAt
-		if want != got {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
-		}
+		testutils.AssertEquivalentTimestamps(t, "2020-11-25T22:30:11.034Z", report.SEs[4].UpdatedAt)
 
 		want = "https://rsbe.dlib.nyu.edu/api/v0/ses/72b8f70b-9a69-446d-9f22-05460252e07f"
 		got = report.SEs[4].SEURL
@@ -265,17 +242,9 @@ func TestBatchReport(t *testing.T) {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
 		}
 
-		want = "2020-11-13T18:30:34.172Z"
-		got = report.IEs[0].CreatedAt
-		if want != got {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
-		}
+		testutils.AssertEquivalentTimestamps(t, "2020-11-13T18:30:34.172Z", report.IEs[0].CreatedAt)
 
-		want = "2020-11-21T17:48:07.129Z"
-		got = report.IEs[0].UpdatedAt
-		if want != got {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
-		}
+		testutils.AssertEquivalentTimestamps(t, "2020-11-21T17:48:07.129Z", report.IEs[0].UpdatedAt)
 
 		want = "https://rsbe.dlib.nyu.edu/api/v0/ies/dcb20119-272d-46e5-8677-e07d14b964bc"
 		got = report.IEs[0].IEURL
@@ -321,13 +290,8 @@ func TestBatchGetFunc(t *testing.T) {
 			t.Errorf("CollectionID mismatch: want: \"%v\", got: \"%v\"", want.CollectionID, got.CollectionID)
 		}
 
-		if want.CreatedAt != got.CreatedAt {
-			t.Errorf("CreatedAt mismatch: want: \"%v\", got: \"%v\"", want.CreatedAt, got.CreatedAt)
-		}
-
-		if want.UpdatedAt != got.UpdatedAt {
-			t.Errorf("UpdatedAt mismatch: want: \"%v\", got: \"%v\"", want.UpdatedAt, got.UpdatedAt)
-		}
+		testutils.AssertEquivalentTimestamps(t, want.CreatedAt, got.CreatedAt)
+		testutils.AssertEquivalentTimestamps(t, want.UpdatedAt, got.UpdatedAt)
 
 		if want.Notes != got.Notes {
 			t.Errorf("Notes mismatch: want: \"%v\", got: \"%v\"", want.Notes, got.Notes)
@@ -370,13 +334,8 @@ func TestBatchGet(t *testing.T) {
 			t.Errorf("CollectionID mismatch: want: \"%v\", got: \"%v\"", want.CollectionID, got.CollectionID)
 		}
 
-		if want.CreatedAt != got.CreatedAt {
-			t.Errorf("CreatedAt mismatch: want: \"%v\", got: \"%v\"", want.CreatedAt, got.CreatedAt)
-		}
-
-		if want.UpdatedAt != got.UpdatedAt {
-			t.Errorf("UpdatedAt mismatch: want: \"%v\", got: \"%v\"", want.UpdatedAt, got.UpdatedAt)
-		}
+		testutils.AssertEquivalentTimestamps(t, want.CreatedAt, got.CreatedAt)
+		testutils.AssertEquivalentTimestamps(t, want.UpdatedAt, got.UpdatedAt)
 
 		if want.Notes != got.Notes {
 			t.Errorf("Notes mismatch: want: \"%v\", got: \"%v\"", want.Notes, got.Notes)
