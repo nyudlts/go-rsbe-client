@@ -3,6 +3,8 @@ package rsbe
 import (
 	"encoding/json"
 	"fmt"
+
+	"github.com/google/uuid"
 )
 
 type BatchListEntry struct {
@@ -147,6 +149,22 @@ func BatchDelete(id string) (err error) {
 	return nil
 }
 
+func BatchPurge(id string) (err error) {
+
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return fmt.Errorf("id is not a UUID: %s", err.Error())
+	}
+
+	path := "/api/v0/batches/" + id
+
+	err = Purge(path)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (c *BatchEntry) Get() (err error) {
 	path := fmt.Sprintf("/api/v0/batches/%s", c.ID)
 
@@ -202,6 +220,10 @@ func (c *BatchEntry) Update() (err error) {
 
 func (c *BatchEntry) Delete() (err error) {
 	return BatchDelete(c.ID)
+}
+
+func (c *BatchEntry) Purge() (err error) {
+	return BatchPurge(c.ID)
 }
 
 func (e BatchListEntry) ToString() string {
