@@ -91,7 +91,7 @@ func TestClientPost(t *testing.T) {
 		if id == "." {
 			t.Errorf("Unable to find created partner to delete.")
 		}
-		err = PartnerDelete(id)
+		err = PartnerPurge(id)
 		if err != nil {
 			t.Errorf("Unexpected error: %s", err)
 		}
@@ -104,7 +104,6 @@ func TestClientPost(t *testing.T) {
 			t.Errorf("err should NOT be nil: %v", err)
 		}
 	})
-
 }
 
 func TestClientPostReturnBody(t *testing.T) {
@@ -134,7 +133,7 @@ func TestClientPostReturnBody(t *testing.T) {
 			t.Errorf("Error parsing body.")
 		}
 
-		err = PartnerDelete(p.ID)
+		err = PartnerPurge(p.ID)
 		if err != nil {
 			t.Errorf("Unexpected error: %s", err)
 		}
@@ -168,14 +167,10 @@ func TestClientPut(t *testing.T) {
 		if id == "." {
 			t.Errorf("Unable to find created partner to delete.")
 		}
+		defer PartnerPurge(id)
 
-		data := "{\"code\":\"bananananana\",\"name\":\"Can elope\",\"rel_path\":\"content/canteloupe\"}"
+		data := "{\"code\":\"bananananana\",\"name\":\"Can elope\",\"rel_path\":\"content/canteloupe\",\"lock_version\":0}"
 		err = Put(ppath+"/"+id, []byte(data))
-		if err != nil {
-			t.Errorf("Unexpected error: %s", err)
-		}
-
-		err = PartnerDelete(id)
 		if err != nil {
 			t.Errorf("Unexpected error: %s", err)
 		}
@@ -214,6 +209,10 @@ func TestClientDelete(t *testing.T) {
 		if err != nil {
 			t.Errorf("Unexpected error: %s", err)
 		}
+
+		// still need to purge here because GORM soft-delete only marks the Partner as deleted,
+		// it doesn't actually remove it from the database
+		PartnerPurge(id)
 	})
 
 	t.Run("confirm bad request response", func(t *testing.T) {
