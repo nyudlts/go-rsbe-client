@@ -1,6 +1,0 @@
-mode: set
-github.com/nyudlts/go-rsbe-client/rsbe/internal/testutils/testutils.go:12.110,16.82 3 0
-github.com/nyudlts/go-rsbe-client/rsbe/internal/testutils/testutils.go:16.82,18.3 1 0
-github.com/nyudlts/go-rsbe-client/rsbe/internal/testutils/testutils.go:20.2,21.80 2 0
-github.com/nyudlts/go-rsbe-client/rsbe/internal/testutils/testutils.go:21.80,23.3 1 0
-github.com/nyudlts/go-rsbe-client/rsbe/internal/testutils/testutils.go:26.2,26.92 1 0
