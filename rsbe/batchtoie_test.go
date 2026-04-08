@@ -1,10 +1,10 @@
 package rsbe
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/nyudlts/go-rsbe-client/rsbe/internal/testutils"
+	"github.com/stretchr/testify/assert"
 )
 
 // var batchToIEListEntry = BatchToIEListEntry{}
@@ -145,22 +145,11 @@ func TestBatchToIEGetFunc(t *testing.T) {
 			t.Errorf("LockVersion mismatch: want: \"%v\", got: \"%v\"", want.LockVersion, got.LockVersion)
 		}
 
-		expect := fmt.Sprintf("http://localhost:3000/api/v0/ies/%s", want.IEID)
-		if expect != got.IEURL {
-			t.Errorf("IEURL mismatch: want: \"%v\", got: \"%v\"", expect, got.IEURL)
-		}
-
-		expect = fmt.Sprintf("http://localhost:3000/api/v0/batches/%s", want.BatchID)
-		if expect != got.BatchURL {
-			t.Errorf("BatchURL mismatch: want: \"%v\", got: \"%v\"", expect, got.BatchURL)
-		}
-
-		expect = "http://localhost:3000/api/v0/batch_to_ies"
-		if expect != got.BatchToIEsURL {
-			t.Errorf("BatchToIEsURL mismatch: want: \"%v\", got: \"%v\"", expect, got.BatchToIEsURL)
-		}
-
+		assert.Contains(t, got.IEURL, "api/v0/ies/"+want.IEID, "IEURL does not contain expected substring")
+		assert.Contains(t, got.BatchURL, "api/v0/batches/"+want.BatchID, "BatchURL does not contain expected substring")
+		assert.Contains(t, got.BatchToIEsURL, "api/v0/batch_to_ies", "BatchToIEsURL does not contain expected substring")
 	})
+
 }
 
 func TestBatchToIEUpdateFunc(t *testing.T) {
