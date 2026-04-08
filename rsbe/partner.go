@@ -24,7 +24,7 @@ type PartnerEntry struct {
 	UpdatedAt      string `json:"updated_at,omitempty"`
 	PartnersURL    string `json:"partners_url,omitempty"`
 	CollectionsURL string `json:"colls_url,omitempty"`
-	LockVersion    int    `json:"lock_version,omitempty"`
+	LockVersion    int    `json:"lock_version"`
 	RelPath        string `json:"rel_path,omitempty"`
 }
 

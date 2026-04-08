@@ -38,7 +38,7 @@ type SEEntry struct {
 	BDIURL        string `json:"bdi_url,omitempty"`
 	FMDsURL       string `json:"fmds_url,omitempty"`
 	CollectionURL string `json:"coll_url,omitempty"`
-	LockVersion   int    `json:"lock_version,omitempty"`
+	LockVersion   int    `json:"lock_version"`
 }
 
 func CollectionSEList(collectionID string) (list []SEListEntry, err error) {

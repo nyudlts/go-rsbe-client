@@ -33,7 +33,7 @@ type BatchToSEEntry struct {
 	BatchURL      string `json:"batch_url,omitempty"`
 	SEURL         string `json:"se_url,omitempty"`
 	BatchToSEsURL string `json:"batch_to_ses_url"`
-	LockVersion   int    `json:"lock_version,omitempty"`
+	LockVersion   int    `json:"lock_version"`
 }
 
 // Get a list of BatchToSEListEntry objects

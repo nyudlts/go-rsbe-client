@@ -24,7 +24,7 @@ type OwnerEntry struct {
 	UpdatedAt      string `json:"updated_at,omitempty"`
 	OwnersURL      string `json:"owners_url,omitempty"`
 	CollectionsURL string `json:"colls_url,omitempty"`
-	LockVersion    int    `json:"lock_version,omitempty"`
+	LockVersion    int    `json:"lock_version"`
 }
 
 func OwnerList() (owners []OwnerListEntry, err error) {

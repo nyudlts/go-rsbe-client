@@ -33,7 +33,7 @@ type BatchEntry struct {
 	UpdatedAt     string `json:"updated_at,omitempty"`
 	CollectionURL string `json:"coll_url,omitempty"`
 	BatchesURL    string `json:"batches_url,omitempty"`
-	LockVersion   int    `json:"lock_version,omitempty"`
+	LockVersion   int    `json:"lock_version"`
 }
 
 type BatchReport struct {

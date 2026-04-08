@@ -19,7 +19,7 @@ type IEListEntry struct {
 	UpdatedAt     string `json:"updated_at,omitempty"`
 	URL           string `json:"url,omitempty"`
 	CollectionURL string `json:"coll_url,omitempty"`
-	LockVersion   int    `json:"lock_version,omitempty"`
+	LockVersion   int    `json:"lock_version"`
 }
 
 type IEEntry struct {
@@ -35,7 +35,7 @@ type IEEntry struct {
 	UpdatedAt     string `json:"updated_at,omitempty"`
 	FMDsURL       string `json:"fmds_url,omitempty"`
 	CollectionURL string `json:"coll_url,omitempty"`
-	LockVersion   int    `json:"lock_version,omitempty"`
+	LockVersion   int    `json:"lock_version"`
 }
 
 func CollectionIEList(collectionID string) (list []IEListEntry, err error) {

@@ -32,7 +32,7 @@ type BatchToIEEntry struct {
 	BatchURL      string `json:"batch_url,omitempty"`
 	IEURL         string `json:"ie_url,omitempty"`
 	BatchToIEsURL string `json:"batch_to_ies_url"`
-	LockVersion   int    `json:"lock_version,omitempty"`
+	LockVersion   int    `json:"lock_version"`
 }
 
 func BatchToIEList() (list []BatchToIEListEntry, err error) {

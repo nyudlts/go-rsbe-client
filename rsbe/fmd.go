@@ -44,7 +44,7 @@ type FMDEntry struct {
 	Data             FMDData   `json:"data,omitempty"`
 	PartnerURL       string    `json:"partner_url,omitempty"`
 	CollectionURL    string    `json:"coll_url,omitempty"`
-	LockVersion      int       `json:"lock_version,omitempty"`
+	LockVersion      int       `json:"lock_version"`
 }
 
 type FMDFormat struct {

@@ -25,7 +25,7 @@ type EToFMDEntry struct {
 	CreatedAt   string `json:"created_at,omitempty"`
 	UpdatedAt   string `json:"updated_at,omitempty"`
 	EURL        string `json:"eurl,omitempty"`         // ---
-	LockVersion int    `json:"lock_version,omitempty"` // ---
+	LockVersion int    `json:"lock_version"` // ---
 }
 
 func EToFMDList() (list []EToFMDListEntry, err error) {

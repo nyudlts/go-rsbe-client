@@ -28,7 +28,7 @@ type IEToSEEntry struct {
 	Notes       string `json:"notes,omitempty"`
 	CreatedAt   string `json:"created_at,omitempty"`
 	UpdatedAt   string `json:"updated_at,omitempty"`
-	LockVersion int    `json:"lock_version,omitempty"`
+	LockVersion int    `json:"lock_version"`
 	IEURL       string `json:"ie_url,omitempty"`
 	SEURL       string `json:"se_url,omitempty"`
 	IEToSEsURL  string `json:"ie_to_ses_url,omitempty"`

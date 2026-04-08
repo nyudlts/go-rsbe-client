@@ -39,7 +39,7 @@ type CollectionEntry struct {
 	OwnerURL        string `json:"owner_url,omitempty"`
 	SEsURL          string `json:"ses_url,omitempty"`
 	IEsURL          string `json:"ies_url,omitempty"`
-	LockVersion     int    `json:"lock_version,omitempty"`
+	LockVersion     int    `json:"lock_version"`
 	CreatedAt       string `json:"created_at,omitempty"`
 	UpdatedAt       string `json:"updated_at,omitempty"`
 }
