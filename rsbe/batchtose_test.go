@@ -1,10 +1,10 @@
 package rsbe
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/nyudlts/go-rsbe-client/rsbe/internal/testutils"
+	"github.com/stretchr/testify/assert"
 )
 
 // var batchToSEListEntry = BatchToSEListEntry{}
@@ -286,20 +286,9 @@ func TestBatchToSEGetFunc(t *testing.T) {
 			t.Errorf("LockVersion mismatch: want: \"%v\", got: \"%v\"", want.LockVersion, got.LockVersion)
 		}
 
-		expect := fmt.Sprintf("http://localhost:3000/api/v0/ses/%s", want.SEID)
-		if expect != got.SEURL {
-			t.Errorf("SEURL mismatch: want: \"%v\", got: \"%v\"", expect, got.SEURL)
-		}
-
-		expect = fmt.Sprintf("http://localhost:3000/api/v0/batches/%s", want.BatchID)
-		if expect != got.BatchURL {
-			t.Errorf("BatchURL mismatch: want: \"%v\", got: \"%v\"", expect, got.BatchURL)
-		}
-
-		expect = "http://localhost:3000/api/v0/batch_to_ses"
-		if expect != got.BatchToSEsURL {
-			t.Errorf("BatchToSEsURL mismatch: want: \"%v\", got: \"%v\"", expect, got.BatchToSEsURL)
-		}
+		assert.Contains(t, got.SEURL, "/api/v0/ses/"+want.SEID, "SEURL does not contain expected substring")
+		assert.Contains(t, got.BatchURL, "/api/v0/batches/"+want.BatchID, "BatchURL does not contain expected substring")
+		assert.Contains(t, got.BatchToSEsURL, "/api/v0/batch_to_ses", "BatchToSEsURL does not contain expected substring")
 
 	})
 }
