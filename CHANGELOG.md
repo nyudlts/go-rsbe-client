@@ -1,5 +1,8 @@
 # Changelog
 
+### v0.7.0
+  * update code to be compatible with cookie-based authentication
+
 ### v0.6.1
   * add `Classification` to `Collection` `ToString()` methods
   * add `RSBE API v0.8.0` development database dump needed for testing
