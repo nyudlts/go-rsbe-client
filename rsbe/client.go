@@ -9,11 +9,9 @@ import (
 	"net/http/cookiejar"
 )
 
-type AuthType string
-
 const (
-	AuthTypeBasic  AuthType = "basic"
-	AuthTypeCookie AuthType = "cookie"
+	AuthTypeBasic  string = "basic"
+	AuthTypeCookie string = "cookie"
 )
 
 type ErrMsg struct {
@@ -24,7 +22,7 @@ type Config struct {
 	BaseURL   string
 	User      string
 	Password  string
-	AuthType  AuthType
+	AuthType  string
 	LoginPath string
 }
 

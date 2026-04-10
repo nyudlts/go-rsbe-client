@@ -9,7 +9,7 @@ import (
 
 // TestConfig represents the structure of the test configuration file
 type TestConfig struct {
-	Environment string                  `yaml:"environment"`
+	Environment string                 `yaml:"environment"`
 	Configs     map[string]ConfigEntry `yaml:"configs"`
 }
 
@@ -64,7 +64,7 @@ func GetConfig(key string) (*Config, error) {
 
 	// Set AuthType if provided, otherwise default to basic
 	if entry.AuthType != "" {
-		config.AuthType = AuthType(entry.AuthType)
+		config.AuthType = entry.AuthType
 	} else {
 		config.AuthType = AuthTypeBasic
 	}
