@@ -71,8 +71,12 @@ func setupTestServerClient(ts *httptest.Server) {
 }
 
 func setupLocalhostClient() {
-	//c, err := GetConfig("basic")
-	c, err := GetConfig("cookie")
+
+	// passing UseDefaultConfig to GetConfig uses the default configuration
+	// specified in the config file under the "default_config" key.
+	// This allows tests to specify which auth method to use without
+	// changing the test code, by simply changing the config file.
+	c, err := GetConfig(UseDefaultConfig)
 	if err != nil {
 		panic(err)
 	}
