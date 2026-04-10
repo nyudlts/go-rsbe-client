@@ -7,10 +7,13 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+const UseDefaultConfig string = "use_default_config"
+
 // TestConfig represents the structure of the test configuration file
 type TestConfig struct {
-	Environment string                 `yaml:"environment"`
-	Configs     map[string]ConfigEntry `yaml:"configs"`
+	Environment   string                 `yaml:"environment"`
+	DefaultConfig string                 `yaml:"default_config"`
+	Configs       map[string]ConfigEntry `yaml:"configs"`
 }
 
 // ConfigEntry represents a configuration entry for a specific auth type
@@ -46,9 +49,21 @@ func LoadConfig() error {
 }
 
 // GetConfig returns a Config struct for the specified configuration key
+// passing the special key UseDefaultConfig to GetConfig selects the
+// default configuration specified in the config file under the "default_config" key.
+// This allows tests to specify which configuration (and therefore auth method)
+// to use without changing the test code.
 func GetConfig(key string) (*Config, error) {
+
 	if Cfg == nil {
 		return nil, fmt.Errorf("configuration not loaded. Call LoadConfig() first")
+	}
+
+	if key == UseDefaultConfig {
+		if Cfg.DefaultConfig == "" {
+			return nil, fmt.Errorf("default_config not specified in config file")
+		}
+		key = Cfg.DefaultConfig
 	}
 
 	entry, ok := Cfg.Configs[key]
