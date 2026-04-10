@@ -4,6 +4,10 @@ import (
 	"net/http/httptest"
 	"strconv"
 	"testing"
+
+	"github.com/nyudlts/go-rsbe-client/rsbe/internal/testutils"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 var collectionListEntry = CollectionListEntry{
@@ -75,9 +79,19 @@ func TestPartnerCollectionList(t *testing.T) {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
 		}
 
-		if collectionListEntry != got[0] {
-			t.Errorf("Mismatch: want: \n\"%v\", \ngot: \n\"%v\"", want, got[0])
-		}
+		assert.Equal(t, want.ID, got[0].ID)
+		assert.Equal(t, want.PartnerID, got[0].PartnerID)
+		assert.Equal(t, want.OwnerID, got[0].OwnerID)
+		assert.Equal(t, want.Code, got[0].Code)
+		assert.Equal(t, want.DisplayCode, got[0].DisplayCode)
+		assert.Equal(t, want.Name, got[0].Name)
+		assert.Equal(t, want.Type, got[0].Type)
+		assert.Equal(t, want.Classification, got[0].Classification)
+		testutils.AssertEquivalentTimestamps(t, want.CreatedAt, got[0].CreatedAt)
+		testutils.AssertEquivalentTimestamps(t, want.UpdatedAt, got[0].UpdatedAt)
+		assert.Contains(t, got[0].URL, "/api/v0/colls/b9612d5d-619a-4ceb-b620-d816e4b4340b")
+		assert.Contains(t, got[0].PartnerURL, "/api/v0/partners/e6517775-6277-4e25-9373-ee7738e820b5")
+		assert.Contains(t, got[0].OwnerURL, "/api/v0/owners/1ca830b5-6a2b-43f9-b6bc-4dfeac3ee178")
 	})
 
 }
@@ -101,9 +115,19 @@ func TestOwnerCollectionList(t *testing.T) {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
 		}
 
-		if collectionListEntry != got[0] {
-			t.Errorf("Mismatch: want: \n\"%v\", \ngot: \n\"%v\"", want, got[0])
-		}
+		assert.Equal(t, want.ID, got[0].ID)
+		assert.Equal(t, want.PartnerID, got[0].PartnerID)
+		assert.Equal(t, want.OwnerID, got[0].OwnerID)
+		assert.Equal(t, want.Code, got[0].Code)
+		assert.Equal(t, want.DisplayCode, got[0].DisplayCode)
+		assert.Equal(t, want.Name, got[0].Name)
+		assert.Equal(t, want.Type, got[0].Type)
+		assert.Equal(t, want.Classification, got[0].Classification)
+		testutils.AssertEquivalentTimestamps(t, want.CreatedAt, got[0].CreatedAt)
+		testutils.AssertEquivalentTimestamps(t, want.UpdatedAt, got[0].UpdatedAt)
+		assert.Contains(t, got[0].URL, "/api/v0/colls/b9612d5d-619a-4ceb-b620-d816e4b4340b")
+		assert.Contains(t, got[0].PartnerURL, "/api/v0/partners/e6517775-6277-4e25-9373-ee7738e820b5")
+		assert.Contains(t, got[0].OwnerURL, "/api/v0/owners/1ca830b5-6a2b-43f9-b6bc-4dfeac3ee178")
 	})
 
 }
@@ -120,14 +144,26 @@ func TestCollectionGetFunc(t *testing.T) {
 		want := collectionShow
 		got := CollectionEntry{ID: "b9612d5d-619a-4ceb-b620-d816e4b4340b"}
 
-		err := got.Get()
-		if err != nil {
-			t.Errorf("Unexpected error: %s", err)
-		}
+		require.NoError(t, got.Get(), "Collection Get failed")
 
-		if got != want {
-			t.Errorf("Mismatch: want: \n\"%v\", \ngot: \n\"%v\"", want, got)
-		}
+		assert.Equal(t, want.ID, got.ID)
+		assert.Equal(t, want.PartnerID, got.PartnerID)
+		assert.Equal(t, want.OwnerID, got.OwnerID)
+		assert.Equal(t, want.Code, got.Code)
+		assert.Equal(t, want.DisplayCode, got.DisplayCode)
+		assert.Equal(t, want.Name, got.Name)
+		assert.Equal(t, want.Type, got.Type)
+		assert.Equal(t, want.Classification, got.Classification)
+		testutils.AssertEquivalentTimestamps(t, want.CreatedAt, got.CreatedAt)
+		testutils.AssertEquivalentTimestamps(t, want.UpdatedAt, got.UpdatedAt)
+		assert.Equal(t, want.Quota, got.Quota)
+		assert.Equal(t, want.ReadyForContent, got.ReadyForContent)
+		assert.Contains(t, got.PartnerURL, "/api/v0/partners/e6517775-6277-4e25-9373-ee7738e820b5")
+		assert.Contains(t, got.OwnerURL, "/api/v0/owners/1ca830b5-6a2b-43f9-b6bc-4dfeac3ee178")
+		assert.Contains(t, got.SEsURL, "/api/v0/colls/b9612d5d-619a-4ceb-b620-d816e4b4340b/ses")
+		assert.Contains(t, got.IEsURL, "/api/v0/colls/b9612d5d-619a-4ceb-b620-d816e4b4340b/ies")
+		assert.Equal(t, want.RelPath, got.RelPath)
+		assert.Equal(t, want.LockVersion, got.LockVersion)
 	})
 
 }
@@ -143,13 +179,26 @@ func TestCollectionGet(t *testing.T) {
 	t.Run("confirm that expected collection was retrieved", func(t *testing.T) {
 		want := collectionShow
 		got, err := CollectionGet("b9612d5d-619a-4ceb-b620-d816e4b4340b")
-		if err != nil {
-			t.Errorf("Unexpected error: %s", err)
-		}
+		require.NoError(t, err, "Collection Get failed")
 
-		if got != want {
-			t.Errorf("Mismatch: want: \n\"%v\", \ngot: \n\"%v\"", want, got)
-		}
+		assert.Equal(t, want.ID, got.ID)
+		assert.Equal(t, want.PartnerID, got.PartnerID)
+		assert.Equal(t, want.OwnerID, got.OwnerID)
+		assert.Equal(t, want.Code, got.Code)
+		assert.Equal(t, want.DisplayCode, got.DisplayCode)
+		assert.Equal(t, want.Name, got.Name)
+		assert.Equal(t, want.Type, got.Type)
+		assert.Equal(t, want.Classification, got.Classification)
+		testutils.AssertEquivalentTimestamps(t, want.CreatedAt, got.CreatedAt)
+		testutils.AssertEquivalentTimestamps(t, want.UpdatedAt, got.UpdatedAt)
+		assert.Equal(t, want.Quota, got.Quota)
+		assert.Equal(t, want.ReadyForContent, got.ReadyForContent)
+		assert.Contains(t, got.PartnerURL, "/api/v0/partners/e6517775-6277-4e25-9373-ee7738e820b5")
+		assert.Contains(t, got.OwnerURL, "/api/v0/owners/1ca830b5-6a2b-43f9-b6bc-4dfeac3ee178")
+		assert.Contains(t, got.SEsURL, "/api/v0/colls/b9612d5d-619a-4ceb-b620-d816e4b4340b/ses")
+		assert.Contains(t, got.IEsURL, "/api/v0/colls/b9612d5d-619a-4ceb-b620-d816e4b4340b/ies")
+		assert.Equal(t, want.RelPath, got.RelPath)
+		assert.Equal(t, want.LockVersion, got.LockVersion)
 	})
 }
 
@@ -157,10 +206,8 @@ func TestCollectionCreateFunc(t *testing.T) {
 	setupLocalhostClient()
 
 	err := collectionToCreate.Create()
-	if err != nil {
-		t.Errorf("Unexpected error: %s", err)
-	}
-	defer collectionToCreate.Delete()
+	require.NoError(t, err, "Collection Create failed")
+	defer collectionToCreate.Purge()
 
 	defer t.Run("confirm that attributes updated", func(t *testing.T) {
 		if collectionToCreate.CreatedAt == "" {
@@ -176,10 +223,8 @@ func TestCollectionCreateFunc(t *testing.T) {
 func TestCollectionUpdateFunc(t *testing.T) {
 	setupLocalhostClient()
 	err := collectionToCreate.Create()
-	if err != nil {
-		t.Errorf("Unexpected error: %s", err)
-	}
-	defer collectionToCreate.Delete()
+	require.NoError(t, err, "Collection Create failed")
+	defer collectionToCreate.Purge()
 
 	err = collectionToCreate.Get()
 	if err != nil {
@@ -226,9 +271,10 @@ func TestCollectionUpdateFunc(t *testing.T) {
 func TestCollectionDeleteFunc(t *testing.T) {
 	setupLocalhostClient()
 	err := collectionToCreate.Create()
-	if err != nil {
-		t.Errorf("Unexpected error: %s", err)
-	}
+	require.NoError(t, err, "Collection Create failed")
+	// the Purge() call is needed because Delete() is a soft delete,
+	// the record will still exist and needs to be purged
+	defer collectionToCreate.Purge()
 
 	err = collectionToCreate.Get()
 	if err != nil {
@@ -255,10 +301,8 @@ func TestCollectionDeleteFunc(t *testing.T) {
 func TestCollectionEntryToString(t *testing.T) {
 	setupLocalhostClient()
 	err := collectionToCreate.Create()
-	if err != nil {
-		t.Errorf("Unexpected error: %s", err)
-	}
-	defer collectionToCreate.Delete()
+	require.NoError(t, err, "Collection Create failed")
+	defer collectionToCreate.Purge()
 
 	err = collectionToCreate.Get()
 	if err != nil {

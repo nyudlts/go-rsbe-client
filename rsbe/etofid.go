@@ -3,6 +3,8 @@ package rsbe
 import (
 	"encoding/json"
 	"fmt"
+
+	"github.com/google/uuid"
 )
 
 type EToFIDListEntry struct {
@@ -23,7 +25,7 @@ type EToFIDEntry struct {
 	CreatedAt   string `json:"created_at,omitempty"`
 	UpdatedAt   string `json:"updated_at,omitempty"`
 	EURL        string `json:"eurl,omitempty"`
-	LockVersion int    `json:"lock_version,omitempty"`
+	LockVersion int    `json:"lock_version"`
 }
 
 func EToFIDList() (list []EToFIDListEntry, err error) {
@@ -42,6 +44,11 @@ func EToFIDList() (list []EToFIDListEntry, err error) {
 }
 
 func EToFIDGet(id string) (item EToFIDEntry, err error) {
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return EToFIDEntry{}, fmt.Errorf("id is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/etofids/" + id
 
 	body, err := GetBody(path)
@@ -58,6 +65,11 @@ func EToFIDGet(id string) (item EToFIDEntry, err error) {
 }
 
 func (p *EToFIDEntry) Get() (err error) {
+	_, err = uuid.Parse(p.ID)
+	if err != nil {
+		return fmt.Errorf("ID is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/etofids/" + p.ID
 
 	body, err := GetBody(path)
@@ -95,6 +107,11 @@ func (p *EToFIDEntry) Create() (err error) {
 }
 
 func (c *EToFIDEntry) Update() (err error) {
+	_, err = uuid.Parse(c.ID)
+	if err != nil {
+		return fmt.Errorf("ID is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/etofids/" + c.ID
 
 	data, err := json.Marshal(c)
@@ -111,6 +128,11 @@ func (c *EToFIDEntry) Update() (err error) {
 }
 
 func EToFIDDelete(id string) (err error) {
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return fmt.Errorf("id is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/etofids/" + id
 
 	err = Delete(path)
@@ -122,6 +144,25 @@ func EToFIDDelete(id string) (err error) {
 
 func (c *EToFIDEntry) Delete() (err error) {
 	return EToFIDDelete(c.ID)
+}
+
+func EToFIDPurge(id string) (err error) {
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return fmt.Errorf("id is not a UUID: %s", err.Error())
+	}
+
+	path := "/api/v0/etofids/" + id
+
+	err = Purge(path)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (c *EToFIDEntry) Purge() (err error) {
+	return EToFIDPurge(c.ID)
 }
 
 func (e EToFIDListEntry) ToString() string {

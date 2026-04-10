@@ -1,39 +1,13 @@
 package rsbe
 
 import (
-	"io/ioutil"
-	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/nyudlts/go-rsbe-client/rsbe/internal/testutils"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
-
-func setupMux(apiPath string, filePath string) (mux *http.ServeMux) {
-	mux = http.NewServeMux()
-	mux.HandleFunc(apiPath, func(w http.ResponseWriter, _ *http.Request) {
-		data, _ := ioutil.ReadFile(filePath)
-		w.Write(data)
-	})
-
-	return mux
-}
-
-func setupTestServerClient(ts *httptest.Server) {
-	c := new(Config)
-	c.BaseURL = ts.URL
-	c.User = "foo"
-	c.Password = "bar"
-
-	ConfigureClient(c)
-}
-
-func setupLocalhostClient() {
-	c := new(Config)
-	c.BaseURL = "http://localhost:3000"
-	c.User = "foo"
-	c.Password = "bar"
-
-	ConfigureClient(c)
-}
 
 var partnerListEntry = PartnerListEntry{
 	ID:        "e6517775-6277-4e25-9373-ee7738e820b5",
@@ -76,11 +50,13 @@ func TestPartnerList(t *testing.T) {
 			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
 		}
 
-		if partnerListEntry != got[0] {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
-		}
+		assert.Equal(t, partnerListEntry.ID, got[0].ID)
+		assert.Equal(t, partnerListEntry.Code, got[0].Code)
+		assert.Equal(t, partnerListEntry.Name, got[0].Name)
+		testutils.AssertEquivalentTimestamps(t, partnerListEntry.CreatedAt, got[0].CreatedAt)
+		testutils.AssertEquivalentTimestamps(t, partnerListEntry.UpdatedAt, got[0].UpdatedAt)
+		assert.Contains(t, got[0].URL, "/api/v0/partners/e6517775-6277-4e25-9373-ee7738e820b5")
 	})
-
 }
 
 func TestPartnerGetFunc(t *testing.T) {
@@ -90,14 +66,17 @@ func TestPartnerGetFunc(t *testing.T) {
 		want := partnerShow
 		got := PartnerEntry{ID: "e6517775-6277-4e25-9373-ee7738e820b5"}
 
-		err := got.Get()
-		if err != nil {
-			t.Errorf("Unexpected error: %s", err)
-		}
+		require.NoError(t, got.Get(), "Partner Get failed")
 
-		if got != want {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
-		}
+		assert.Equal(t, want.ID, got.ID)
+		assert.Equal(t, want.Code, got.Code)
+		assert.Equal(t, want.Name, got.Name)
+		testutils.AssertEquivalentTimestamps(t, want.CreatedAt, got.CreatedAt)
+		testutils.AssertEquivalentTimestamps(t, want.UpdatedAt, got.UpdatedAt)
+		assert.Contains(t, got.PartnersURL, "/api/v0/partners")
+		assert.Contains(t, got.CollectionsURL, "/api/v0/partners/e6517775-6277-4e25-9373-ee7738e820b5/colls")
+		assert.Equal(t, want.LockVersion, got.LockVersion)
+		assert.Equal(t, want.RelPath, got.RelPath)
 	})
 
 }
@@ -113,13 +92,17 @@ func TestPartnerGet(t *testing.T) {
 	t.Run("confirm that expected partner was retrieved", func(t *testing.T) {
 		want := partnerShow
 		got, err := PartnerGet("e6517775-6277-4e25-9373-ee7738e820b5")
-		if err != nil {
-			t.Errorf("Unexpected error: %s", err)
-		}
+		require.NoError(t, err, "Partner Get failed")
 
-		if got != want {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
-		}
+		assert.Equal(t, want.ID, got.ID)
+		assert.Equal(t, want.Code, got.Code)
+		assert.Equal(t, want.Name, got.Name)
+		testutils.AssertEquivalentTimestamps(t, want.CreatedAt, got.CreatedAt)
+		testutils.AssertEquivalentTimestamps(t, want.UpdatedAt, got.UpdatedAt)
+		assert.Contains(t, got.PartnersURL, "/api/v0/partners")
+		assert.Contains(t, got.CollectionsURL, "/api/v0/partners/e6517775-6277-4e25-9373-ee7738e820b5/colls")
+		assert.Equal(t, want.LockVersion, got.LockVersion)
+		assert.Equal(t, want.RelPath, got.RelPath)
 	})
 }
 
@@ -127,9 +110,10 @@ func TestPartnerCreateFunc(t *testing.T) {
 	setupLocalhostClient()
 
 	err := partnerToCreate.Create()
-	if err != nil {
-		t.Errorf("Unexpected error: %s", err)
-	}
+	require.NoError(t, err, "Partner Create failed")
+	defer partnerToCreate.Purge()
+
+	require.NoError(t, partnerToCreate.Get(), "Partner Get failed")
 
 	t.Run("confirm that attributes updated", func(t *testing.T) {
 		if partnerToCreate.ID == "" {
@@ -149,7 +133,12 @@ func TestPartnerCreateFunc(t *testing.T) {
 func TestPartnerUpdateFunc(t *testing.T) {
 	setupLocalhostClient()
 
-	_ = partnerToCreate.Get()
+	err := partnerToCreate.Create()
+	require.NoError(t, err, "Partner Create failed")
+	defer partnerToCreate.Purge()
+
+	err = partnerToCreate.Get()
+	require.NoError(t, err, "Partner Get failed")
 
 	if partnerToCreate.Name != "Waffles and Syrup" {
 		t.Errorf("variable already updated: %s", partnerToCreate.ToString())
@@ -157,7 +146,7 @@ func TestPartnerUpdateFunc(t *testing.T) {
 
 	partnerToCreate.Name = "WAFFLES WAFFLES WAFFLES"
 
-	err := partnerToCreate.Update()
+	err = partnerToCreate.Update()
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}
@@ -170,7 +159,7 @@ func TestPartnerUpdateFunc(t *testing.T) {
 		}
 
 		if partnerToCreate.CreatedAt == partnerToCreate.UpdatedAt {
-			t.Errorf("UpeatedAt not updated")
+			t.Errorf("UpdatedAt not updated")
 		}
 	})
 }
@@ -178,11 +167,18 @@ func TestPartnerUpdateFunc(t *testing.T) {
 func TestPartnerDeleteFunc(t *testing.T) {
 	setupLocalhostClient()
 
-	_ = partnerToCreate.Get()
+	err := partnerToCreate.Create()
+	require.NoError(t, err, "Partner Create failed")
+	// the Purge() call is needed because Delete() is a soft delete,
+	// the record will still exist and needs to be purged
+	defer partnerToCreate.Purge()
+
+	err = partnerToCreate.Get()
+	require.NoError(t, err, "Partner Get failed")
 
 	id := partnerToCreate.ID
 
-	err := partnerToCreate.Delete()
+	err = partnerToCreate.Delete()
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}

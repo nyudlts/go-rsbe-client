@@ -2,6 +2,7 @@ package rsbe
 
 import (
 	"github.com/google/go-querystring/query"
+	"github.com/google/uuid"
 
 	"encoding/json"
 	"fmt"
@@ -27,7 +28,7 @@ type IEToSEEntry struct {
 	Notes       string `json:"notes,omitempty"`
 	CreatedAt   string `json:"created_at,omitempty"`
 	UpdatedAt   string `json:"updated_at,omitempty"`
-	LockVersion int    `json:"lock_version,omitempty"`
+	LockVersion int    `json:"lock_version"`
 	IEURL       string `json:"ie_url,omitempty"`
 	SEURL       string `json:"se_url,omitempty"`
 	IEToSEsURL  string `json:"ie_to_ses_url,omitempty"`
@@ -75,6 +76,11 @@ func IEToSEList(filter ...IEToSEListEntry) (list []IEToSEListEntry, err error) {
 }
 
 func IEToSEGet(id string) (item IEToSEEntry, err error) {
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return IEToSEEntry{}, fmt.Errorf("id is not a UUID: %s", err.Error())
+	}
+
 	path := fmt.Sprintf("/api/v0/ie_to_ses/%s", id)
 
 	body, err := GetBody(path)
@@ -91,6 +97,11 @@ func IEToSEGet(id string) (item IEToSEEntry, err error) {
 }
 
 func IEToSEDelete(id string) (err error) {
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return fmt.Errorf("id is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/ie_to_ses/" + id
 
 	err = Delete(path)
@@ -100,7 +111,27 @@ func IEToSEDelete(id string) (err error) {
 	return nil
 }
 
+func IEToSEPurge(id string) (err error) {
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return fmt.Errorf("id is not a UUID: %s", err.Error())
+	}
+
+	path := "/api/v0/ie_to_ses/" + id
+
+	err = Purge(path)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (c *IEToSEEntry) Get() (err error) {
+	_, err = uuid.Parse(c.ID)
+	if err != nil {
+		return fmt.Errorf("ID is not a UUID: %s", err.Error())
+	}
+
 	path := fmt.Sprintf("/api/v0/ie_to_ses/%s", c.ID)
 
 	body, err := GetBody(path)
@@ -138,6 +169,11 @@ func (c *IEToSEEntry) Create() (err error) {
 }
 
 func (c *IEToSEEntry) Update() (err error) {
+	_, err = uuid.Parse(c.ID)
+	if err != nil {
+		return fmt.Errorf("ID is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/ie_to_ses/" + c.ID
 
 	data, err := json.Marshal(c)
@@ -155,6 +191,10 @@ func (c *IEToSEEntry) Update() (err error) {
 
 func (c *IEToSEEntry) Delete() (err error) {
 	return IEToSEDelete(c.ID)
+}
+
+func (c *IEToSEEntry) Purge() (err error) {
+	return IEToSEPurge(c.ID)
 }
 
 func (e IEToSEListEntry) ToString() string {

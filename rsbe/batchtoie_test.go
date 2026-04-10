@@ -1,8 +1,10 @@
 package rsbe
 
 import (
-	"fmt"
 	"testing"
+
+	"github.com/nyudlts/go-rsbe-client/rsbe/internal/testutils"
+	"github.com/stretchr/testify/assert"
 )
 
 // var batchToIEListEntry = BatchToIEListEntry{}
@@ -24,6 +26,7 @@ func TestBatchToIECreateFunc(t *testing.T) {
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}
+	defer batchToIEToCreate.Purge()
 
 	t.Run("confirm that attributes updated", func(t *testing.T) {
 		if batchToIEToCreate.ID == "" {
@@ -42,6 +45,12 @@ func TestBatchToIECreateFunc(t *testing.T) {
 
 func TestBatchToIEList(t *testing.T) {
 	setupLocalhostClient()
+
+	err := batchToIEToCreate.Create()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
+	defer batchToIEToCreate.Purge()
 
 	t.Run("check that proper attribute values are returned", func(t *testing.T) {
 		list, err := BatchToIEList()
@@ -80,18 +89,19 @@ func TestBatchToIEList(t *testing.T) {
 			t.Errorf("Status mismatch: want: \"%v\", got: \"%v\"", want.Status, got.Status)
 		}
 
-		if want.CreatedAt != got.CreatedAt {
-			t.Errorf("CreatedAt mismatch: want: \"%v\", got: \"%v\"", want.CreatedAt, got.CreatedAt)
-		}
-
-		if want.UpdatedAt != got.UpdatedAt {
-			t.Errorf("UpdatedAt mismatch: want: \"%v\", got: \"%v\"", want.UpdatedAt, got.UpdatedAt)
-		}
+		testutils.AssertEquivalentTimestamps(t, want.CreatedAt, got.CreatedAt)
+		testutils.AssertEquivalentTimestamps(t, want.UpdatedAt, got.UpdatedAt)
 	})
 }
 
 func TestBatchToIEGetFunc(t *testing.T) {
 	setupLocalhostClient()
+
+	err := batchToIEToCreate.Create()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
+	defer batchToIEToCreate.Purge()
 
 	t.Run("check that proper attribute values are returned", func(t *testing.T) {
 		want := batchToIEToCreate
@@ -124,13 +134,8 @@ func TestBatchToIEGetFunc(t *testing.T) {
 			t.Errorf("Status mismatch: want: \"%v\", got: \"%v\"", want.Status, got.Status)
 		}
 
-		if want.CreatedAt != got.CreatedAt {
-			t.Errorf("CreatedAt mismatch: want: \"%v\", got: \"%v\"", want.CreatedAt, got.CreatedAt)
-		}
-
-		if want.UpdatedAt != got.UpdatedAt {
-			t.Errorf("UpdatedAt mismatch: want: \"%v\", got: \"%v\"", want.UpdatedAt, got.UpdatedAt)
-		}
+		testutils.AssertEquivalentTimestamps(t, want.CreatedAt, got.CreatedAt)
+		testutils.AssertEquivalentTimestamps(t, want.UpdatedAt, got.UpdatedAt)
 
 		if want.Notes != got.Notes {
 			t.Errorf("Notes mismatch: want: \"%v\", got: \"%v\"", want.Notes, got.Notes)
@@ -140,28 +145,23 @@ func TestBatchToIEGetFunc(t *testing.T) {
 			t.Errorf("LockVersion mismatch: want: \"%v\", got: \"%v\"", want.LockVersion, got.LockVersion)
 		}
 
-		expect := fmt.Sprintf("http://localhost:3000/api/v0/ies/%s", want.IEID)
-		if expect != got.IEURL {
-			t.Errorf("IEURL mismatch: want: \"%v\", got: \"%v\"", expect, got.IEURL)
-		}
-
-		expect = fmt.Sprintf("http://localhost:3000/api/v0/batches/%s", want.BatchID)
-		if expect != got.BatchURL {
-			t.Errorf("BatchURL mismatch: want: \"%v\", got: \"%v\"", expect, got.BatchURL)
-		}
-
-		expect = "http://localhost:3000/api/v0/batch_to_ies"
-		if expect != got.BatchToIEsURL {
-			t.Errorf("BatchToIEsURL mismatch: want: \"%v\", got: \"%v\"", expect, got.BatchToIEsURL)
-		}
-
+		assert.Contains(t, got.IEURL, "api/v0/ies/"+want.IEID, "IEURL does not contain expected substring")
+		assert.Contains(t, got.BatchURL, "api/v0/batches/"+want.BatchID, "BatchURL does not contain expected substring")
+		assert.Contains(t, got.BatchToIEsURL, "api/v0/batch_to_ies", "BatchToIEsURL does not contain expected substring")
 	})
+
 }
 
 func TestBatchToIEUpdateFunc(t *testing.T) {
 	setupLocalhostClient()
 
-	err := batchToIEToCreate.Get()
+	err := batchToIEToCreate.Create()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
+	defer batchToIEToCreate.Purge()
+
+	err = batchToIEToCreate.Get()
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}
@@ -196,7 +196,15 @@ func TestBatchToIEUpdateFunc(t *testing.T) {
 func TestBatchToIEDeleteFunc(t *testing.T) {
 	setupLocalhostClient()
 
-	err := batchToIEToCreate.Get()
+	err := batchToIEToCreate.Create()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
+	// the Purge() call is needed because Delete() is a soft delete,
+	// the record will still exist and needs to be purged
+	defer batchToIEToCreate.Purge()
+
+	err = batchToIEToCreate.Get()
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}

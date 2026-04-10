@@ -3,6 +3,8 @@ package rsbe
 import (
 	"encoding/json"
 	"fmt"
+
+	"github.com/google/uuid"
 )
 
 type EToFMDListEntry struct {
@@ -23,7 +25,7 @@ type EToFMDEntry struct {
 	CreatedAt   string `json:"created_at,omitempty"`
 	UpdatedAt   string `json:"updated_at,omitempty"`
 	EURL        string `json:"eurl,omitempty"`         // ---
-	LockVersion int    `json:"lock_version,omitempty"` // ---
+	LockVersion int    `json:"lock_version"` // ---
 }
 
 func EToFMDList() (list []EToFMDListEntry, err error) {
@@ -42,6 +44,11 @@ func EToFMDList() (list []EToFMDListEntry, err error) {
 }
 
 func EToFMDGet(id string) (item EToFMDEntry, err error) {
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return EToFMDEntry{}, fmt.Errorf("id is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/etofmds/" + id
 
 	body, err := GetBody(path)
@@ -58,6 +65,11 @@ func EToFMDGet(id string) (item EToFMDEntry, err error) {
 }
 
 func (p *EToFMDEntry) Get() (err error) {
+	_, err = uuid.Parse(p.ID)
+	if err != nil {
+		return fmt.Errorf("ID is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/etofmds/" + p.ID
 
 	body, err := GetBody(path)
@@ -95,6 +107,11 @@ func (p *EToFMDEntry) Create() (err error) {
 }
 
 func (c *EToFMDEntry) Update() (err error) {
+	_, err = uuid.Parse(c.ID)
+	if err != nil {
+		return fmt.Errorf("ID is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/etofmds/" + c.ID
 
 	data, err := json.Marshal(c)
@@ -111,6 +128,11 @@ func (c *EToFMDEntry) Update() (err error) {
 }
 
 func EToFMDDelete(id string) (err error) {
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return fmt.Errorf("id is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/etofmds/" + id
 
 	err = Delete(path)
@@ -122,6 +144,25 @@ func EToFMDDelete(id string) (err error) {
 
 func (c *EToFMDEntry) Delete() (err error) {
 	return EToFMDDelete(c.ID)
+}
+
+func EToFMDPurge(id string) (err error) {
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return fmt.Errorf("id is not a UUID: %s", err.Error())
+	}
+
+	path := "/api/v0/etofmds/" + id
+
+	err = Purge(path)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (c *EToFMDEntry) Purge() (err error) {
+	return EToFMDPurge(c.ID)
 }
 
 func (e EToFMDListEntry) ToString() string {

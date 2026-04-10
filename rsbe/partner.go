@@ -3,6 +3,8 @@ package rsbe
 import (
 	"encoding/json"
 	"fmt"
+
+	"github.com/google/uuid"
 )
 
 type PartnerListEntry struct {
@@ -22,7 +24,7 @@ type PartnerEntry struct {
 	UpdatedAt      string `json:"updated_at,omitempty"`
 	PartnersURL    string `json:"partners_url,omitempty"`
 	CollectionsURL string `json:"colls_url,omitempty"`
-	LockVersion    int    `json:"lock_version,omitempty"`
+	LockVersion    int    `json:"lock_version"`
 	RelPath        string `json:"rel_path,omitempty"`
 }
 
@@ -42,6 +44,11 @@ func PartnerList() (partners []PartnerListEntry, err error) {
 }
 
 func PartnerGet(id string) (partner PartnerEntry, err error) {
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return PartnerEntry{}, fmt.Errorf("ID is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/partners/" + id
 
 	body, err := GetBody(path)
@@ -58,6 +65,12 @@ func PartnerGet(id string) (partner PartnerEntry, err error) {
 }
 
 func (p *PartnerEntry) Get() (err error) {
+
+	_, err = uuid.Parse(p.ID)
+	if err != nil {
+		return fmt.Errorf("ID is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/partners/" + p.ID
 
 	body, err := GetBody(path)
@@ -74,6 +87,7 @@ func (p *PartnerEntry) Get() (err error) {
 }
 
 func (p *PartnerEntry) Create() (err error) {
+
 	path := "/api/v0/partners"
 
 	data, err := json.Marshal(p)
@@ -95,6 +109,12 @@ func (p *PartnerEntry) Create() (err error) {
 }
 
 func (p *PartnerEntry) Update() (err error) {
+
+	_, err = uuid.Parse(p.ID)
+	if err != nil {
+		return fmt.Errorf("ID is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/partners/" + p.ID
 
 	data, err := json.Marshal(p)
@@ -111,6 +131,12 @@ func (p *PartnerEntry) Update() (err error) {
 }
 
 func PartnerDelete(id string) (err error) {
+
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return fmt.Errorf("id is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/partners/" + id
 
 	err = Delete(path)
@@ -120,8 +146,28 @@ func PartnerDelete(id string) (err error) {
 	return nil
 }
 
+func PartnerPurge(id string) (err error) {
+
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return fmt.Errorf("id is not a UUID: %s", err.Error())
+	}
+
+	path := "/api/v0/partners/" + id
+
+	err = Purge(path)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (p *PartnerEntry) Delete() (err error) {
 	return PartnerDelete(p.ID)
+}
+
+func (p *PartnerEntry) Purge() (err error) {
+	return PartnerPurge(p.ID)
 }
 
 func (e PartnerListEntry) ToString() string {

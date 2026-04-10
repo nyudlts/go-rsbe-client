@@ -90,6 +90,7 @@ func TestEToFMDCreateFunc(t *testing.T) {
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}
+	defer etofmdToCreate.Purge()
 
 	t.Run("confirm that attributes updated", func(t *testing.T) {
 		if etofmdToCreate.ID == "" {
@@ -109,6 +110,12 @@ func TestEToFMDCreateFunc(t *testing.T) {
 func TestEToFMDUpdateFunc(t *testing.T) {
 	setupLocalhostClient()
 
+	err := etofmdToCreate.Create()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
+	defer etofmdToCreate.Purge()
+
 	_ = etofmdToCreate.Get()
 
 	if etofmdToCreate.Role != "notes" {
@@ -117,7 +124,7 @@ func TestEToFMDUpdateFunc(t *testing.T) {
 
 	etofmdToCreate.Role = "waffles"
 
-	err := etofmdToCreate.Update()
+	err = etofmdToCreate.Update()
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}
@@ -138,11 +145,19 @@ func TestEToFMDUpdateFunc(t *testing.T) {
 func TestEToFMDDeleteFunc(t *testing.T) {
 	setupLocalhostClient()
 
+	err := etofmdToCreate.Create()
+	if err != nil {
+		t.Errorf("Unexpected error: %s", err)
+	}
+	// the Purge() call is needed because Delete() is a soft delete,
+	// the record will still exist and needs to be purged
+	defer etofmdToCreate.Purge()
+
 	_ = etofmdToCreate.Get()
 
 	id := etofmdToCreate.ID
 
-	err := etofmdToCreate.Delete()
+	err = etofmdToCreate.Delete()
 	if err != nil {
 		t.Errorf("Unexpected error: %s", err)
 	}

@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"path/filepath"
+
+	"github.com/google/uuid"
 )
 
 type SEListEntry struct {
@@ -36,7 +38,7 @@ type SEEntry struct {
 	BDIURL        string `json:"bdi_url,omitempty"`
 	FMDsURL       string `json:"fmds_url,omitempty"`
 	CollectionURL string `json:"coll_url,omitempty"`
-	LockVersion   int    `json:"lock_version,omitempty"`
+	LockVersion   int    `json:"lock_version"`
 }
 
 func CollectionSEList(collectionID string) (list []SEListEntry, err error) {
@@ -56,6 +58,11 @@ func CollectionSEList(collectionID string) (list []SEListEntry, err error) {
 }
 
 func SEGet(id string) (item SEEntry, err error) {
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return SEEntry{}, fmt.Errorf("id is not a UUID: %s", err.Error())
+	}
+
 	path := fmt.Sprintf("/api/v0/ses/%s", id)
 
 	body, err := GetBody(path)
@@ -79,6 +86,11 @@ func SEGetByDigiID(digiID string) (item SEEntry, err error) {
 }
 
 func SEDelete(id string) (err error) {
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return fmt.Errorf("id is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/ses/" + id
 
 	err = Delete(path)
@@ -88,7 +100,27 @@ func SEDelete(id string) (err error) {
 	return nil
 }
 
+func SEPurge(id string) (err error) {
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return fmt.Errorf("id is not a UUID: %s", err.Error())
+	}
+
+	path := "/api/v0/ses/" + id
+
+	err = Purge(path)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (c *SEEntry) Get() (err error) {
+	_, err = uuid.Parse(c.ID)
+	if err != nil {
+		return fmt.Errorf("ID is not a UUID: %s", err.Error())
+	}
+
 	path := fmt.Sprintf("/api/v0/ses/%s", c.ID)
 
 	body, err := GetBody(path)
@@ -149,6 +181,11 @@ func (c *SEEntry) Create() (err error) {
 }
 
 func (c *SEEntry) Update() (err error) {
+	_, err = uuid.Parse(c.ID)
+	if err != nil {
+		return fmt.Errorf("ID is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/ses/" + c.ID
 
 	data, err := json.Marshal(c)
@@ -166,6 +203,10 @@ func (c *SEEntry) Update() (err error) {
 
 func (c *SEEntry) Delete() (err error) {
 	return SEDelete(c.ID)
+}
+
+func (c *SEEntry) Purge() (err error) {
+	return SEPurge(c.ID)
 }
 
 func (e SEListEntry) ToString() string {

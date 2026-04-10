@@ -1,5 +1,10 @@
 # Changelog
 
+### v0.7.0
+  * update code so that library can be used with both Rails-based RSBE  
+    instances using `HTTP Basic Auth` as well as `go-rsbe` instances
+    using cookie-based authentication
+
 ### v0.6.1
   * add `Classification` to `Collection` `ToString()` methods
   * add `RSBE API v0.8.0` development database dump needed for testing

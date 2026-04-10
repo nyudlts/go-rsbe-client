@@ -1,2 +1,9 @@
 *~
 main
+.env.*.yaml
+.env.test.yaml
+.env.dev.yaml
+.setup-test
+coverage.out
+TODO.md
+

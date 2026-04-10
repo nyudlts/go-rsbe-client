@@ -3,7 +3,10 @@ package rsbe
 import (
 	"encoding/json"
 	"fmt"
+
+	"github.com/google/uuid"
 )
+
 
 type BatchListEntry struct {
 	ID            string `json:"id,omitempty"`
@@ -30,7 +33,7 @@ type BatchEntry struct {
 	UpdatedAt     string `json:"updated_at,omitempty"`
 	CollectionURL string `json:"coll_url,omitempty"`
 	BatchesURL    string `json:"batches_url,omitempty"`
-	LockVersion   int    `json:"lock_version,omitempty"`
+	LockVersion   int    `json:"lock_version"`
 }
 
 type BatchReport struct {
@@ -106,6 +109,11 @@ func BatchList() (list []BatchListEntry, err error) {
 }
 
 func BatchGet(id string) (item BatchEntry, err error) {
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return BatchEntry{}, fmt.Errorf("id is not a UUID: %s", err.Error())
+	}
+
 	path := fmt.Sprintf("/api/v0/batches/%s", id)
 
 	body, err := GetBody(path)
@@ -138,6 +146,11 @@ func BatchReportGet(id string) (item BatchReport, err error) {
 }
 
 func BatchDelete(id string) (err error) {
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return fmt.Errorf("id is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/batches/" + id
 
 	err = Delete(path)
@@ -147,7 +160,28 @@ func BatchDelete(id string) (err error) {
 	return nil
 }
 
+func BatchPurge(id string) (err error) {
+
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return fmt.Errorf("id is not a UUID: %s", err.Error())
+	}
+
+	path := "/api/v0/batches/" + id
+
+	err = Purge(path)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (c *BatchEntry) Get() (err error) {
+	_, err = uuid.Parse(c.ID)
+	if err != nil {
+		return fmt.Errorf("ID is not a UUID: %s", err.Error())
+	}
+
 	path := fmt.Sprintf("/api/v0/batches/%s", c.ID)
 
 	body, err := GetBody(path)
@@ -185,6 +219,11 @@ func (c *BatchEntry) Create() (err error) {
 }
 
 func (c *BatchEntry) Update() (err error) {
+	_, err = uuid.Parse(c.ID)
+	if err != nil {
+		return fmt.Errorf("ID is not a UUID: %s", err.Error())
+	}
+
 	path := "/api/v0/batches/" + c.ID
 
 	data, err := json.Marshal(c)
@@ -202,6 +241,10 @@ func (c *BatchEntry) Update() (err error) {
 
 func (c *BatchEntry) Delete() (err error) {
 	return BatchDelete(c.ID)
+}
+
+func (c *BatchEntry) Purge() (err error) {
+	return BatchPurge(c.ID)
 }
 
 func (e BatchListEntry) ToString() string {
