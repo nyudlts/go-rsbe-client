@@ -4,4 +4,6 @@ main
 .env.test.yaml
 .env.dev.yaml
 .setup-test
-**/coverage.out
+coverage.out
+TODO.md
+
