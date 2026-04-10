@@ -1,18 +1,34 @@
 ---
-# Test configuration file for go-rsbe-client
-# Set APP_ENV_FILE_PATH to point to this file when running tests
-environment: test
+# Example test configuration file for go-rsbe-client
+# Copy this file to .env.test.yaml and update with your test credentials
+# Then set: export APP_ENV_FILE_PATH=/path/to/.env.test.yaml
 
+# NOTE: THIS FILE IS FOR TESTING PURPOSES ONLY. 
+#       When using this library in a application it doesn't matter where you 
+#       get your configuration values from. The important thing is that you 
+#       call `rsbe.ConfigureClient(&config)` with a valid config struct 
+#       before making any API calls.
+
+environment: test
+default_config: cookie # default config to use for tests that hit the server
+                       # can be any config key listed under "configs"
+		                   # in this example the options are "rails" and "gorsbe"
 configs:
-  basic:
+  # Example configuration for a Rails RSBE instance
+  # Update with your test base URL and credentials.
+  rails:
     BaseURL:  "http://localhost:3000/"
-    User:     "foo"
-    Password: "bar"
+    User:     "your_username"
+    Password: "your_password"
   
-  cookie:
-    BaseURL:   "http://localhost:3000/"
-    User:      "foo"
-    Password:  "bar"
+  # Example configuration for a go-rsbe instance
+  # Update with your test base URL, credentials, and login path.
+  gorsbe:
+    BaseURL:   "http://localhost:3001/"
+    User:      "your_email@example.com"
+    Password:  "your_password"
     AuthType:  "cookie"
     LoginPath: "/api/v0/sessions"
 
+# end of document marker follows
+...

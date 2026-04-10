@@ -226,9 +226,9 @@ func TestClientDelete(t *testing.T) {
 }
 
 func TestCookieAuth(t *testing.T) {
-	t.Run("test cookie auth config", func(t *testing.T) {
-		c, err := GetConfig("cookie")
-		assert.NoError(t, err, "Failed to get cookie config")
+	t.Run("test gorsbe config with cookie auth", func(t *testing.T) {
+		c, err := GetConfig("gorsbe")
+		assert.NoError(t, err, "Failed to get gorsbe config")
 
 		assert.NoError(t, ConfigureClient(c), "ConfigureClient should only return an error if the server is down")
 		assert.Equal(t, conf.AuthType, AuthTypeCookie, "AuthType should be set to cookie after ConfigureClient")
@@ -237,9 +237,9 @@ func TestCookieAuth(t *testing.T) {
 		assert.NotEmpty(t, conf.LoginPath, "Expected LoginPath to be set")
 	})
 
-	t.Run("test basic auth config", func(t *testing.T) {
-		c, err := GetConfig("basic")
-		assert.NoError(t, err, "Failed to get basic config")
+	t.Run("test rails config with basic auth", func(t *testing.T) {
+		c, err := GetConfig("rails")
+		assert.NoError(t, err, "Failed to get rails config")
 
 		assert.NoError(t, ConfigureClient(c), "ConfigureClient should only return an error if the server is down")
 		assert.Equal(t, conf.AuthType, AuthTypeBasic, "Expected AuthType to be basic after ConfigureClient")
@@ -248,9 +248,9 @@ func TestCookieAuth(t *testing.T) {
 		assert.Empty(t, conf.LoginPath, "Expected LoginPath to be empty for basic auth")
 	})
 
-	t.Run("test cookie auth without LoginPath returns error", func(t *testing.T) {
-		c, err := GetConfig("cookie")
-		assert.NoError(t, err, "Failed to get cookie config")
+	t.Run("test gorsbe config with cookie auth without LoginPath returns error", func(t *testing.T) {
+		c, err := GetConfig("gorsbe")
+		assert.NoError(t, err, "Failed to get gorsbe config")
 
 		// Clear LoginPath to test error handling
 		c.LoginPath = ""
@@ -274,9 +274,9 @@ func TestBackwardCompatibility(t *testing.T) {
 		defer ts.Close()
 
 		// Get basic config and clear AuthType to test default behavior
-		c, err := GetConfig("basic")
+		c, err := GetConfig("rails")
 		if err != nil {
-			t.Fatalf("Failed to get basic config: %v", err)
+			t.Fatalf("Failed to get rails config: %v", err)
 		}
 		c.BaseURL = ts.URL
 		// Clear AuthType to test default behavior
@@ -301,9 +301,9 @@ func TestBackwardCompatibility(t *testing.T) {
 
 func TestCookieAuthWithMockServer(t *testing.T) {
 	// Get expected credentials from config
-	cookieConfig, err := GetConfig("cookie")
+	gorsbeConfig, err := GetConfig("gorsbe")
 	if err != nil {
-		t.Fatalf("Failed to get cookie config: %v", err)
+		t.Fatalf("Failed to get gorsbe config: %v", err)
 	}
 
 	// Create a mock server
@@ -332,7 +332,7 @@ func TestCookieAuthWithMockServer(t *testing.T) {
 			return
 		}
 
-		if loginReq.Email != cookieConfig.User || loginReq.Password != cookieConfig.Password {
+		if loginReq.Email != gorsbeConfig.User || loginReq.Password != gorsbeConfig.Password {
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
 		}
@@ -366,11 +366,11 @@ func TestCookieAuthWithMockServer(t *testing.T) {
 	ts := httptest.NewServer(mux)
 	defer ts.Close()
 
-	t.Run("test successful cookie auth flow", func(t *testing.T) {
-		// Get cookie config from configuration file
-		c, err := GetConfig("cookie")
+	t.Run("test successful gorsbe config with cookie auth flow", func(t *testing.T) {
+		// Get gorsbe config from configuration file
+		c, err := GetConfig("gorsbe")
 		if err != nil {
-			t.Fatalf("Failed to get cookie config: %v", err)
+			t.Fatalf("Failed to get gorsbe config: %v", err)
 		}
 
 		// Override BaseURL to use the test server

@@ -25,8 +25,8 @@ func TestLoadConfig(t *testing.T) {
 		}
 	})
 
-	t.Run("test GetConfig for basic auth", func(t *testing.T) {
-		config, err := GetConfig("basic")
+	t.Run("test GetConfig for rails config with basic auth", func(t *testing.T) {
+		config, err := GetConfig("rails")
 		if err != nil {
 			t.Fatalf("Unexpected error: %v", err)
 		}
@@ -40,8 +40,8 @@ func TestLoadConfig(t *testing.T) {
 		}
 	})
 
-	t.Run("test GetConfig for cookie auth", func(t *testing.T) {
-		config, err := GetConfig("cookie")
+	t.Run("test GetConfig for gorsbe config with cookie auth", func(t *testing.T) {
+		config, err := GetConfig("gorsbe")
 		if err != nil {
 			t.Fatalf("Unexpected error: %v", err)
 		}

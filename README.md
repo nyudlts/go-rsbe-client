@@ -19,7 +19,7 @@ type Config struct {
 }
 ```
 
-Please reference the [`.env.test.yaml.example`](./.env.test.yaml.example) file for sample values.
+Please reference the [`cfg/config.yaml.example`](./cfg/config.yaml.example) file for sample values.
 
 ## Testing
 
@@ -27,9 +27,9 @@ The test suite requires a configuration file to be specified via the `APP_ENV_FI
 
 ### Setup Test Configuration
 
-1. Create a test configuration file (e.g., `.env.test.yaml`) based on the example in `cfg/config.yaml.example`
+1. Create a test configuration file (e.g., `.env.test.yaml`) based on [`cfg/config.yaml.example`](./cfg/config.yaml.example)
 2. Ensure the configuration file has `environment: test` set
-3. Configure both `basic` and `cookie` authentication entries as needed
+3. Update the `rails` and `gorsbe` configurations as needed
 
 Example configuration:
 
@@ -37,12 +37,12 @@ Example configuration:
 environment: test
 
 configs:
-  basic:
+  rails:
     BaseURL:  "http://localhost:3000/"
     User:     "foo"
     Password: "bar"
   
-  cookie:
+  gorsbe:
     BaseURL:   "http://localhost:3000/"
     User:      "foo"
     Password:  "bar"
