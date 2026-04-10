@@ -1,7 +1,25 @@
-## `go-rsbe-client`
+# `go-rsbe-client`
 
-This is an [`rsbe`](https://github.com/nyudlts/rsbe) API client package
-written in Golang.
+This repo contains a client package for the R* Back End (`RSBE`) API written in Go.  
+The library supports two forms of authentication:  
+
+* `HTTP Basic Auth`  (used with the [Rails-based `RSBE` implementation](https://github.com/nyudlts/rsbe))
+* cookie based authentication (used with the [Go-based `RSBE` implementation](https://github.com/nyudlts/go-rsbe))
+
+Before placing requests to either implementation, you must call the  
+`rsbe.ConfigureClient(&cfg)` function with a properly initialized `Config` variable.
+
+```go
+type Config struct {
+  BaseURL   string
+  User      string
+  Password  string
+  AuthType  string
+  LoginPath string
+}
+```
+
+Please reference the [`.env.test.yaml.example`](./.env.test.yaml.example) file for sample values.
 
 ## Testing
 
@@ -41,5 +59,5 @@ export APP_ENV_FILE_PATH=/path/to/.env.test.yaml
 go test ./...
 ```
 
-The test suite will validate that the `environment` field is set to `test` to prevent accidental modification of non-test databases.
-
+The test suite will validate that the `environment` field is set to `test`  
+to prevent accidental modification of non-test databases.
