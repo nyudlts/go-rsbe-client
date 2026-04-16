@@ -1,5 +1,8 @@
 # Changelog
 
+### v0.7.1
+  * align `*ListEntry` and `*Entry` types with latest `go-rsbe` `DTOs`
+
 ### v0.7.0
   * update code so that library can be used with both Rails-based RSBE  
     instances using `HTTP Basic Auth` as well as `go-rsbe` instances
