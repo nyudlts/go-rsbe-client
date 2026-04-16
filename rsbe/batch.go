@@ -7,7 +7,6 @@ import (
 	"github.com/google/uuid"
 )
 
-
 type BatchListEntry struct {
 	ID            string `json:"id,omitempty"`
 	Type          string `json:"batch_type,omitempty"`
@@ -19,20 +18,23 @@ type BatchListEntry struct {
 	CollectionID  string `json:"coll_id,omitempty"`
 	URL           string `json:"url,omitempty"`
 	CollectionURL string `json:"coll_url,omitempty"`
+	ReportURL     string `json:"report_url,omitempty"`
 }
 
 type BatchEntry struct {
 	ID            string `json:"id,omitempty"`
-	Name          string `json:"name,omitempty"`
-	Source        string `json:"source_file,omitempty"`
-	CollectionID  string `json:"coll_id,omitempty"`
 	Type          string `json:"batch_type,omitempty"`
 	Number        uint   `json:"batch_number,omitempty"`
+	Name          string `json:"name,omitempty"`
+	Source        string `json:"source_file,omitempty"`
 	Notes         string `json:"notes,omitempty"`
 	CreatedAt     string `json:"created_at,omitempty"`
 	UpdatedAt     string `json:"updated_at,omitempty"`
+	DeletedAt     string `json:"deleted_at,omitempty"`
+	CollectionID  string `json:"coll_id,omitempty"`
 	CollectionURL string `json:"coll_url,omitempty"`
 	BatchesURL    string `json:"batches_url,omitempty"`
+	ReportURL     string `json:"report_url,omitempty"`
 	LockVersion   int    `json:"lock_version"`
 }
 

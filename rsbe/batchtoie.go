@@ -2,7 +2,7 @@ package rsbe
 
 import (
 	"encoding/json"
-		"fmt"
+	"fmt"
 
 	"github.com/google/uuid"
 )
@@ -16,6 +16,7 @@ type BatchToIEListEntry struct {
 	Status    string `json:"status,omitempty"`
 	CreatedAt string `json:"created_at,omitempty"`
 	UpdatedAt string `json:"updated_at,omitempty"`
+	DeletedAt string `json:"deleted_at,omitempty"`
 	URL       string `json:"url,omitempty"`
 }
 
@@ -29,9 +30,11 @@ type BatchToIEEntry struct {
 	Notes         string `json:"notes,omitempty"`
 	CreatedAt     string `json:"created_at,omitempty"`
 	UpdatedAt     string `json:"updated_at,omitempty"`
+	DeletedAt     string `json:"deleted_at,omitempty"`
+	Data          string `json:"data,omitempty"`
 	BatchURL      string `json:"batch_url,omitempty"`
 	IEURL         string `json:"ie_url,omitempty"`
-	BatchToIEsURL string `json:"batch_to_ies_url"`
+	BatchToIEsURL string `json:"batch_to_ies_url,omitempty"`
 	LockVersion   int    `json:"lock_version"`
 }
 

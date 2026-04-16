@@ -18,27 +18,42 @@ type SEListEntry struct {
 	Label         string `json:"label,omitempty"`
 	CreatedAt     string `json:"created_at,omitempty"`
 	UpdatedAt     string `json:"updated_at,omitempty"`
+	DeletedAt     string `json:"deleted_at,omitempty"`
 	URL           string `json:"url,omitempty"`
 	CollectionURL string `json:"coll_url,omitempty"`
 }
 
 type SEEntry struct {
-	ID            string `json:"id,omitempty"`
-	CollectionID  string `json:"coll_id,omitempty"` // REQUIRED
-	DigiID        string `json:"digi_id,omitempty"` // REQUIRED
-	DOType        string `json:"do_type,omitempty"` // REQUIRED
-	Phase         string `json:"phase,omitempty"`   // REQUIRED
-	Step          string `json:"step,omitempty"`    // REQUIRED
-	Status        string `json:"status,omitempty"`  // REQUIRED
-	Notes         string `json:"notes,omitempty"`
-	Label         string `json:"label,omitempty"`
-	Title         string `json:"title,omitempty"`
-	CreatedAt     string `json:"created_at,omitempty"`
-	UpdatedAt     string `json:"updated_at,omitempty"`
-	BDIURL        string `json:"bdi_url,omitempty"`
-	FMDsURL       string `json:"fmds_url,omitempty"`
-	CollectionURL string `json:"coll_url,omitempty"`
-	LockVersion   int    `json:"lock_version"`
+	ID            string        `json:"id,omitempty"`
+	CollectionID  string        `json:"coll_id,omitempty"` // REQUIRED
+	DigiID        string        `json:"digi_id,omitempty"` // REQUIRED
+	DOType        string        `json:"do_type,omitempty"` // REQUIRED
+	Phase         string        `json:"phase,omitempty"`   // REQUIRED
+	Step          string        `json:"step,omitempty"`    // REQUIRED
+	Status        string        `json:"status,omitempty"`  // REQUIRED
+	Notes         string        `json:"notes,omitempty"`
+	Label         string        `json:"label,omitempty"`
+	Title         string        `json:"title,omitempty"`
+	Metadata      JSONMap       `json:"metadata,omitempty"`
+	CreatedAt     string        `json:"created_at,omitempty"`
+	UpdatedAt     string        `json:"updated_at,omitempty"`
+	DeletedAt     string        `json:"deleted_at,omitempty"`
+	Fids          JSONMap       `json:"fids,omitempty"`
+	IEs           []IEforSEShow `json:"ies,omitempty"`
+	BDIURL        string        `json:"bdi_url,omitempty"`
+	FMDsURL       string        `json:"fmds_url,omitempty"`
+	CollectionURL string        `json:"coll_url,omitempty"`
+	LockVersion   int           `json:"lock_version"`
+}
+
+type SEforIEShow struct {
+	DigiID    string    `json:"digi_id"`
+	Order     int       `json:"order"`
+	Section   int       `json:"section"`
+	SEID      uuid.UUID `json:"se_id"`
+	Notes     string    `json:"notes"`
+	SEURL     string    `json:"se_url"`
+	IEToSEURL string    `json:"ie_to_se_url"`
 }
 
 func CollectionSEList(collectionID string) (list []SEListEntry, err error) {

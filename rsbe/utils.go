@@ -12,3 +12,6 @@ func checkStringContains(t *testing.T, got, expected string) {
 		t.Errorf("Expected to contain: \n %v\nGot:\n %v\n", expected, got)
 	}
 }
+
+// JSONMap is a shortcut for a JSON object
+type JSONMap map[string]any

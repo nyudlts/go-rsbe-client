@@ -40,10 +40,11 @@ type FMDEntry struct {
 	HashSHA512       string    `json:"hash_sha512,omitempty"`
 	CreatedAt        string    `json:"created_at,omitempty"`
 	UpdatedAt        string    `json:"updated_at,omitempty"`
+	DeletedAt        string    `json:"deleted_at,omitempty"`
 	Formats          FMDFormat `json:"fmts,omitempty"`
 	Data             FMDData   `json:"data,omitempty"`
-	PartnerURL       string    `json:"partner_url,omitempty"`
 	CollectionURL    string    `json:"coll_url,omitempty"`
+	PartnerURL       string    `json:"partner_url,omitempty"`
 	LockVersion      int       `json:"lock_version"`
 }
 
