@@ -36,7 +36,7 @@ type IEEntry struct {
 	UpdatedAt     string        `json:"updated_at,omitempty"`
 	DeletedAt     string        `json:"deleted_at,omitempty"`
 	Fids          JSONMap       `json:"fids,omitempty"`
-	SEs           []SEForIEShow `json:"ses,omitempty"`
+	SEs           []SEforIEShow `json:"ses,omitempty"`
 	FMDsURL       string        `json:"fmds_url,omitempty"`
 	CollectionURL string        `json:"coll_url,omitempty"`
 	LockVersion   int           `json:"lock_version"`
