@@ -17,25 +17,39 @@ type IEListEntry struct {
 	Title         string `json:"title,omitempty"`
 	CreatedAt     string `json:"created_at,omitempty"`
 	UpdatedAt     string `json:"updated_at,omitempty"`
+	DeletedAt     string `json:"deleted_at,omitempty"`
 	URL           string `json:"url,omitempty"`
 	CollectionURL string `json:"coll_url,omitempty"`
 	LockVersion   int    `json:"lock_version"`
 }
 
 type IEEntry struct {
-	ID            string `json:"id,omitempty"`
-	CollectionID  string `json:"coll_id,omitempty"` // REQUIRED
-	SysNum        string `json:"sys_num,omitempty"` // REQUIRED
-	Phase         string `json:"phase,omitempty"`   // REQUIRED
-	Step          string `json:"step,omitempty"`    // REQUIRED
-	Status        string `json:"status,omitempty"`  // REQUIRED
-	Notes         string `json:"notes,omitempty"`
-	Title         string `json:"title,omitempty"`
-	CreatedAt     string `json:"created_at,omitempty"`
-	UpdatedAt     string `json:"updated_at,omitempty"`
-	FMDsURL       string `json:"fmds_url,omitempty"`
-	CollectionURL string `json:"coll_url,omitempty"`
-	LockVersion   int    `json:"lock_version"`
+	ID            string        `json:"id,omitempty"`
+	CollectionID  string        `json:"coll_id,omitempty"` // REQUIRED
+	SysNum        string        `json:"sys_num,omitempty"` // REQUIRED
+	Phase         string        `json:"phase,omitempty"`   // REQUIRED
+	Step          string        `json:"step,omitempty"`    // REQUIRED
+	Status        string        `json:"status,omitempty"`  // REQUIRED
+	Title         string        `json:"title,omitempty"`
+	Notes         string        `json:"notes,omitempty"`
+	CreatedAt     string        `json:"created_at,omitempty"`
+	UpdatedAt     string        `json:"updated_at,omitempty"`
+	DeletedAt     string        `json:"deleted_at,omitempty"`
+	Fids          JSONMap       `json:"fids,omitempty"`
+	SEs           []SEForIEShow `json:"ses,omitempty"`
+	FMDsURL       string        `json:"fmds_url,omitempty"`
+	CollectionURL string        `json:"coll_url,omitempty"`
+	LockVersion   int           `json:"lock_version"`
+}
+
+type IEforSEShow struct {
+	SysNum    string    `json:"sys_num"`
+	Order     int       `json:"order"`
+	Section   int       `json:"section"`
+	IEID      uuid.UUID `json:"ie_id"`
+	Notes     string    `json:"notes"`
+	IEURL     string    `json:"ie_url"`
+	IEToSEURL string    `json:"ie_to_se_url"`
 }
 
 func CollectionIEList(collectionID string) (list []IEListEntry, err error) {

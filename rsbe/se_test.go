@@ -236,9 +236,7 @@ func TestSEGetByDigiID(t *testing.T) {
 			t.Errorf("Unexpected error: %s", err)
 		}
 
-		if got != want {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
-		}
+		assert.Equal(t, want, got, "SEGetByDigiID did not return expected SE")
 	})
 
 	t.Run("confirm error is returned when not found", func(t *testing.T) {
@@ -267,9 +265,7 @@ func TestGetByDigiIDFunc(t *testing.T) {
 			t.Errorf("Unexpected error: %s", err)
 		}
 
-		if got != want {
-			t.Errorf("Mismatch: want: \"%v\", got: \"%v\"", want, got)
-		}
+		assert.Equal(t, want, got, "SEGetByDigiID did not return expected SE")
 	})
 
 	t.Run("confirm error is returned when not found", func(t *testing.T) {
