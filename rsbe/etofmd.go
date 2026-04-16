@@ -9,23 +9,25 @@ import (
 
 type EToFMDListEntry struct {
 	ID    string `json:"id,omitempty"`
-	EID   string `json:"eid,omitempty"`
 	EType string `json:"etype,omitempty"`
-	FMDID string `json:"fmd_id,omitempty"`
+	EID   string `json:"eid,omitempty"`
 	Role  string `json:"role,omitempty"`
+	FMDID string `json:"fmd_id,omitempty"`
 	URL   string `json:"url,omitempty"`
+	EURL  string `json:"eurl,omitempty"`
 }
 
 type EToFMDEntry struct {
 	ID          string `json:"id,omitempty"`
-	EID         string `json:"eid,omitempty"`
 	EType       string `json:"etype,omitempty"`
-	FMDID       string `json:"fmd_id,omitempty"`
+	EID         string `json:"eid,omitempty"`
 	Role        string `json:"role,omitempty"`
+	FMDID       string `json:"fmd_id,omitempty"`
 	CreatedAt   string `json:"created_at,omitempty"`
 	UpdatedAt   string `json:"updated_at,omitempty"`
-	EURL        string `json:"eurl,omitempty"`         // ---
-	LockVersion int    `json:"lock_version"` // ---
+	DeletedAt   string `json:"deleted_at,omitempty"`
+	EURL        string `json:"eurl,omitempty"`
+	LockVersion int    `json:"lock_version"`
 }
 
 func EToFMDList() (list []EToFMDListEntry, err error) {
