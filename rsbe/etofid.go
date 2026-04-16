@@ -9,11 +9,12 @@ import (
 
 type EToFIDListEntry struct {
 	ID       string `json:"id,omitempty"`
-	EID      string `json:"eid,omitempty"`
 	EType    string `json:"etype,omitempty"`
+	EID      string `json:"eid,omitempty"`
 	FIDType  string `json:"fid_type,omitempty"`
 	FIDValue string `json:"fid_value,omitempty"`
 	URL      string `json:"url,omitempty"`
+	EURL     string `json:"eurl,omitempty"`
 }
 
 type EToFIDEntry struct {
@@ -24,6 +25,7 @@ type EToFIDEntry struct {
 	FIDValue    string `json:"fid_value,omitempty"`
 	CreatedAt   string `json:"created_at,omitempty"`
 	UpdatedAt   string `json:"updated_at,omitempty"`
+	DeletedAt   string `json:"deleted_at,omitempty"`
 	EURL        string `json:"eurl,omitempty"`
 	LockVersion int    `json:"lock_version"`
 }
