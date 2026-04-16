@@ -25,23 +25,27 @@ type CollectionListEntry struct {
 
 type CollectionEntry struct {
 	ID              string `json:"id,omitempty"`
-	PartnerID       string `json:"partner_id"`         // REQUIRED for CREATE
-	OwnerID         string `json:"owner_id"`           // REQUIRED    ""
-	Code            string `json:"code"`               // REQUIRED    ""
-	DisplayCode     string `json:"display_code"`       // REQUIRED    ""
-	Name            string `json:"name,omitempty"`     // optional    ""
-	Type            string `json:"coll_type"`          // REQUIRED    ""  (origin, virtual)
-	Classification  string `json:"classification"`     // REQUIRED    ""
-	Quota           int    `json:"quota"`              // REQUIRED    ""
-	RelPath         string `json:"rel_path,omitempty"` // REQUIRED    ""
-	ReadyForContent bool   `json:"ready_for_content"`  // REQUIRED    ""
-	PartnerURL      string `json:"partner_url,omitempty"`
-	OwnerURL        string `json:"owner_url,omitempty"`
-	SEsURL          string `json:"ses_url,omitempty"`
-	IEsURL          string `json:"ies_url,omitempty"`
-	LockVersion     int    `json:"lock_version"`
-	CreatedAt       string `json:"created_at,omitempty"`
-	UpdatedAt       string `json:"updated_at,omitempty"`
+	PartnerID       string `json:"partner_id"`            // REQUIRED for CREATE
+	OwnerID         string `json:"owner_id"`              // REQUIRED    ""
+	Code            string `json:"code"`                  // REQUIRED    ""
+	DisplayCode     string `json:"display_code"`          // REQUIRED    ""
+	Name            string `json:"name,omitempty"`        // optional    ""
+	Type            string `json:"coll_type"`             // REQUIRED    ""  (origin, virtual)
+	Classification  string `json:"classification"`        // REQUIRED    ""
+	CreatedAt       string `json:"created_at,omitempty"`  //
+	UpdatedAt       string `json:"updated_at,omitempty"`  //
+	Quota           int    `json:"quota"`                 // REQUIRED    ""
+	ReadyForContent bool   `json:"ready_for_content"`     // REQUIRED    ""
+	URL             string `json:"url,omitempty"`         //
+	PartnerURL      string `json:"partner_url,omitempty"` //
+	StorageURL      string `json:"storage_url,omitempty"` //
+	OwnerURL        string `json:"owner_url,omitempty"`   //
+	IEsURL          string `json:"ies_url,omitempty"`     //
+	SEsURL          string `json:"ses_url,omitempty"`     //
+	LockVersion     int    `json:"lock_version"`          //
+	RelPath         string `json:"rel_path"`              // REQUIRED    ""
+	Path            string `json:"path,omitempty"`        //
+	DeletedAt       string `json:"deleted_at,omitempty"`  //
 }
 
 func PartnerCollectionList(partnerID string) (collections []CollectionListEntry, err error) {
