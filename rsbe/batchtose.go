@@ -17,23 +17,26 @@ type BatchToSEListEntry struct {
 	Status    string `json:"status,omitempty"     url:"status,omitempty"`
 	CreatedAt string `json:"created_at,omitempty" url:"-"`
 	UpdatedAt string `json:"updated_at,omitempty" url:"-"`
+	DeletedAt string `json:"deleted_at,omitempty" url:"-"`
 	URL       string `json:"url,omitempty"        url:"-"`
 }
 
 type BatchToSEEntry struct {
-	ID            string `json:"id,omitempty"`
-	BatchID       string `json:"batch_id,omitempty"`
-	SEID          string `json:"se_id,omitempty"`
-	Phase         string `json:"phase,omitempty"`
-	Step          string `json:"step,omitempty"`
-	Status        string `json:"status,omitempty"`
-	Notes         string `json:"notes,omitempty"`
-	CreatedAt     string `json:"created_at,omitempty"`
-	UpdatedAt     string `json:"updated_at,omitempty"`
-	BatchURL      string `json:"batch_url,omitempty"`
-	SEURL         string `json:"se_url,omitempty"`
-	BatchToSEsURL string `json:"batch_to_ses_url"`
-	LockVersion   int    `json:"lock_version"`
+	ID            string  `json:"id,omitempty"`
+	BatchID       string  `json:"batch_id,omitempty"`
+	SEID          string  `json:"se_id,omitempty"`
+	Phase         string  `json:"phase,omitempty"`
+	Step          string  `json:"step,omitempty"`
+	Status        string  `json:"status,omitempty"`
+	Notes         string  `json:"notes,omitempty"`
+	CreatedAt     string  `json:"created_at,omitempty"`
+	UpdatedAt     string  `json:"updated_at,omitempty"`
+	DeletedAt     string  `json:"deleted_at,omitempty"`
+	Data          JSONMap `json:"data,omitempty"`
+	BatchURL      string  `json:"batch_url,omitempty"`
+	SEURL         string  `json:"se_url,omitempty"`
+	BatchToSEsURL string  `json:"batch_to_ses_url,omitempty"`
+	LockVersion   int     `json:"lock_version"`
 }
 
 // Get a list of BatchToSEListEntry objects
