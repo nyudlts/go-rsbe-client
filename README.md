@@ -6,8 +6,14 @@ The library supports two forms of authentication:
 * `HTTP Basic Auth`  (used with the [Rails-based `RSBE` implementation](https://github.com/nyudlts/rsbe))
 * cookie based authentication (used with the [Go-based `RSBE` implementation](https://github.com/nyudlts/go-rsbe))
 
-Before placing requests to either implementation, you must call the  
-`rsbe.ConfigureClient(&cfg)` function with a properly initialized `Config` variable.
+Before placing requests, call `rsbe.ConfigureClient(&cfg)` with a properly initialized `Config` variable.
+For cookie auth, call `rsbe.Login()` after configuration.
+
+`ConfigureClient()` now only configures the client and does not perform network authentication.
+If you are using cookie auth, login and logout are explicit operations:
+
+* `rsbe.Login()` authenticates and stores session cookies.
+* `rsbe.Logout()` sends a `DELETE` request to `LoginPath` and clears client cookies.
 
 ```go
 type Config struct {
@@ -17,7 +23,29 @@ type Config struct {
   AuthType  string
   LoginPath string
 }
+
+// Basic auth
+if err := rsbe.ConfigureClient(&cfg); err != nil {
+  panic(err)
+}
+
+// Cookie auth
+if err := rsbe.ConfigureClient(&cfg); err != nil {
+  panic(err)
+}
+if err := rsbe.Login(); err != nil {
+  panic(err)
+}
+
+// ... make API calls ...
+
+if err := rsbe.Logout(); err != nil {
+  panic(err)
+}
 ```
+
+Migration note: if existing code relied on `ConfigureClient()` to automatically authenticate
+cookie sessions, add an explicit `rsbe.Login()` call immediately after configuration.
 
 Please reference the [`cfg/config.yaml.example`](./cfg/config.yaml.example) file for sample values.
 

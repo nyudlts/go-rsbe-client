@@ -1,4 +1,9 @@
-# Changelog
+# CHANGELOG
+
+### Unreleased
+  * add explicit `Login()` and `Logout()` functions for cookie-based authentication
+  * update `ConfigureClient()` to configure client state only (it no longer performs login)
+  * make `Logout()` issue a `DELETE` request to the configured `LoginPath` endpoint and clear client cookies
 
 ### v0.7.1
   * align `*ListEntry` and `*Entry` types with latest `go-rsbe` `DTOs`
