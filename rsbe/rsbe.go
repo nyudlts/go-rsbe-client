@@ -1,3 +1,3 @@
 package rsbe
 
-const Version = "0.8.0-alpha.2"
+const Version = "0.8.0-rc.1"
