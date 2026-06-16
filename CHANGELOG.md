@@ -4,6 +4,7 @@
   * add explicit `Login()` and `Logout()` functions for cookie-based authentication
   * update `ConfigureClient()` to configure client state only (it no longer performs login)
   * make `Logout()` issue a `DELETE` request to the configured `LoginPath` endpoint and clear client cookies
+  * add optional filtering to `EToFIDList()` by passing an `EToFIDListEntry` parameter with filter values for `EID`, `EType`, `FIDType`, or `FIDValue`
 
 ### v0.7.1
   * align `*ListEntry` and `*Entry` types with latest `go-rsbe` `DTOs`

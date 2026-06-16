@@ -184,3 +184,179 @@ func TestEToFIDDeleteFunc(t *testing.T) {
 
 	})
 }
+
+func TestEToFIDListFiltering(t *testing.T) {
+	setupLocalhostClient()
+
+	// Create test data with different values for filtering
+	etofid1 := EToFIDEntry{
+		EType:    "ie",
+		EID:      "9ea98441-b6b6-46cf-b6c8-91dff385c6c8",
+		FIDType:  "handle",
+		FIDValue: "test.1/abc123",
+	}
+
+	etofid2 := EToFIDEntry{
+		EType:    "se",
+		EID:      "8c258cb2-d700-43be-8773-a61a7b9cd668",
+		FIDType:  "citation_url",
+		FIDValue: "https://hdl.handle.net/test.2/def456",
+	}
+
+	etofid3 := EToFIDEntry{
+		EType:    "ie",
+		EID:      "9ea98441-b6b6-46cf-b6c8-91dff385c6c8",
+		FIDType:  "noid",
+		FIDValue: "ghi789",
+	}
+
+	// Create all test entries
+	if err := etofid1.Create(); err != nil {
+		t.Errorf("Failed to create test entry 1: %s", err)
+	}
+	defer etofid1.Purge()
+
+	if err := etofid2.Create(); err != nil {
+		t.Errorf("Failed to create test entry 2: %s", err)
+	}
+	defer etofid2.Purge()
+
+	if err := etofid3.Create(); err != nil {
+		t.Errorf("Failed to create test entry 3: %s", err)
+	}
+	defer etofid3.Purge()
+
+	t.Run("list with no filters returns all entries", func(t *testing.T) {
+		list, err := EToFIDList()
+		if err != nil {
+			t.Errorf("Unexpected error: %s", err)
+		}
+
+		if len(list) < 3 {
+			t.Errorf("Expected at least 3 entries, got: %d", len(list))
+		}
+	})
+
+	t.Run("list with empty filter returns all entries", func(t *testing.T) {
+		list, err := EToFIDList(EToFIDListEntry{})
+		if err != nil {
+			t.Errorf("Unexpected error: %s", err)
+		}
+
+		if len(list) < 3 {
+			t.Errorf("Expected at least 3 entries, got: %d", len(list))
+		}
+	})
+
+	t.Run("filter by EID", func(t *testing.T) {
+		list, err := EToFIDList(EToFIDListEntry{EID: etofid1.EID})
+		if err != nil {
+			t.Errorf("Unexpected error: %s", err)
+		}
+
+		if len(list) < 1 {
+			t.Errorf("Expected at least 1 entry, got: %d", len(list))
+		}
+
+		found := false
+		for _, entry := range list {
+			if entry.EID == etofid1.EID {
+				found = true
+				break
+			}
+		}
+
+		if !found {
+			t.Errorf("Expected to find entry with EID: %s", etofid1.EID)
+		}
+	})
+
+	t.Run("filter by EType", func(t *testing.T) {
+		list, err := EToFIDList(EToFIDListEntry{EType: "ie"})
+		if err != nil {
+			t.Errorf("Unexpected error: %s", err)
+		}
+
+		if len(list) < 2 {
+			t.Errorf("Expected at least 2 IE entries, got: %d", len(list))
+		}
+
+		for _, entry := range list {
+			if entry.EType != "ie" {
+				t.Errorf("Expected EType 'ie', got: %s", entry.EType)
+			}
+		}
+	})
+
+	t.Run("filter by FIDType", func(t *testing.T) {
+		list, err := EToFIDList(EToFIDListEntry{FIDType: "handle"})
+		if err != nil {
+			t.Errorf("Unexpected error: %s", err)
+		}
+
+		if len(list) < 1 {
+			t.Errorf("Expected at least 1 entry with FIDType 'handle', got: %d", len(list))
+		}
+
+		found := false
+		for _, entry := range list {
+			if entry.FIDType == "handle" && entry.FIDValue == etofid1.FIDValue {
+				found = true
+				break
+			}
+		}
+
+		if !found {
+			t.Errorf("Expected to find entry with FIDType 'handle' and FIDValue: %s", etofid1.FIDValue)
+		}
+	})
+
+	t.Run("filter by FIDValue", func(t *testing.T) {
+		list, err := EToFIDList(EToFIDListEntry{FIDValue: etofid2.FIDValue})
+		if err != nil {
+			t.Errorf("Unexpected error: %s", err)
+		}
+
+		if len(list) < 1 {
+			t.Errorf("Expected at least 1 entry, got: %d", len(list))
+		}
+
+		found := false
+		for _, entry := range list {
+			if entry.FIDValue == etofid2.FIDValue {
+				found = true
+				break
+			}
+		}
+
+		if !found {
+			t.Errorf("Expected to find entry with FIDValue: %s", etofid2.FIDValue)
+		}
+	})
+
+	t.Run("filter by multiple parameters", func(t *testing.T) {
+		list, err := EToFIDList(EToFIDListEntry{
+			EType:   "se",
+			FIDType: "citation_url",
+		})
+		if err != nil {
+			t.Errorf("Unexpected error: %s", err)
+		}
+
+		if len(list) < 1 {
+			t.Errorf("Expected at least 1 entry, got: %d", len(list))
+		}
+
+		found := false
+		for _, entry := range list {
+			if entry.EType == "se" && entry.FIDType == "citation_url" {
+				found = true
+				break
+			}
+		}
+
+		if !found {
+			t.Errorf("Expected to find entry with EType 'se' and FIDType 'citation_url'")
+		}
+	})
+}
