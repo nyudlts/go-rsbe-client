@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/cookiejar"
+	"net/url"
 )
 
 const (
@@ -31,13 +32,86 @@ var client *http.Client
 
 func ConfigureClient(c *Config) error {
 	conf = c
+	return nil
+}
 
-	// If cookie auth, perform login to get session cookie
-	if conf.AuthType == AuthTypeCookie {
-		if err := login(); err != nil {
-			return fmt.Errorf("cookie authentication failed: %w", err)
-		}
+// Login performs authentication for cookie-based auth and stores session cookies
+// in the client's cookie jar.
+func Login() error {
+	if conf == nil {
+		return fmt.Errorf("client is not configured")
 	}
+
+	if conf.AuthType != AuthTypeCookie {
+		return nil
+	}
+
+	if err := login(); err != nil {
+		return fmt.Errorf("cookie authentication failed: %w", err)
+	}
+
+	return nil
+}
+
+// Logout clears cookie-based authentication state from the client's cookie jar.
+func Logout() error {
+	if conf == nil {
+		return fmt.Errorf("client is not configured")
+	}
+
+	if conf.AuthType != AuthTypeCookie {
+		return nil
+	}
+
+	if err := logout(); err != nil {
+		return fmt.Errorf("cookie logout failed: %w", err)
+	}
+
+	return nil
+}
+
+func logout() error {
+
+	if conf.LoginPath == "" {
+		return fmt.Errorf("LoginPath is required for cookie authentication")
+	}
+
+	logoutURL := fmt.Sprintf("%s%s", conf.BaseURL, conf.LoginPath)
+	req, err := http.NewRequest("DELETE", logoutURL, nil)
+	if err != nil {
+		return err
+	}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusAccepted && resp.StatusCode != http.StatusNoContent {
+		respBody, readErr := io.ReadAll(resp.Body)
+		if readErr != nil {
+			return fmt.Errorf("logout failed: %d (unable to read response body: %v)", resp.StatusCode, readErr)
+		}
+		var eMsg ErrMsg
+		if err := json.Unmarshal(respBody, &eMsg); err != nil {
+			return fmt.Errorf("logout failed: %d (response: %s)", resp.StatusCode, string(respBody))
+		}
+		return fmt.Errorf("logout failed: %d ; %v", resp.StatusCode, eMsg.Error)
+	}
+
+	baseURL, err := url.Parse(conf.BaseURL)
+	if err != nil {
+		return fmt.Errorf("invalid BaseURL: %w", err)
+	}
+
+	// Recreate the cookie jar to ensure all session cookies are cleared.
+	jar, err := cookiejar.New(nil)
+	if err != nil {
+		return fmt.Errorf("failed to reset cookie jar: %w", err)
+	}
+	client.Jar = jar
+	client.Jar.SetCookies(baseURL, []*http.Cookie{})
 
 	return nil
 }

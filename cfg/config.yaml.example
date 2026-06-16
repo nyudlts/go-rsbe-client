@@ -6,8 +6,9 @@
 # NOTE: THIS FILE IS FOR TESTING PURPOSES ONLY. 
 #       When using this library in a application it doesn't matter where you 
 #       get your configuration values from. The important thing is that you 
-#       call `rsbe.ConfigureClient(&config)` with a valid config struct 
-#       before making any API calls.
+#       call `rsbe.ConfigureClient(&config)` with a valid config struct
+#       before making any API calls. If using cookie auth, also call
+#       `rsbe.Login()` after configuration.
 
 environment: test
 default_config: cookie # default config to use for tests that hit the server

@@ -81,5 +81,13 @@ func setupLocalhostClient() {
 		panic(err)
 	}
 
-	_ = ConfigureClient(c)
+	if err := ConfigureClient(c); err != nil {
+		panic(err)
+	}
+
+	if c.AuthType == AuthTypeCookie {
+		if err := Login(); err != nil {
+			panic(err)
+		}
+	}
 }

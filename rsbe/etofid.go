@@ -1,20 +1,21 @@
 package rsbe
 
 import (
+	"github.com/google/go-querystring/query"
+	"github.com/google/uuid"
+
 	"encoding/json"
 	"fmt"
-
-	"github.com/google/uuid"
 )
 
 type EToFIDListEntry struct {
-	ID       string `json:"id,omitempty"`
-	EType    string `json:"etype,omitempty"`
-	EID      string `json:"eid,omitempty"`
-	FIDType  string `json:"fid_type,omitempty"`
-	FIDValue string `json:"fid_value,omitempty"`
-	URL      string `json:"url,omitempty"`
-	EURL     string `json:"eurl,omitempty"`
+	ID       string `json:"id,omitempty"        url:"-"`
+	EType    string `json:"etype,omitempty"      url:"etype,omitempty"`
+	EID      string `json:"eid,omitempty"        url:"eid,omitempty"`
+	FIDType  string `json:"fid_type,omitempty"   url:"fid_type,omitempty"`
+	FIDValue string `json:"fid_value,omitempty" url:"fid_value,omitempty"`
+	URL      string `json:"url,omitempty"        url:"-"`
+	EURL     string `json:"eurl,omitempty"       url:"-"`
 }
 
 type EToFIDEntry struct {
@@ -30,9 +31,36 @@ type EToFIDEntry struct {
 	LockVersion int    `json:"lock_version"`
 }
 
-func EToFIDList() (list []EToFIDListEntry, err error) {
+// Get a list of EToFIDListEntry objects
+// Function accepts 0 or 1 EToFIDListEntry parameters.
+//
+// If an EToFIDListEntry parameter is passed, the EID, EType,
+// FIDType, and FIDValue fields are added to the RSBE query as query
+// params.
+func EToFIDList(e ...EToFIDListEntry) (list []EToFIDListEntry, err error) {
 
-	body, err := GetBody("/api/v0/etofids")
+	path := "/api/v0/etofids"
+
+	// check if there are any query parameters
+	switch len(e) {
+	case 0:
+		// noop
+	case 1:
+		// extract url.Values
+		v, err := query.Values(e[0])
+		if err != nil {
+			return nil, err
+		}
+
+		// if encoded values are not empty, append to path
+		if v.Encode() != "" {
+			path += "?" + v.Encode()
+		}
+	default:
+		return list, fmt.Errorf("error: can only accept 0 or 1 EToFIDListEntry arguments")
+	}
+
+	body, err := GetBody(path)
 	if err != nil {
 		return nil, err
 	}
