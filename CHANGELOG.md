@@ -1,6 +1,6 @@
 # CHANGELOG
 
-### v0.8.0-rc.1 (BREAKING CHANGE)
+### v0.8.0 (BREAKING CHANGE)
 
 * BREAKING CHANGE: update `ConfigureClient()` to configure client state only (it no longer performs login)
 * BREAKING CHANGE: add explicit `Login()` and `Logout()` functions for cookie-based authentication
