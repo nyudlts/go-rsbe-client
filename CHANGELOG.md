@@ -1,5 +1,17 @@
 # CHANGELOG
 
+### v0.9.0
+
+* add automatic cookie-auth session refresh on `401 Unauthorized` in the shared request path
+* retry the original request once by default after successful re-authentication
+* guard refresh login under concurrency so parallel `401` responses do not trigger login stampedes
+* add additive config fields for auth-refresh behavior:
+  * `AutoRefreshOn401` (default enabled for cookie auth)
+  * `MaxAuthRetries` (default `1`)
+  * `AuthRefreshCooldownSeconds` (optional)
+* preserve existing behavior for basic auth and non-`401` errors
+* add tests for refresh success/failure, retry replay, toggle/retry-count, and concurrency
+
 ### v0.8.0 (BREAKING CHANGE)
 
 * BREAKING CHANGE: update `ConfigureClient()` to configure client state only (it no longer performs login)

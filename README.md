@@ -22,6 +22,9 @@ type Config struct {
   Password  string
   AuthType  string
   LoginPath string
+  AutoRefreshOn401           *bool
+  MaxAuthRetries             int
+  AuthRefreshCooldownSeconds int
 }
 
 // Basic auth
@@ -46,6 +49,37 @@ if err := rsbe.Logout(); err != nil {
 
 Migration note: if existing code relied on `ConfigureClient()` to automatically authenticate
 cookie sessions, add an explicit `rsbe.Login()` call immediately after configuration.
+
+## Automatic Cookie Session Refresh on 401
+
+For cookie authentication, API requests now automatically recover from expired sessions:
+
+* If a request receives `401 Unauthorized`, the client attempts `rsbe.Login()` internally.
+* The original request is retried once by default.
+* If the replay still returns `401`, that unauthorized response is returned to the caller.
+* Basic auth behavior is unchanged.
+
+This behavior is controlled by additive config fields:
+
+* `AutoRefreshOn401` (default: enabled for cookie auth when nil)
+* `MaxAuthRetries` (default: `1` when value is `<= 0`)
+* `AuthRefreshCooldownSeconds` (optional throttle for repeated refresh attempts)
+
+Example:
+
+```go
+enabled := true
+cfg := rsbe.Config{
+  BaseURL:                   "http://localhost:3001/",
+  User:                      "your_email@example.com",
+  Password:                  "your_password",
+  AuthType:                  rsbe.AuthTypeCookie,
+  LoginPath:                 "/api/v0/sessions",
+  AutoRefreshOn401:          &enabled,
+  MaxAuthRetries:            1,
+  AuthRefreshCooldownSeconds: 1,
+}
+```
 
 Please reference the [`cfg/config.yaml.example`](./cfg/config.yaml.example) file for sample values.
 
@@ -76,6 +110,8 @@ configs:
     Password:  "bar"
     AuthType:  "cookie"
     LoginPath: "/api/v0/sessions"
+    MaxAuthRetries: 1
+    AuthRefreshCooldownSeconds: 1
 ```
 
 ### Running Tests
