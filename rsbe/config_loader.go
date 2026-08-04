@@ -18,11 +18,14 @@ type TestConfig struct {
 
 // ConfigEntry represents a configuration entry for a specific auth type
 type ConfigEntry struct {
-	BaseURL   string `yaml:"BaseURL"`
-	User      string `yaml:"User"`
-	Password  string `yaml:"Password"`
-	AuthType  string `yaml:"AuthType,omitempty"`
-	LoginPath string `yaml:"LoginPath,omitempty"`
+	BaseURL                    string `yaml:"BaseURL"`
+	User                       string `yaml:"User"`
+	Password                   string `yaml:"Password"`
+	AuthType                   string `yaml:"AuthType,omitempty"`
+	LoginPath                  string `yaml:"LoginPath,omitempty"`
+	AutoRefreshOn401           *bool  `yaml:"AutoRefreshOn401,omitempty"`
+	MaxAuthRetries             int    `yaml:"MaxAuthRetries,omitempty"`
+	AuthRefreshCooldownSeconds int    `yaml:"AuthRefreshCooldownSeconds,omitempty"`
 }
 
 var Cfg *TestConfig
@@ -72,9 +75,12 @@ func GetConfig(key string) (*Config, error) {
 	}
 
 	config := &Config{
-		BaseURL:  entry.BaseURL,
-		User:     entry.User,
-		Password: entry.Password,
+		BaseURL:                    entry.BaseURL,
+		User:                       entry.User,
+		Password:                   entry.Password,
+		AutoRefreshOn401:           entry.AutoRefreshOn401,
+		MaxAuthRetries:             entry.MaxAuthRetries,
+		AuthRefreshCooldownSeconds: entry.AuthRefreshCooldownSeconds,
 	}
 
 	// Set AuthType if provided, otherwise default to basic

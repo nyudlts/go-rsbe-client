@@ -30,6 +30,8 @@ configs:
     Password:  "your_password"
     AuthType:  "cookie"
     LoginPath: "/api/v0/sessions"
+    MaxAuthRetries: 1
+    AuthRefreshCooldownSeconds: 1
 
 # end of document marker follows
 ...
